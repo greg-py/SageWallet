@@ -1,0 +1,9 @@
+dist
+*.html
+*.hbs
+*.min.js
+.builds
+.cache
+node_modules
+*.d.ts
+*.test.ts
