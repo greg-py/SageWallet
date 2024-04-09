@@ -4,14 +4,9 @@ import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import LoginButton from "../auth/LoginButton";
-import LoadingSpinner from "./LoadingSpinner";
 
 const ProfileNavbar = () => {
-  const { user, isAuthenticated, isLoading, logout } = useAuth0();
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+  const { user, isAuthenticated, logout } = useAuth0();
 
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
@@ -54,16 +49,18 @@ const ProfileNavbar = () => {
           <LoginButton />
         )}
       </div>
-      <Navbar.Collapse>
-        {navItems.length &&
-          navItems.map((item) => {
-            return (
-              <Navbar.Link key={item.label} href={item.href}>
-                {item.label}
-              </Navbar.Link>
-            );
-          })}
-      </Navbar.Collapse>
+      {isAuthenticated && (
+        <Navbar.Collapse>
+          {navItems.length &&
+            navItems.map((item) => {
+              return (
+                <Navbar.Link key={item.label} href={item.href}>
+                  {item.label}
+                </Navbar.Link>
+              );
+            })}
+        </Navbar.Collapse>
+      )}
     </Navbar>
   );
 };
