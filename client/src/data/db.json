@@ -1,0 +1,28 @@
+{
+  "Transactions": [
+    {
+      "date": "2024-04-11",
+      "vendor": "Target",
+      "price": 24.95,
+      "category": "Shopping"
+    },
+    {
+      "date": "2024-04-09",
+      "vendor": "GetGo",
+      "price": 24.95,
+      "category": "Automotive"
+    },
+    {
+      "date": "2024-04-03",
+      "vendor": "Moe's",
+      "price": 24.95,
+      "category": "Restaurants"
+    },
+    {
+      "date": "2024-04-10",
+      "vendor": "FirstEnergy",
+      "price": 24.95,
+      "category": "Utilities"
+    }
+  ]
+}

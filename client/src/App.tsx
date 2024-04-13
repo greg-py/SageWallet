@@ -1,8 +1,8 @@
 import Container from "./components/layout/Container";
 import LoadingSpinner from "./components/layout/LoadingSpinner";
 import ProfileNavbar from "./components/layout/Navbar";
-import Dashboard from "./components/pages/Dashboard";
-import NotAuthenticated from "./components/pages/NotAuthenticated";
+import Dashboard from "./pages/Dashboard";
+import NotAuthenticated from "./pages/NotAuthenticated";
 
 import { useAuth0 } from "@auth0/auth0-react";
 

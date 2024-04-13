@@ -1,5 +1,3 @@
-"use client";
-
 import { Spinner } from "flowbite-react";
 
 const LoadingSpinner = () => {

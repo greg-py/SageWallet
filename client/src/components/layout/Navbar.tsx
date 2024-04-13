@@ -1,5 +1,3 @@
-"use client";
-
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -11,11 +9,6 @@ const ProfileNavbar = () => {
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
   };
-
-  const navItems = [
-    { label: "Dashboard", href: "/" },
-    { label: "Transactions", href: "/transactions" },
-  ];
 
   return (
     <Navbar fluid rounded className="bg-gray-300">
@@ -49,18 +42,6 @@ const ProfileNavbar = () => {
           <LoginButton />
         )}
       </div>
-      {isAuthenticated && (
-        <Navbar.Collapse>
-          {navItems.length &&
-            navItems.map((item) => {
-              return (
-                <Navbar.Link key={item.label} href={item.href}>
-                  {item.label}
-                </Navbar.Link>
-              );
-            })}
-        </Navbar.Collapse>
-      )}
     </Navbar>
   );
 };
