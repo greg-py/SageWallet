@@ -1,15 +1,31 @@
 import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import swaggerOptions from "./config/swagger";
+import usersRoutes from "./routes/users";
 
-dotenv.config();
+const endpointPrefix = "/api";
 
+// Create express app
 const app: Express = express();
-const port = process.env.PORT || 3000;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server Test");
+// JSON middleware
+app.use(express.json());
+
+// Configure Swagger Docs middleware
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use(
+  `${endpointPrefix}/docs`,
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocs)
+);
+
+// Configure routes
+app.use(`${endpointPrefix}/users`, usersRoutes);
+
+// Return not found for any unmatched routes
+app.use("*", (req: Request, res: Response) => {
+  res.status(404).send("Not Found");
 });
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+export default app;

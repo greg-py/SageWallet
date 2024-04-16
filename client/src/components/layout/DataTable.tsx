@@ -32,25 +32,21 @@ const DataTable = ({ columns, data, size = "medium" }: DataTableProps) => {
               >
                 {columns &&
                   columns.map((col, index) => {
-                    const cell = item[col.accessor];
-                    if (cell) {
-                      return (
-                        <Table.Cell
-                          key={index}
-                          className={`${
-                            size === "small"
-                              ? "text-xs"
-                              : size === "large"
-                              ? "text-md"
-                              : "text-sm"
-                          }`}
-                        >
-                          {cell}
-                        </Table.Cell>
-                      );
-                    } else {
-                      return null;
-                    }
+                    const cell = item[col.accessor] || "";
+                    return (
+                      <Table.Cell
+                        key={index}
+                        className={`${
+                          size === "small"
+                            ? "text-xs"
+                            : size === "large"
+                            ? "text-md"
+                            : "text-sm"
+                        }`}
+                      >
+                        {cell}
+                      </Table.Cell>
+                    );
                   })}
               </Table.Row>
             );

@@ -6,6 +6,8 @@ import LoginButton from "../auth/LoginButton";
 const ProfileNavbar = () => {
   const { user, isAuthenticated, logout } = useAuth0();
 
+  console.log(user);
+
   const handleLogout = () => {
     logout({ logoutParams: { returnTo: window.location.origin } });
   };

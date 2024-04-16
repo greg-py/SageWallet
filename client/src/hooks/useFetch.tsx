@@ -1,15 +1,17 @@
 import { useEffect } from "react";
 
-interface UseFetchProps<T> {
+interface UseFetchProps<T, U> {
   url: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
   setData: React.Dispatch<React.SetStateAction<T>>;
-  transformData?: (data: T) => T; // Optional transformation function
+  transformData?: (data: T, auxiliaryData?: U) => T; // Optional transformation function
+  auxiliaryData?: U;
 }
 
-const useFetch = <T,>(props: UseFetchProps<T>) => {
-  const { url, setLoading, setError, setData, transformData } = props;
+const useFetch = <T, U>(props: UseFetchProps<T, U>) => {
+  const { url, setLoading, setError, setData, transformData, auxiliaryData } =
+    props;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,10 +23,16 @@ const useFetch = <T,>(props: UseFetchProps<T>) => {
         }
         const rawData = (await response.json()) as T;
 
-        // Apply the transformation function if provided
-        const data = transformData ? transformData(rawData) : rawData;
+        let transformedData: T;
+        if (transformData && auxiliaryData) {
+          transformedData = transformData(rawData, auxiliaryData);
+        } else if (transformData) {
+          transformedData = transformData(rawData);
+        } else {
+          transformedData = rawData;
+        }
 
-        setData(data);
+        setData(transformedData);
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);
@@ -37,7 +45,7 @@ const useFetch = <T,>(props: UseFetchProps<T>) => {
     };
 
     fetchData();
-  }, [url, setLoading, setData, setError, transformData]);
+  }, [url, setLoading, setData, setError, transformData, auxiliaryData]);
 };
 
 export default useFetch;
