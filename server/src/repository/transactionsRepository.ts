@@ -2,14 +2,16 @@ import Transaction from "../models/transaction";
 
 const findTransactionsByUserId = async (userId: string) => {
   try {
-    return await Transaction.findAll({
+    const transactions = await Transaction.findAll({
       where: { user_id: userId },
     });
+    return transactions;
   } catch (error) {
     if (error instanceof Error)
       throw new Error(
         "Database error when fetching transactions: " + error.message
       );
+    return [];
   }
 };
 

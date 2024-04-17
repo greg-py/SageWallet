@@ -1,22 +1,32 @@
 import Container from "./components/layout/Container";
-import LoadingSpinner from "./components/layout/LoadingSpinner";
 import ProfileNavbar from "./components/layout/Navbar";
 import Dashboard from "./pages/Dashboard";
-import NotAuthenticated from "./pages/NotAuthenticated";
 
 import { useAuth0 } from "@auth0/auth0-react";
+import LoginButton from "./components/auth/LoginButton";
+import LoadingOverlay from "./components/layout/LoadingOverlay";
 
 const App = () => {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated, isLoading } = useAuth0();
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return <LoadingOverlay />;
+  }
+
+  if (!user || !isAuthenticated) {
+    return (
+      <Container>
+        <div className="flex justify-center items-center h-screen w-full">
+          <LoginButton />
+        </div>
+      </Container>
+    );
   }
 
   return (
     <Container>
       <ProfileNavbar />
-      {isAuthenticated ? <Dashboard /> : <NotAuthenticated />}
+      <Dashboard />
     </Container>
   );
 };

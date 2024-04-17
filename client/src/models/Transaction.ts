@@ -1,26 +1,10 @@
 export interface Transaction {
-  id: string;
+  id?: string;
   date: string;
   vendor: string;
   price: number;
   category: string;
+  userId: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
-
-export const TransactionColumns = [
-  {
-    header: "Date",
-    accessor: "date",
-  },
-  {
-    header: "Vendor",
-    accessor: "vendor",
-  },
-  {
-    header: "Price",
-    accessor: "price",
-  },
-  {
-    header: "Category",
-    accessor: "category",
-  },
-];

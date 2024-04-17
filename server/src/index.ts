@@ -3,6 +3,7 @@ import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "./config/swagger";
 import usersRoutes from "./routes/users";
+import cors from "cors";
 
 const endpointPrefix = "/api";
 
@@ -11,6 +12,9 @@ const app: Express = express();
 
 // JSON middleware
 app.use(express.json());
+
+// CORS middleware
+app.use(cors());
 
 // Configure Swagger Docs middleware
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
