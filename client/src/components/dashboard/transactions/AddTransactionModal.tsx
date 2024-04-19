@@ -1,21 +1,14 @@
 import { Button, Label, Modal, TextInput, Datepicker } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { format } from "date-fns";
 import { DATE_FORMAT_STRING } from "../../../config/constants";
 import { useMutation } from "@tanstack/react-query";
-import {
-  deleteTransaction,
-  updateTransaction,
-} from "../../../api/transactions";
-import { useAuth0 } from "@auth0/auth0-react";
 import { Transaction } from "../../../models/Transaction";
+import { useAuth0 } from "@auth0/auth0-react";
+import { addTransaction } from "../../../api/transactions";
 import { queryClient } from "../../../api/queryClient";
 
-interface EditTransactionModalProps {
-  transaction: Transaction;
-}
-
-const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
+const AddTransactionModal = () => {
   const [openModal, setOpenModal] = useState(false);
   const [date, setDate] = useState("");
   const [vendor, setVendor] = useState("");
@@ -24,13 +17,20 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
 
   const { user } = useAuth0();
 
-  const updateMutation = useMutation({
+  const clearForm = () => {
+    setDate("");
+    setVendor("");
+    setPrice(0);
+    setCategory("");
+  };
+
+  const mutation = useMutation({
     mutationFn: (transactionObj: Transaction) => {
       if (!user?.sub) {
         throw new Error("User ID undefined");
       }
 
-      return updateTransaction(user.sub, transactionObj);
+      return addTransaction(user.sub, transactionObj);
     },
   });
 
@@ -39,9 +39,8 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
       return;
     }
 
-    updateMutation.mutate(
+    mutation.mutate(
       {
-        id: transaction.id,
         date,
         vendor,
         price,
@@ -52,51 +51,19 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["transactions"] });
           setOpenModal(false);
+          clearForm();
         },
       }
     );
   };
 
-  const deleteMutation = useMutation({
-    mutationFn: (transactionId: string) => {
-      if (!user?.sub) {
-        throw new Error("User ID undefined");
-      }
-
-      return deleteTransaction(user.sub, transactionId);
-    },
-  });
-
-  const handleDelete = () => {
-    if (!user?.sub || !transaction.id) {
-      return;
-    }
-
-    deleteMutation.mutate(transaction.id, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["transactions"] });
-        setOpenModal(false);
-      },
-    });
-  };
-
-  // Set current input values on modal open from props
-  useEffect(() => {
-    if (transaction) {
-      setDate(transaction.date);
-      setVendor(transaction.vendor);
-      setPrice(transaction.price);
-      setCategory(transaction.category);
-    }
-  }, [transaction, openModal]);
-
   return (
     <>
       <Button size="xs" onClick={() => setOpenModal(true)}>
-        Edit
+        Add New
       </Button>
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
-        <Modal.Header>Edit Transaction</Modal.Header>
+        <Modal.Header>Add Transaction</Modal.Header>
         <Modal.Body>
           <form className="flex max-w-md flex-col gap-4">
             <div>
@@ -153,13 +120,10 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleSubmit}>Save</Button>
-          <Button color="red" onClick={handleDelete}>
-            Delete
-          </Button>
         </Modal.Footer>
       </Modal>
     </>
   );
 };
 
-export default EditTransactionModal;
+export default AddTransactionModal;

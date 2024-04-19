@@ -1,16 +1,14 @@
-// import { Transaction } from "../models/Transaction";
 import { useAuth0 } from "@auth0/auth0-react";
 import TransactionsTable from "../components/dashboard/transactions/TransactionsTable";
 import { useQuery } from "@tanstack/react-query";
-import { getTransactions } from "../api/transactions";
 import LoadingOverlay from "../components/layout/LoadingOverlay";
+import { transactionsQuery } from "../api/queries/transactions";
+import AddTransactionModal from "../components/dashboard/transactions/AddTransactionModal";
 
 const Dashboard = () => {
   const { user } = useAuth0();
-  const { isPending, error, data } = useQuery({
-    queryKey: ["transactions"],
-    queryFn: () => getTransactions(user?.sub),
-  });
+  const userId = user?.sub || "";
+  const { isPending, error, data } = useQuery(transactionsQuery(userId));
 
   if (isPending) {
     return <LoadingOverlay />;
@@ -20,7 +18,15 @@ const Dashboard = () => {
     return <div>{error.message}</div>;
   }
 
-  return <TransactionsTable data={data} />;
+  return (
+    <div className="my-4 flex flex-col space-y-4">
+      <h1 className="font-bold text-xl text-center">Transactions</h1>
+      <TransactionsTable data={data} />
+      <div className="max-w-24">
+        <AddTransactionModal />
+      </div>
+    </div>
+  );
 };
 
 export default Dashboard;
