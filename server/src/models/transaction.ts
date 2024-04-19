@@ -1,7 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { db } from "../config/db";
-import { format } from "date-fns";
-import { DATE_FORMAT_STRING } from "../config/constants";
 
 interface TransactionAttributes {
   id: string;
@@ -62,13 +60,13 @@ const Transaction = db.define<TransactionInstance>(
 
 export class FormattedTransaction {
   id: string;
-  date: string;
+  date: Date;
   vendor: string;
   price: number;
   category: string;
   userId: string;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 
   constructor({
     id,
@@ -81,13 +79,47 @@ export class FormattedTransaction {
     updated_at,
   }: TransactionInstance) {
     this.id = id;
-    this.date = format(date, DATE_FORMAT_STRING);
+    this.date = date;
     this.vendor = vendor.trim();
     this.price = price;
     this.category = category.trim();
     this.userId = user_id;
-    this.createdAt = created_at && format(created_at, DATE_FORMAT_STRING);
-    this.updatedAt = updated_at && format(updated_at, DATE_FORMAT_STRING);
+    this.createdAt = created_at;
+    this.updatedAt = updated_at;
+  }
+}
+
+interface ClientTransaction {
+  id: string;
+  date: string;
+  vendor: string;
+  price: number;
+  category: string;
+  userId: string;
+}
+
+export class DatabaseTransaction {
+  id: string;
+  date: Date;
+  vendor: string;
+  price: number;
+  category: string;
+  user_id: string;
+
+  constructor({
+    id,
+    date,
+    vendor,
+    price,
+    category,
+    userId,
+  }: ClientTransaction) {
+    this.id = id;
+    this.date = new Date(date);
+    this.vendor = vendor;
+    this.price = price;
+    this.category = category;
+    this.user_id = userId;
   }
 }
 

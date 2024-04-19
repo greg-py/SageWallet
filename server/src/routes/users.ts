@@ -69,4 +69,14 @@ router.get("/:userId/transactions", transactionsController.getUserTransactions);
  */
 router.post("/:userId/transactions", transactionsController.addUserTransaction);
 
+router.put(
+  "/:userId/transactions/:transactionId",
+  transactionsController.updateUserTransaction
+);
+
+router.delete(
+  "/:userId/transactions/:transactionId",
+  transactionsController.deleteUserTransaction
+);
+
 export default router;

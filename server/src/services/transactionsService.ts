@@ -1,5 +1,8 @@
 import transactionsRepository from "../repository/transactionsRepository";
-import { FormattedTransaction } from "../models/transaction";
+import {
+  DatabaseTransaction,
+  FormattedTransaction,
+} from "../models/transaction";
 
 const getUserTransactions = async (userId: string) => {
   // Fetch transactions from database
@@ -16,6 +19,9 @@ const getUserTransactions = async (userId: string) => {
     });
   }
 
+  // Sort transactions
+  formattedTransactions.sort((a, b) => a.date.getTime() - b.date.getTime());
+
   return formattedTransactions;
 };
 
@@ -26,4 +32,31 @@ const addUserTransaction = async (userId: string, transaction: any) => {
   );
 };
 
-export default { getUserTransactions, addUserTransaction };
+const updateUserTranasction = async (
+  userId: string,
+  transactionId: string,
+  transaction: any
+) => {
+  // Map transaction data from request to database transaction model
+  const formattedTransaction = new DatabaseTransaction(transaction);
+
+  return await transactionsRepository.updateTransactionByTransactionId(
+    userId,
+    transactionId,
+    formattedTransaction
+  );
+};
+
+const deleteUserTransaction = async (userId: string, transactionId: string) => {
+  return await transactionsRepository.deleteTransactionByTransactionId(
+    userId,
+    transactionId
+  );
+};
+
+export default {
+  getUserTransactions,
+  addUserTransaction,
+  updateUserTranasction,
+  deleteUserTransaction,
+};
