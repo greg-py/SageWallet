@@ -60,7 +60,7 @@ const AddTransactionModal = () => {
   return (
     <>
       <Button size="xs" onClick={() => setOpenModal(true)}>
-        Add New
+        Add
       </Button>
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header>Add Transaction</Modal.Header>

@@ -1,5 +1,6 @@
 import express from "express";
 import transactionsController from "../controllers/transactionsController";
+import budgetsController from "../controllers/budgetsController";
 
 const router = express.Router();
 
@@ -78,5 +79,9 @@ router.delete(
   "/:userId/transactions/:transactionId",
   transactionsController.deleteUserTransaction
 );
+
+router.get("/:userId/budgets", budgetsController.getUserBudgets);
+
+router.post("/:userId/budgets", budgetsController.addUserBudgets);
 
 export default router;

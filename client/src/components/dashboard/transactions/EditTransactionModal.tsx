@@ -12,11 +12,16 @@ import { Transaction } from "../../../models/Transaction";
 import { queryClient } from "../../../api/queryClient";
 
 interface EditTransactionModalProps {
+  openModal: boolean;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   transaction: Transaction;
 }
 
-const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
-  const [openModal, setOpenModal] = useState(false);
+const EditTransactionModal = ({
+  openModal,
+  setOpenModal,
+  transaction,
+}: EditTransactionModalProps) => {
   const [date, setDate] = useState("");
   const [vendor, setVendor] = useState("");
   const [price, setPrice] = useState(0);
@@ -91,74 +96,69 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
   }, [transaction, openModal]);
 
   return (
-    <>
-      <Button size="xs" onClick={() => setOpenModal(true)}>
-        Edit
-      </Button>
-      <Modal show={openModal} onClose={() => setOpenModal(false)}>
-        <Modal.Header>Edit Transaction</Modal.Header>
-        <Modal.Body>
-          <form className="flex max-w-md flex-col gap-4">
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="date" value="Date" />
-              </div>
-              <Datepicker
-                value={date && format(date, DATE_FORMAT_STRING)}
-                onSelectedDateChanged={(date) => {
-                  const formattedDate = date.toISOString();
-                  setDate(formattedDate);
-                }}
-              />
+    <Modal show={openModal} onClose={() => setOpenModal(false)}>
+      <Modal.Header>Edit Transaction</Modal.Header>
+      <Modal.Body>
+        <form className="flex max-w-md flex-col gap-4">
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="date" value="Date" />
             </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="vendor" value="Vendor" />
-              </div>
-              <TextInput
-                id="vendor"
-                type="text"
-                placeholder="Walmart"
-                required
-                value={vendor}
-                onChange={(e) => setVendor(e.target.value)}
-              />
+            <Datepicker
+              value={date && format(date, DATE_FORMAT_STRING)}
+              onSelectedDateChanged={(date) => {
+                const formattedDate = date.toISOString();
+                setDate(formattedDate);
+              }}
+            />
+          </div>
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="vendor" value="Vendor" />
             </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="price" value="Price ($)" />
-              </div>
-              <TextInput
-                id="price"
-                type="number"
-                required
-                value={price}
-                onChange={(e) => setPrice(parseFloat(e.target.value))}
-              />
+            <TextInput
+              id="vendor"
+              type="text"
+              placeholder="Walmart"
+              required
+              value={vendor}
+              onChange={(e) => setVendor(e.target.value)}
+            />
+          </div>
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="price" value="Price ($)" />
             </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="category" value="Category" />
-              </div>
-              <TextInput
-                id="category"
-                type="text"
-                placeholder="Groceries"
-                required
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              />
+            <TextInput
+              id="price"
+              type="number"
+              required
+              value={price}
+              onChange={(e) => setPrice(parseFloat(e.target.value))}
+            />
+          </div>
+          <div>
+            <div className="mb-2 block">
+              <Label htmlFor="category" value="Category" />
             </div>
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={handleSubmit}>Save</Button>
-          <Button color="red" onClick={handleDelete}>
-            Delete
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+            <TextInput
+              id="category"
+              type="text"
+              placeholder="Groceries"
+              required
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            />
+          </div>
+        </form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={handleSubmit}>Save</Button>
+        <Button color="red" onClick={handleDelete}>
+          Delete
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 

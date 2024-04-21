@@ -12,7 +12,7 @@ const ProfileNavbar = () => {
     <Navbar fluid rounded className="bg-gray-300">
       <Navbar.Brand href="/">
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-          Banking App
+          Budget
         </span>
       </Navbar.Brand>
       {isAuthenticated && user && (
