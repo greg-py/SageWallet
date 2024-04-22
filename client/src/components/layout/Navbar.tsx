@@ -9,7 +9,7 @@ const ProfileNavbar = () => {
   };
 
   return (
-    <Navbar fluid rounded className="bg-cyan-700">
+    <Navbar fluid className="bg-cyan-700">
       <Navbar.Brand href="/">
         <span className="self-center whitespace-nowrap text-xl font-semibold text-white">
           Budget
@@ -33,7 +33,7 @@ const ProfileNavbar = () => {
               Sign out
             </Dropdown.Item>
           </Dropdown>
-          <Navbar.Toggle />
+          <Navbar.Toggle className="text-slate-300" />
         </div>
       )}
     </Navbar>

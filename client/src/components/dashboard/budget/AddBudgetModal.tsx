@@ -55,8 +55,10 @@ const AddBudgetModal = () => {
         Add
       </Button>
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
-        <Modal.Header>Add Budget</Modal.Header>
-        <Modal.Body>
+        <Modal.Header className="bg-cyan-700 border-slate-300">
+          <p className="text-white">Add Budget</p>
+        </Modal.Header>
+        <Modal.Body className="bg-slate-300">
           <form className="flex max-w-md flex-col gap-4">
             <div>
               <div className="mb-2 block">
@@ -85,7 +87,7 @@ const AddBudgetModal = () => {
             </div>
           </form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="bg-slate-300 border-slate-300">
           <Button onClick={handleSubmit}>Save</Button>
         </Modal.Footer>
       </Modal>

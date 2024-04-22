@@ -13,12 +13,14 @@ const BudgetSection = ({ budget, transactions }: BudgetSectionProps) => {
   const calculatedBudget = calculateBudgetCurrents(budget, transactions);
 
   return (
-    <div className="p-4 max-h-screen overflow-y-scroll overflow-x-scroll rounded-md flex flex-col space-y-4">
+    <div className="p-4 mt-4 rounded-md outline outline-1 outline-slate-300 flex flex-col space-y-4">
       <div className="flex flex-row justify-between items-center">
         <h1 className="font-bold text-xl text-center">Budget</h1>
         <AddBudgetModal />
       </div>
-      <BudgetTable data={calculatedBudget} />
+      <div className="max-h-96 overflow-y-scroll hide-scrollbar">
+        <BudgetTable data={calculatedBudget} />
+      </div>
     </div>
   );
 };

@@ -8,6 +8,9 @@ interface BudgetTableProps {
 }
 
 const BudgetTable = ({ data }: BudgetTableProps) => {
+  // Sort data by budget amount
+  data && data.sort((a, b) => parseInt(b.budget) - parseInt(a.budget));
+
   return (
     <Table>
       <Table.Head>
@@ -27,11 +30,18 @@ const BudgetTable = ({ data }: BudgetTableProps) => {
                 key={item.id}
                 className="bg-slate-200 text-xs text-black hover:cursor-pointer hover:bg-slate-300"
               >
-                <Table.Cell>{item.category}</Table.Cell>
-                <Table.Cell>
+                <Table.Cell className="py-2">{item.category}</Table.Cell>
+                <Table.Cell className="py-2">
                   {item.budget ? `$${parseInt(item.budget)}` : ""}
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell
+                  className={
+                    item.current &&
+                    parseInt(item.current) <= parseInt(item.budget)
+                      ? `bg-emerald-300 py-2`
+                      : `bg-red-300 py-2`
+                  }
+                >
                   {item.current ? `$${parseInt(item.current)}` : ""}
                 </Table.Cell>
               </Table.Row>

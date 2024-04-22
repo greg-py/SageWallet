@@ -32,9 +32,11 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:px-4 lg:grid-cols-2 lg:space-x-4">
-      <TransactionSection transactions={transactions} />
-      <BudgetSection budget={budget} transactions={transactions} />
+    <div className="lg:px-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:space-x-4">
+        <TransactionSection transactions={transactions} />
+        <BudgetSection budget={budget} transactions={transactions} />
+      </div>
     </div>
   );
 };
