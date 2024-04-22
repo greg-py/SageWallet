@@ -58,6 +58,7 @@ const Transaction = db.define<TransactionInstance>(
   }
 );
 
+// Class to map GET requests
 export class FormattedTransaction {
   id: string;
   date: Date;

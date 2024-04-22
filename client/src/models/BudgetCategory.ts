@@ -1,8 +1,8 @@
 export interface BudgetCategory {
   id?: string;
   category: string;
-  budget: number;
-  current?: number;
+  budget: string;
+  current?: string;
   userId: string;
   createdAt?: string;
   updatedAt?: string;

@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { Transaction } from "../models/Transaction";
 import { DATE_FORMAT_STRING } from "../config/constants";
 
@@ -12,7 +12,11 @@ export const groupTransactionsByDate = (transactions: Transaction[]) => {
 
   transactions.forEach((transaction) => {
     // Extract the date part only
-    const dateKey = format(transaction.date.split("T")[0], DATE_FORMAT_STRING); // Splits at 'T' and takes the first part (YYYY-MM-DD)
+    const dateKey = format(
+      parseISO(transaction.date.split("T")[0]),
+      DATE_FORMAT_STRING,
+      {}
+    ); // Splits at 'T' and takes the first part (YYYY-MM-DD)
 
     // Check if the key exists, if not initialize it
     if (!grouped[dateKey]) {

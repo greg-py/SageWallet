@@ -49,7 +49,7 @@ const EditTransactionModal = ({
         id: transaction.id,
         date,
         vendor,
-        price,
+        price: price.toString(),
         category,
         userId: user.sub,
       },
@@ -90,7 +90,7 @@ const EditTransactionModal = ({
     if (transaction) {
       setDate(transaction.date);
       setVendor(transaction.vendor);
-      setPrice(transaction.price);
+      setPrice(parseFloat(transaction.price));
       setCategory(transaction.category);
     }
   }, [transaction, openModal]);

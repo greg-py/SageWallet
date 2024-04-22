@@ -36,7 +36,7 @@ const AddBudgetModal = () => {
     mutation.mutate(
       {
         category,
-        budget,
+        budget: budget.toString(),
         userId: user.sub,
       },
       {

@@ -9,9 +9,9 @@ const ProfileNavbar = () => {
   };
 
   return (
-    <Navbar fluid rounded className="bg-gray-300">
+    <Navbar fluid rounded className="bg-cyan-700">
       <Navbar.Brand href="/">
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+        <span className="self-center whitespace-nowrap text-xl font-semibold text-white">
           Budget
         </span>
       </Navbar.Brand>

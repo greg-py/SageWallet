@@ -43,7 +43,7 @@ const AddTransactionModal = () => {
       {
         date,
         vendor,
-        price,
+        price: price.toString(),
         category,
         userId: user.sub,
       },
