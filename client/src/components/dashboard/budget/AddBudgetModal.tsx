@@ -51,9 +51,7 @@ const AddBudgetModal = () => {
 
   return (
     <>
-      <Button size="xs" onClick={() => setOpenModal(true)}>
-        Add
-      </Button>
+      <Button onClick={() => setOpenModal(true)}>Add</Button>
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Header className="bg-cyan-700 border-slate-300">
           <p className="text-white">Add Budget</p>

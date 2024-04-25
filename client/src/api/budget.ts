@@ -24,3 +24,37 @@ export const addBudget = async (userId: string, budget: BudgetCategory) => {
   const data = await response.json();
   return data;
 };
+
+export const updateBudget = async (userId: string, budget: BudgetCategory) => {
+  if (!userId || !budget) {
+    return {};
+  } else if (userId !== budget.userId) {
+    return {};
+  }
+
+  const response = await fetch(
+    `${API_BASE_URL}/users/${userId}/budgets/${budget.id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(budget),
+    }
+  );
+  const data = await response.json();
+  return data;
+};
+
+export const deleteBudget = async (userId: string, budgetId: string) => {
+  if (!userId || !budgetId) {
+    return {};
+  }
+
+  const response = await fetch(
+    `${API_BASE_URL}/users/${userId}/budgets/${budgetId}`,
+    { method: "DELETE" }
+  );
+  const data = await response.json();
+  return data;
+};

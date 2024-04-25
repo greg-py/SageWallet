@@ -1,6 +1,8 @@
 import Container from "./components/layout/Container";
 import ProfileNavbar from "./components/layout/Navbar";
+import Body from "./components/layout/Body";
 import Dashboard from "./pages/Dashboard";
+import FooterSection from "./components/layout/Footer";
 
 import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./components/auth/LoginButton";
@@ -26,7 +28,10 @@ const App = () => {
   return (
     <Container>
       <ProfileNavbar />
-      <Dashboard />
+      <Body>
+        <Dashboard />
+      </Body>
+      <FooterSection />
     </Container>
   );
 };

@@ -9,7 +9,7 @@ const ProfileNavbar = () => {
   };
 
   return (
-    <Navbar fluid className="bg-cyan-700">
+    <Navbar rounded fluid className="bg-cyan-700">
       <Navbar.Brand href="/">
         <span className="self-center whitespace-nowrap text-xl font-semibold text-white">
           Budget

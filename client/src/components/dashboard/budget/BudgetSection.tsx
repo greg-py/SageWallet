@@ -13,7 +13,7 @@ const BudgetSection = ({ budget, transactions }: BudgetSectionProps) => {
   const calculatedBudget = calculateBudgetCurrents(budget, transactions);
 
   return (
-    <div className="p-4 mt-4 rounded-md outline outline-1 outline-slate-300 flex flex-col space-y-4">
+    <div className="p-4 rounded-md outline outline-1 outline-slate-300 flex flex-col space-y-4">
       <div className="flex flex-row justify-between items-center">
         <h1 className="font-bold text-xl text-center">Budget</h1>
         <AddBudgetModal />

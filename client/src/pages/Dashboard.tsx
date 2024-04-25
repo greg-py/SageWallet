@@ -33,7 +33,7 @@ const Dashboard = () => {
 
   return (
     <div className="lg:px-4">
-      <div className="grid grid-cols-1 lg:grid-cols-2 lg:space-x-4">
+      <div className="grid grid-cols-1 space-y-4 lg:grid-cols-2 lg:space-x-4 lg:space-y-0">
         <TransactionSection transactions={transactions} />
         <BudgetSection budget={budget} transactions={transactions} />
       </div>

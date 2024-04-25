@@ -1,3 +1,4 @@
+import { FILTER_CATEGORIES_ALL_STRING } from "../config/constants";
 import { BudgetCategory } from "../models/BudgetCategory";
 import { Transaction } from "../models/Transaction";
 
@@ -23,4 +24,21 @@ export const calculateBudgetCurrents = (
   });
 
   return budget;
+};
+
+export const createFilterCategories = (transactions: Transaction[]) => {
+  const filterOptions: string[] = [];
+
+  transactions &&
+    transactions.forEach((transaction) => {
+      if (!filterOptions.includes(transaction.category)) {
+        filterOptions.push(transaction.category);
+      }
+    });
+
+  filterOptions.push(FILTER_CATEGORIES_ALL_STRING);
+
+  filterOptions.sort();
+
+  return filterOptions;
 };
