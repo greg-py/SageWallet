@@ -2,7 +2,7 @@ import { Footer } from "flowbite-react";
 
 const FooterSection = () => {
   return (
-    <Footer container className="bg-cyan-700">
+    <Footer container className="">
       <div className="w-full text-center">
         <div className="w-full justify-between sm:flex sm:items-center sm:justify-between">
           <Footer.Brand
@@ -11,7 +11,7 @@ const FooterSection = () => {
             alt="Flowbite Logo"
             name="Budget"
           />
-          <Footer.LinkGroup className="text-white">
+          <Footer.LinkGroup>
             <Footer.Link href="#">About</Footer.Link>
             <Footer.Link href="#">Privacy Policy</Footer.Link>
             <Footer.Link href="#">Licensing</Footer.Link>
@@ -20,7 +20,6 @@ const FooterSection = () => {
         </div>
         <Footer.Divider />
         <Footer.Copyright
-          className="text-white"
           href="#"
           by="Greg King"
           year={new Date().getFullYear()}

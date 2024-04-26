@@ -97,10 +97,10 @@ const EditTransactionModal = ({
 
   return (
     <Modal show={openModal} onClose={() => setOpenModal(false)}>
-      <Modal.Header className="bg-cyan-700 border-slate-300">
-        <p className="text-white">Edit Transaction</p>
+      <Modal.Header className=" border-slate-300">
+        <p>Edit Transaction</p>
       </Modal.Header>
-      <Modal.Body className="bg-slate-300 border-slate-300">
+      <Modal.Body>
         <form className="flex max-w-md flex-col gap-4">
           <div>
             <div className="mb-2 block">
@@ -154,7 +154,7 @@ const EditTransactionModal = ({
           </div>
         </form>
       </Modal.Body>
-      <Modal.Footer className="bg-slate-300 border-slate-300">
+      <Modal.Footer>
         <Button onClick={handleSubmit}>Save</Button>
         <Button color="red" onClick={handleDelete}>
           Delete
