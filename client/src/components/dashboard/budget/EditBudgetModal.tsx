@@ -86,7 +86,7 @@ const EditBudgetModal = ({
 
   return (
     <Modal show={openModal} onClose={() => setOpenModal(false)}>
-      <Modal.Header className=" border-slate-300">
+      <Modal.Header className=" border-base-300">
         <p>Edit Budget</p>
       </Modal.Header>
       <Modal.Body>

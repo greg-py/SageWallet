@@ -33,7 +33,7 @@ const ProfileNavbar = () => {
               Sign out
             </Dropdown.Item>
           </Dropdown>
-          <Navbar.Toggle className="text-slate-300" />
+          <Navbar.Toggle className="text-base-300" />
         </div>
       )}
     </Navbar>

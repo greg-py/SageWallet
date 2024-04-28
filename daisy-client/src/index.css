@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px; /* Height of the fading effect */
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.8));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* Allows clicking through the element */
+}

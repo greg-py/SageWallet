@@ -2,7 +2,7 @@ import Card from "../../../../components/Layout/Card";
 
 const StatsGrid = () => {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-8">
+    <div className="grid grid-cols-2 gap-6 xl:grid-cols-4 2xl:gap-8">
       <Card title="Cash Balance">
         <p className="text-success">$85,000</p>
       </Card>

@@ -10,7 +10,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <Drawer>
       <Navbar />
-      <main className="flex-grow bg-slate-100">{children}</main>
+      <main className="w-full flex-grow bg-base-200">{children}</main>
       <Footer />
     </Drawer>
   );

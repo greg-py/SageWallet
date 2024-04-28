@@ -4,12 +4,12 @@ interface DrawerProps {
 
 const Drawer = ({ children }: DrawerProps) => {
   return (
-    <div className="bg-slate-100 drawer lg:drawer-open">
+    <div className="bg-base-100 drawer lg:drawer-open">
       <input id="drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col items-center justify-center">
         {children}
         <label
-          htmlFor="my-drawer-2"
+          htmlFor="drawer"
           className="btn btn-primary drawer-button lg:hidden"
         >
           Open drawer
@@ -24,7 +24,7 @@ const Drawer = ({ children }: DrawerProps) => {
           aria-label="Close menu"
           className="drawer-overlay"
         ></label>
-        <aside className="bg-neutral min-h-screen w-80">
+        <aside className="bg-neutral min-h-screen w-64 2xl:w-72">
           <div className="bg-neutral sticky top-0 z-20 hidden items-center gap-2 bg-opacity-90 px-4 py-2 backdrop-blur lg:flex">
             <a
               href="/"
@@ -37,6 +37,21 @@ const Drawer = ({ children }: DrawerProps) => {
               </div>
             </a>
           </div>
+          <ul className="menu p-4 text-white">
+            {/* Sidebar content here */}
+            <li>
+              <a>Dashboard</a>
+            </li>
+            <li>
+              <a>Transactions</a>
+            </li>
+            <li>
+              <a>Budget</a>
+            </li>
+            <li>
+              <a>Balances</a>
+            </li>
+          </ul>
         </aside>
       </div>
     </div>

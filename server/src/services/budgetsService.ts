@@ -1,7 +1,9 @@
 import budgetsRepository from "../repository/budgetsRepository";
 
 const getUserBudgets = async (userId: string) => {
-  return await budgetsRepository.findBudgetsByUserId(userId);
+  const budget = await budgetsRepository.findBudgetsByUserId(userId);
+  budget.sort((a, b) => b.budget - a.budget);
+  return budget;
 };
 
 const addUserBudgets = async (userId: string, budget: any) => {

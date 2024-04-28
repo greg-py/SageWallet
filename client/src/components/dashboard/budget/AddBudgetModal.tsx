@@ -53,7 +53,7 @@ const AddBudgetModal = () => {
     <>
       <Button onClick={() => setOpenModal(true)}>Add</Button>
       <Modal show={openModal} onClose={() => setOpenModal(false)}>
-        <Modal.Header className=" border-slate-300">
+        <Modal.Header className=" border-base-300">
           <p>Add Budget</p>
         </Modal.Header>
         <Modal.Body>

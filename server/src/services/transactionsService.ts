@@ -20,7 +20,7 @@ const getUserTransactions = async (userId: string) => {
   }
 
   // Sort transactions
-  formattedTransactions.sort((a, b) => a.date.getTime() - b.date.getTime());
+  formattedTransactions.sort((a, b) => b.date.getTime() - a.date.getTime());
 
   return formattedTransactions;
 };

@@ -14,7 +14,7 @@ export const Card = ({
   actionFn = () => null,
 }: CardProps) => {
   return (
-    <div className="card glass w-full bg-base-100 shadow-xl outline outline-1 outline-slate-200">
+    <div className="card glass w-full bg-base-100 shadow-xl">
       <div className="card-body">
         <h2 className="card-title">{title}</h2>
         {children}
