@@ -46,7 +46,7 @@ const FilterModal = ({
                     key={category}
                     className={
                       filterCategories.includes(category)
-                        ? "bg-primary rounded-full"
+                        ? "bg-primary rounded-box"
                         : ""
                     }
                   >

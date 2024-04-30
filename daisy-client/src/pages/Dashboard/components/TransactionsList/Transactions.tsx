@@ -13,7 +13,7 @@ const Transactions = ({ transactions }: TransactionsProps) => {
         transactions.map((transaction) => (
           <li
             key={transaction.id}
-            className="flex justify-between gap-x-4 p-4 rounded-2xl hover:cursor-pointer hover:bg-base-200"
+            className="flex justify-between gap-x-4 p-4 rounded-box hover:cursor-pointer hover:bg-base-200"
           >
             <div className="flex min-w-0 gap-x-4">
               <div className="min-w-0 flex-auto">

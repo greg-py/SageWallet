@@ -1,12 +1,21 @@
 import { BudgetCategory } from "../../../../models/budget";
+import { Transaction } from "../../../../models/transaction";
+import { calculateBudgetCurrents } from "../../../../utils/dashboard";
 
 interface BudgetTableProps {
-  data: BudgetCategory[];
+  budgetCategories: BudgetCategory[];
+  transactions: Transaction[];
 }
 
-const BudgetTable = ({ data }: BudgetTableProps) => {
+const BudgetTable = ({ budgetCategories, transactions }: BudgetTableProps) => {
+  // Calculate current budget category totals based on transactions data
+  const calculatedData = calculateBudgetCurrents(
+    budgetCategories,
+    transactions
+  );
+
   return (
-    <div className="col-span-12 rounded-2xl max-h-full bg-base-100 overflow-y-scroll p-8 shadow-xl xl:col-span-6">
+    <div className="col-span-12 rounded-box scrollable-rounded max-h-full bg-base-100 overflow-y-scroll p-8 shadow-xl xl:col-span-6">
       <h2 className="font-bold text-xl">Budget</h2>
       <div className="overflow-x-auto">
         <table className="table">
@@ -18,8 +27,11 @@ const BudgetTable = ({ data }: BudgetTableProps) => {
             </tr>
           </thead>
           <tbody>
-            {data &&
-              data.map((category) => {
+            {calculatedData &&
+              calculatedData.map((category) => {
+                const isOverBudget =
+                  category.current &&
+                  parseInt(category.current) > parseInt(category.budget);
                 return (
                   <tr key={category.id}>
                     <th>{category.category}</th>
@@ -28,7 +40,13 @@ const BudgetTable = ({ data }: BudgetTableProps) => {
                         ? `$${category.budget}`
                         : "$0"}
                     </th>
-                    <th>
+                    <th
+                      className={
+                        isOverBudget
+                          ? "bg-error rounded-box"
+                          : "bg-primary rounded-box"
+                      }
+                    >
                       {typeof category.current === "string"
                         ? `$${category.current}`
                         : "$0"}

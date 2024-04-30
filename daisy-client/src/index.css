@@ -2,15 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-.scroll-indicator {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50px; /* Height of the fading effect */
-  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.8));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none; /* Allows clicking through the element */
+/* For Webkit browsers */
+.scrollable-rounded::-webkit-scrollbar {
+  width: 8px; /* or any appropriate width */
+}
+
+.scrollable-rounded::-webkit-scrollbar-track {
+  background: #f1f1f1; /* or any color that matches your design */
+  border-radius: 10px; /* this should match the border-radius of your container */
+  display: none;
+}
+
+.scrollable-rounded::-webkit-scrollbar-thumb {
+  background-color: darkgrey; /* this is the draggable part of the scroll */
+  border-radius: 10px; /* radius of the draggable part */
 }

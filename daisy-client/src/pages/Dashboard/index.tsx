@@ -36,11 +36,11 @@ const Dashboard = () => {
       <StatsGrid />
       <div className="mt-4 grid grid-cols-12 h-96 gap-4 md:mt-6 md:gap-6 2xl:mt-8 2xl:gap-8">
         <TransactionsList
-          data={transactions}
+          transactions={transactions}
           filterCategories={filterCategories}
           setFilterCategories={setFilterCategories}
         />
-        <BudgetTable data={budget} />
+        <BudgetTable budgetCategories={budget} transactions={transactions} />
       </div>
     </div>
   );
