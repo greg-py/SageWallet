@@ -23,3 +23,15 @@ export const calculateBudgetCurrents = (
   data.sort((a, b) => parseFloat(b.budget) - parseFloat(a.budget));
   return data;
 };
+
+export const handleTransactionAmountChange = (
+  e: React.ChangeEvent<HTMLInputElement>,
+  setAmount: React.Dispatch<React.SetStateAction<string>>
+) => {
+  const value = e.target.value;
+  const regex = /^[0-9]*\.?[0-9]{0,2}$/; // Regex to limit to two decimal places
+
+  if (value === "" || regex.test(value)) {
+    setAmount(value);
+  }
+};

@@ -4,9 +4,10 @@ import { Transaction } from "../../../../models/transaction";
 
 interface TransactionsProps {
   transactions: Transaction[];
+  handleEdit: (transaction: Transaction) => void;
 }
 
-const Transactions = ({ transactions }: TransactionsProps) => {
+const Transactions = ({ transactions, handleEdit }: TransactionsProps) => {
   return (
     <ul role="list" className="divide-y divide-gray-100">
       {transactions &&
@@ -14,6 +15,7 @@ const Transactions = ({ transactions }: TransactionsProps) => {
           <li
             key={transaction.id}
             className="flex justify-between gap-x-4 p-4 rounded-box hover:cursor-pointer hover:bg-base-200"
+            onClick={() => handleEdit(transaction)}
           >
             <div className="flex min-w-0 gap-x-4">
               <div className="min-w-0 flex-auto">
@@ -30,7 +32,7 @@ const Transactions = ({ transactions }: TransactionsProps) => {
               <p className="text-sm leading-6">
                 {transaction.price && `$${transaction.price}`}
               </p>
-              <p className="mt-1 text-xs leading-5 badge badge-primary">
+              <p className="mt-1 text-xs leading-5 badge badge-neutral">
                 {transaction.category}
               </p>
             </div>

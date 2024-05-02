@@ -38,7 +38,7 @@ const FilterModal = ({
             </button>
           </form>
           <h3 className="font-bold text-lg">Filter Transactions</h3>
-          <ul className="menu h-64 overflow-y-scroll">
+          <ul className="h-64 menu">
             {categories &&
               categories.map((category) => {
                 return (
@@ -46,7 +46,7 @@ const FilterModal = ({
                     key={category}
                     className={
                       filterCategories.includes(category)
-                        ? "bg-primary rounded-box"
+                        ? "bg-primary rounded-lg"
                         : ""
                     }
                   >
