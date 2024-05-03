@@ -3,11 +3,21 @@ import {
   DatabaseTransaction,
   FormattedTransaction,
 } from "../models/transaction";
+import { getUTCDateRange } from "../utils/dates";
 
-const getUserTransactions = async (userId: string) => {
+const getUserTransactions = async (
+  userId: string,
+  month: string,
+  year: string
+) => {
+  // Use month and year query parameters to build date range for query
+  const { startDate, endDate } = getUTCDateRange(year, month);
+
   // Fetch transactions from database
   const rawTransactions = await transactionsRepository.findTransactionsByUserId(
-    userId
+    userId,
+    startDate,
+    endDate
   );
 
   // Map raw transactions data to formatted transactions class
@@ -20,7 +30,9 @@ const getUserTransactions = async (userId: string) => {
   }
 
   // Sort transactions
-  formattedTransactions.sort((a, b) => b.date.getTime() - a.date.getTime());
+  formattedTransactions.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
 
   return formattedTransactions;
 };

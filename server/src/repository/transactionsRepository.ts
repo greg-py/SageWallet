@@ -1,9 +1,20 @@
+import { Op } from "sequelize";
 import Transaction, { DatabaseTransaction } from "../models/transaction";
 
-const findTransactionsByUserId = async (userId: string) => {
+const findTransactionsByUserId = async (
+  userId: string,
+  startDate: string,
+  endDate: string
+) => {
   try {
     const transactions = await Transaction.findAll({
-      where: { user_id: userId },
+      where: {
+        user_id: userId,
+        date: {
+          [Op.gte]: startDate,
+          [Op.lt]: endDate,
+        },
+      },
     });
     return transactions;
   } catch (error) {

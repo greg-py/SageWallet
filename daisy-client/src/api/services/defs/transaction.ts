@@ -2,9 +2,13 @@ import { Transaction } from "../../../models/transaction";
 import { API_BASE_URL } from "../../../config/constants";
 
 export const getTransactions = async (
-  userId: string
+  userId: string,
+  filterMonth: number,
+  filterYear: number
 ): Promise<Transaction[]> => {
-  const response = await fetch(`${API_BASE_URL}/users/${userId}/transactions`);
+  const response = await fetch(
+    `${API_BASE_URL}/users/${userId}/transactions?month=${filterMonth}&year=${filterYear}`
+  );
   const data = await response.json();
   return data;
 };

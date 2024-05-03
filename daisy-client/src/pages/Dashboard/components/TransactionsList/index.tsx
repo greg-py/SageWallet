@@ -1,22 +1,21 @@
 import { Transaction } from "../../../../models/transaction";
-import FilterModal from "./FilterModal";
 import AddModal from "./AddModal";
 import Transactions from "./Transactions";
 import EditModal from "./EditModal";
 import { useState } from "react";
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { DATEPICKER_FORMAT_STRING } from "../../../../config/constants";
 
 interface TransactionsListProps {
   transactions: Transaction[];
   filterCategories: string[];
-  setFilterCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  refetchPending: boolean;
 }
 
 const TransactionsList = ({
   transactions,
   filterCategories,
-  setFilterCategories,
+  refetchPending,
 }: TransactionsListProps) => {
   // State for edit modal
   const [transaction, setTransaction] = useState<Transaction | null>(null);
@@ -27,21 +26,18 @@ const TransactionsList = ({
 
   // Function for setting transaction edit state
   const initializeTransactionEdit = (transaction: Transaction) => {
+    const formattedDate = formatInTimeZone(
+      transaction.date,
+      "UTC",
+      DATEPICKER_FORMAT_STRING
+    );
+
     setTransaction(transaction);
-    setDate(format(transaction.date, DATEPICKER_FORMAT_STRING));
+    setDate(formattedDate);
     setVendor(transaction.vendor);
     setAmount(transaction.price);
     setCategory(transaction.category);
   };
-
-  // Build and sort list of categories from transactions
-  const categories: string[] = [];
-  transactions.forEach((transaction) => {
-    if (!categories.includes(transaction.category)) {
-      categories.push(transaction.category);
-    }
-  });
-  categories.sort();
 
   // Filter the transactions if a filter category is chosen
   const filteredTransactions = filterCategories.length
@@ -63,19 +59,16 @@ const TransactionsList = ({
     <div className="col-span-12 rounded-box scrollable-rounded max-h-full bg-base-100 overflow-y-scroll p-8 shadow-xl xl:col-span-6">
       <div className="flex flex-row justify-between">
         <h2 className="font-bold text-xl">Transactions</h2>
-        <div className="space-x-2">
-          <FilterModal
-            categories={categories}
-            filterCategories={filterCategories}
-            setFilterCategories={setFilterCategories}
-          />
-          <AddModal />
-        </div>
+        <AddModal />
       </div>
-      <Transactions
-        transactions={filteredTransactions}
-        handleEdit={handleEditModalOpen}
-      />
+      {refetchPending ? (
+        <div>Loading</div>
+      ) : (
+        <Transactions
+          transactions={filteredTransactions}
+          handleEdit={handleEditModalOpen}
+        />
+      )}
       <EditModal
         transaction={transaction}
         date={date}

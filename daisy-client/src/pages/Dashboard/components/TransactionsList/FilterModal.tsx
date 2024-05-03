@@ -27,7 +27,7 @@ const FilterModal = ({
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleFilterModalOpen}>
+      <button className="btn" onClick={handleFilterModalOpen}>
         Filter
       </button>
       <dialog id="filter_modal" className="modal">
@@ -46,7 +46,7 @@ const FilterModal = ({
                     key={category}
                     className={
                       filterCategories.includes(category)
-                        ? "bg-primary rounded-lg"
+                        ? "bg-neutral rounded-lg text-base-100"
                         : ""
                     }
                   >

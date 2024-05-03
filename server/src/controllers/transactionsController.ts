@@ -4,7 +4,21 @@ import transactionsService from "../services/transactionsService";
 const getUserTransactions = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
-    const response = await transactionsService.getUserTransactions(userId);
+    const { month, year } = req.query;
+
+    if (!userId || !month || !year) {
+      return res.status(400).send({ error: "Missing required parameters" });
+    }
+
+    if (typeof month !== "string" || typeof year !== "string") {
+      return res.status(400).send({ error: "Invalid query parameters" });
+    }
+
+    const response = await transactionsService.getUserTransactions(
+      userId,
+      month,
+      year
+    );
     res.json(response);
   } catch (error) {
     console.log(error);
