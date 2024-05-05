@@ -5,6 +5,7 @@ import EditModal from "./EditModal";
 import { useState } from "react";
 import { formatInTimeZone } from "date-fns-tz";
 import { DATEPICKER_FORMAT_STRING } from "../../../../config/constants";
+import Spinner from "../../../../components/Layout/Spinner";
 
 interface TransactionsListProps {
   transactions: Transaction[];
@@ -48,39 +49,45 @@ const TransactionsList = ({
 
   const handleEditModalOpen = (transaction: Transaction) => {
     initializeTransactionEdit(transaction);
-    (document.getElementById("edit_modal") as HTMLDialogElement)?.showModal();
+    (
+      document.getElementById("edit_transaction_modal") as HTMLDialogElement
+    )?.showModal();
   };
 
   const handleEditModalClose = () => {
-    (document.getElementById("edit_modal") as HTMLDialogElement)?.close();
+    (
+      document.getElementById("edit_transaction_modal") as HTMLDialogElement
+    )?.close();
   };
 
   return (
     <div className="col-span-12 rounded-box scrollable-rounded max-h-full bg-base-100 overflow-y-scroll p-8 shadow-xl xl:col-span-6">
-      <div className="flex flex-row justify-between">
-        <h2 className="font-bold text-xl">Transactions</h2>
-        <AddModal />
-      </div>
       {refetchPending ? (
-        <div>Loading</div>
+        <Spinner />
       ) : (
-        <Transactions
-          transactions={filteredTransactions}
-          handleEdit={handleEditModalOpen}
-        />
+        <>
+          <div className="flex flex-row justify-between">
+            <h2 className="font-bold text-xl">Transactions</h2>
+            <AddModal />
+          </div>
+          <Transactions
+            transactions={filteredTransactions}
+            handleEdit={handleEditModalOpen}
+          />
+          <EditModal
+            transaction={transaction}
+            date={date}
+            setDate={setDate}
+            vendor={vendor}
+            setVendor={setVendor}
+            amount={amount}
+            setAmount={setAmount}
+            category={category}
+            setCategory={setCategory}
+            handleClose={handleEditModalClose}
+          />
+        </>
       )}
-      <EditModal
-        transaction={transaction}
-        date={date}
-        setDate={setDate}
-        vendor={vendor}
-        setVendor={setVendor}
-        amount={amount}
-        setAmount={setAmount}
-        category={category}
-        setCategory={setCategory}
-        handleClose={handleEditModalClose}
-      />
     </div>
   );
 };

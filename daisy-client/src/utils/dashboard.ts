@@ -35,3 +35,15 @@ export const handleTransactionAmountChange = (
     setAmount(value);
   }
 };
+
+export const handleBudgetAmountChange = (
+  e: React.ChangeEvent<HTMLInputElement>,
+  setBudget: React.Dispatch<React.SetStateAction<string>>
+) => {
+  const value = e.target.value;
+  const regex = /^[0-9]*\.?[0-9]{0,2}$/; // Regex to limit to two decimal places
+
+  if (value === "" || regex.test(value)) {
+    setBudget(value);
+  }
+};

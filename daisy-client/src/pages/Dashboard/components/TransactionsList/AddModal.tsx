@@ -1,6 +1,4 @@
-import { format } from "date-fns";
 import { useState } from "react";
-import { DATEPICKER_FORMAT_STRING } from "../../../../config/constants";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation } from "@tanstack/react-query";
 import { Transaction } from "../../../../models/transaction";
@@ -9,26 +7,26 @@ import { queryClient } from "../../../../api/queries/queryClient";
 import { handleTransactionAmountChange } from "../../../../utils/dashboard";
 
 const AddModal = () => {
-  const [date, setDate] = useState(() =>
-    format(new Date(), DATEPICKER_FORMAT_STRING)
-  );
+  const [date, setDate] = useState("");
   const [vendor, setVendor] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
 
   const { user } = useAuth0();
 
-  // Function to open add transaction modal
-  const handleAddModalOpen = () => {
-    clearState();
-    (document.getElementById("add_modal") as HTMLDialogElement)?.showModal();
-  };
-
   const clearState = () => {
     setDate("");
     setVendor("");
     setAmount("");
     setCategory("");
+  };
+
+  // Function to open add transaction modal
+  const handleAddModalOpen = () => {
+    clearState();
+    (
+      document.getElementById("add_transaction_modal") as HTMLDialogElement
+    )?.showModal();
   };
 
   const mutation = useMutation({
@@ -68,7 +66,7 @@ const AddModal = () => {
       <button className="btn btn-neutral btn-sm" onClick={handleAddModalOpen}>
         Add
       </button>
-      <dialog id="add_modal" className="modal">
+      <dialog id="add_transaction_modal" className="modal">
         <div className="modal-box w-full max-w-xl">
           <form method="dialog">
             <button

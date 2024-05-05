@@ -15,6 +15,10 @@ const findTransactionsByUserId = async (
           [Op.lt]: endDate,
         },
       },
+      order: [
+        ["date", "DESC"],
+        ["created_at", "DESC"],
+      ],
     });
     return transactions;
   } catch (error) {

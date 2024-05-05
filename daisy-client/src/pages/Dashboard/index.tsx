@@ -65,6 +65,7 @@ const Dashboard = () => {
         <BudgetTable
           budgetCategories={budget}
           transactions={transactions}
+          filterCategories={filterCategories}
           refetchPending={isRefetchingTransactions}
         />
       </div>

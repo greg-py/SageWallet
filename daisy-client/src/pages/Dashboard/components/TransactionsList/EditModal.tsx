@@ -92,7 +92,7 @@ const EditModal = ({
   };
 
   return (
-    <dialog id="edit_modal" className="modal">
+    <dialog id="edit_transaction_modal" className="modal">
       <div className="modal-box w-full max-w-xl">
         <form method="dialog">
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
