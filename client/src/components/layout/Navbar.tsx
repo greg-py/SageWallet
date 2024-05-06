@@ -1,7 +1,6 @@
-import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-const ProfileNavbar = () => {
+const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth0();
 
   const handleLogout = () => {
@@ -9,35 +8,36 @@ const ProfileNavbar = () => {
   };
 
   return (
-    <Navbar rounded fluid className="">
-      <Navbar.Brand href="/">
-        <span className="self-center whitespace-nowrap text-xl font-semibold">
-          Budget
-        </span>
-      </Navbar.Brand>
+    <div className="navbar bg-base-100">
+      <div className="flex-1">
+        <a className="btn btn-ghost text-xl">Budget</a>
+      </div>
       {isAuthenticated && user && (
-        <div className="flex md:order-2">
-          <Dropdown
-            arrowIcon={false}
-            inline
-            label={<Avatar alt="User settings" img={user.picture} rounded />}
+        <div className="dropdown dropdown-end">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle avatar"
           >
-            <Dropdown.Header>
-              <span className="block truncate text-sm font-medium">
-                {user.email}
-              </span>
-            </Dropdown.Header>
-            <Dropdown.Item>Profile</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item onClick={() => handleLogout()}>
-              Sign out
-            </Dropdown.Item>
-          </Dropdown>
-          <Navbar.Toggle className="text-base-300" />
+            <div className="w-10 rounded-full">
+              <img alt="User avatar" src={user.picture} />
+            </div>
+          </div>
+          <ul
+            tabIndex={0}
+            className="mt-3 z-[1] p-2 shadow-xl menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <a className="justify-between">Profile</a>
+            </li>
+            <li>
+              <a onClick={handleLogout}>Logout</a>
+            </li>
+          </ul>
         </div>
       )}
-    </Navbar>
+    </div>
   );
 };
 
-export default ProfileNavbar;
+export default Navbar;

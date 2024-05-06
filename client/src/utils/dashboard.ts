@@ -24,6 +24,23 @@ export const calculateBudgetCurrents = (
   return data;
 };
 
+export const calculateBudgetTotals = (budgetCategories: BudgetCategory[]) => {
+  let budgetTotal = 0;
+  let currentTotal = 0;
+
+  budgetCategories.forEach((category) => {
+    budgetTotal += parseFloat(category.budget);
+    if (category.current) {
+      currentTotal += parseFloat(category.current);
+    }
+  });
+
+  return {
+    budgetTotal,
+    currentTotal,
+  };
+};
+
 export const handleTransactionAmountChange = (
   e: React.ChangeEvent<HTMLInputElement>,
   setAmount: React.Dispatch<React.SetStateAction<string>>

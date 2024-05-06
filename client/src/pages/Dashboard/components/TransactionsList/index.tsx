@@ -61,7 +61,7 @@ const TransactionsList = ({
   };
 
   return (
-    <div className="col-span-12 rounded-box scrollable-rounded max-h-full bg-base-100 overflow-y-scroll p-8 shadow-xl xl:col-span-6">
+    <div className="col-span-12 h-96 rounded-box scrollable-rounded max-h-full bg-base-100 overflow-y-scroll p-8 shadow-xl xl:col-span-6">
       {refetchPending ? (
         <Spinner />
       ) : (

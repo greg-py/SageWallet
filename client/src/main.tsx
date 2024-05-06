@@ -2,8 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
+
 import { Auth0Provider } from "@auth0/auth0-react";
-import { queryClient } from "./api/queryClient.ts";
+import { queryClient } from "./api/queries/queryClient.ts";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 

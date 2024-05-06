@@ -42,39 +42,37 @@ const Filters = ({
   };
 
   return (
-    <div className="mt-4 md:mt-6 2xl:mt-8">
-      <div className="flex flex-col space-y-2 xl:flex-row xl:space-y-0 xl:space-x-4">
-        <select
-          className="select min-w-96 shadow-xl"
-          value={MONTHS[filterMonth] ?? ""}
-          onChange={(e) => handleMonthChange(e)}
-        >
-          <option disabled>Month</option>
-          {MONTHS &&
-            MONTHS.map((month) => {
-              return <option key={month}>{month}</option>;
-            })}
-        </select>
-        <select
-          className="select min-w-96 shadow-xl"
-          value={filterYear}
-          onChange={(e) => setFilterYear(parseInt(e.target.value))}
-        >
-          <option disabled>Year</option>
-          {YEARS &&
-            YEARS.map((year) => {
-              return <option key={year}>{year}</option>;
-            })}
-        </select>
-        <button className="btn btn-neutral" onClick={() => refetch()}>
-          Submit
-        </button>
-        <FilterModal
-          categories={categories}
-          filterCategories={filterCategories}
-          setFilterCategories={setFilterCategories}
-        />
-      </div>
+    <div className="flex flex-col space-y-2 xl:flex-row xl:space-y-0 xl:space-x-4">
+      <select
+        className="select min-w-96 shadow-xl"
+        value={MONTHS[filterMonth] ?? ""}
+        onChange={(e) => handleMonthChange(e)}
+      >
+        <option disabled>Month</option>
+        {MONTHS &&
+          MONTHS.map((month) => {
+            return <option key={month}>{month}</option>;
+          })}
+      </select>
+      <select
+        className="select min-w-96 shadow-xl"
+        value={filterYear}
+        onChange={(e) => setFilterYear(parseInt(e.target.value))}
+      >
+        <option disabled>Year</option>
+        {YEARS &&
+          YEARS.map((year) => {
+            return <option key={year}>{year}</option>;
+          })}
+      </select>
+      <button className="btn btn-neutral" onClick={() => refetch()}>
+        Submit
+      </button>
+      <FilterModal
+        categories={categories}
+        filterCategories={filterCategories}
+        setFilterCategories={setFilterCategories}
+      />
     </div>
   );
 };

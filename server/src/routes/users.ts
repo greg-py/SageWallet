@@ -84,4 +84,8 @@ router.get("/:userId/budgets", budgetsController.getUserBudgets);
 
 router.post("/:userId/budgets", budgetsController.addUserBudgets);
 
+router.put("/:userId/budgets/:budgetId", budgetsController.updateUserBudget);
+
+router.delete("/:userId/budgets/:budgetId", budgetsController.deleteUserBudget);
+
 export default router;

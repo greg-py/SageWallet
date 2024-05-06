@@ -2,10 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-.hide-scrollbar {
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+/* For Webkit browsers */
+.scrollable-rounded::-webkit-scrollbar {
+  width: 8px; /* or any appropriate width */
 }
-.hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
+
+.scrollable-rounded::-webkit-scrollbar-track {
+  background: #f1f1f1; /* or any color that matches your design */
+  border-radius: 10px; /* this should match the border-radius of your container */
+  display: none;
+}
+
+.scrollable-rounded::-webkit-scrollbar-thumb {
+  background-color: darkgrey; /* this is the draggable part of the scroll */
+  border-radius: 10px; /* radius of the draggable part */
 }

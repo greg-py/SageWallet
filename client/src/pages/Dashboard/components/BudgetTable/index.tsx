@@ -2,7 +2,10 @@ import { useState } from "react";
 import Spinner from "../../../../components/Layout/Spinner";
 import { BudgetCategory } from "../../../../models/budget";
 import { Transaction } from "../../../../models/transaction";
-import { calculateBudgetCurrents } from "../../../../utils/dashboard";
+import {
+  calculateBudgetCurrents,
+  calculateBudgetTotals,
+} from "../../../../utils/dashboard";
 import AddModal from "./AddModal";
 import EditModal from "./EditModal";
 
@@ -46,6 +49,8 @@ const BudgetTable = ({
     transactions
   );
 
+  const budgetTotals = calculateBudgetTotals(calculatedData);
+
   const handleEditModalOpen = (budget: BudgetCategory) => {
     initializeBudgetEdit(budget);
     (
@@ -60,7 +65,7 @@ const BudgetTable = ({
   };
 
   return (
-    <div className="col-span-12 rounded-box scrollable-rounded max-h-full bg-base-100 overflow-y-scroll p-8 shadow-xl xl:col-span-6">
+    <div className="col-span-12 h-96 rounded-box scrollable-rounded max-h-full bg-base-100 overflow-y-scroll p-8 shadow-xl xl:col-span-6">
       {refetchPending ? (
         <Spinner />
       ) : (
@@ -74,8 +79,9 @@ const BudgetTable = ({
               <thead>
                 <tr>
                   <th>Category</th>
-                  <th>Budget</th>
-                  <th>Current</th>
+                  <th>Budget ($)</th>
+                  <th>Current ($)</th>
+                  <th>Current (%)</th>
                 </tr>
               </thead>
               <tbody>
@@ -107,10 +113,26 @@ const BudgetTable = ({
                             ? `$${category.current}`
                             : "$0"}
                         </th>
+                        <th></th>
                       </tr>
                     );
                   })}
               </tbody>
+              <tfoot>
+                <tr>
+                  <th>Total</th>
+                  <th>
+                    {budgetTotals.budgetTotal
+                      ? `$${budgetTotals.budgetTotal}`
+                      : null}
+                  </th>
+                  <th>
+                    {budgetTotals.currentTotal
+                      ? `$${budgetTotals.currentTotal}`
+                      : null}
+                  </th>
+                </tr>
+              </tfoot>
             </table>
           </div>
           <EditModal

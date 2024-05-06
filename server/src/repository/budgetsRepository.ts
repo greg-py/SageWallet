@@ -28,7 +28,48 @@ const addBudgetByUserId = async (userId: string, budget: any) => {
   }
 };
 
+const updateBudgetByUserId = async (
+  userId: string,
+  budgetId: string,
+  budget: any
+) => {
+  try {
+    return await Budget.update(
+      {
+        category: budget.category,
+        budget: budget.budget,
+        user_id: budget.userId,
+      },
+      {
+        where: { id: budgetId, user_id: userId },
+        returning: true,
+      }
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error("Database error when updating budget: " + error.message);
+    }
+  }
+};
+
+const deleteBudgetByBudgetId = async (userId: string, budgetId: string) => {
+  try {
+    return await Budget.destroy({
+      where: {
+        id: budgetId,
+        user_id: userId,
+      },
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error("Database error when deleting budget: " + error.message);
+    }
+  }
+};
+
 export default {
   findBudgetsByUserId,
   addBudgetByUserId,
+  updateBudgetByUserId,
+  deleteBudgetByBudgetId,
 };

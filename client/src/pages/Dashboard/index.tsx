@@ -1,4 +1,4 @@
-import StatsGrid from "./components/StatsGrid";
+// import StatsGrid from "./components/StatsGrid";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../components/Layout/LoadingSpinner";
@@ -45,7 +45,7 @@ const Dashboard = () => {
 
   return (
     <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-      <StatsGrid />
+      {/* <StatsGrid /> */}
       <Filters
         filterMonth={filterMonth}
         setFilterMonth={setFilterMonth}
@@ -56,7 +56,7 @@ const Dashboard = () => {
         setFilterCategories={setFilterCategories}
         refetch={refetchTransactions}
       />
-      <div className="mt-4 grid grid-cols-12 h-96 gap-4 md:mt-6 md:gap-6 2xl:mt-8 2xl:gap-8">
+      <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-8 2xl:gap-8">
         <TransactionsList
           transactions={transactions}
           filterCategories={filterCategories}

@@ -1,39 +1,25 @@
-import Container from "./components/layout/Container";
-import ProfileNavbar from "./components/layout/Navbar";
-import Body from "./components/layout/Body";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import Layout from "./components/Layout/Layout";
 import Dashboard from "./pages/Dashboard";
-import FooterSection from "./components/layout/Footer";
 
-import { useAuth0 } from "@auth0/auth0-react";
-import LoginButton from "./components/auth/LoginButton";
-import LoadingOverlay from "./components/layout/LoadingOverlay";
-
-const App = () => {
-  const { user, isAuthenticated, isLoading } = useAuth0();
-
-  if (isLoading) {
-    return <LoadingOverlay />;
-  }
-
-  if (!user || !isAuthenticated) {
-    return (
-      <Container>
-        <div className="flex justify-center items-center h-screen w-full">
-          <LoginButton />
-        </div>
-      </Container>
-    );
-  }
-
+function App() {
   return (
-    <Container>
-      <ProfileNavbar />
-      <Body>
-        <Dashboard />
-      </Body>
-      <FooterSection />
-    </Container>
+    <Router>
+      <Layout>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Layout>
+    </Router>
   );
-};
+}
 
 export default App;
