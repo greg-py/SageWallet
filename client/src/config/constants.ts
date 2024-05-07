@@ -18,3 +18,4 @@ export const MONTHS = [
   "December",
 ];
 export const YEARS = [2023, 2024];
+export const DASHBOARD_TRANSACTION_COUNT = 5;

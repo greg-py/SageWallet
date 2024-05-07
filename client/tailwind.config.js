@@ -8,6 +8,19 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["emerald", "pastel", "nord"],
+    themes: [
+      "emerald",
+      "pastel",
+      "nord",
+      "light",
+      "dark",
+      "bumblebee",
+      "corporate",
+      "fantasy",
+      "dracula",
+      "dim",
+      "night",
+      "sunset",
+    ],
   },
 };

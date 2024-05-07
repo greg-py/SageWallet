@@ -4,9 +4,17 @@ import { useMutation } from "@tanstack/react-query";
 import { Transaction } from "../../../../models/transaction";
 import { addTransaction } from "../../../../api/services/defs/transaction";
 import { queryClient } from "../../../../api/queries/queryClient";
-import { handleTransactionAmountChange } from "../../../../utils/dashboard";
+import {
+  buildCategoryList,
+  handleTransactionAmountChange,
+} from "../../../../utils/dashboard";
+import { BudgetCategory } from "../../../../models/budget";
 
-const AddModal = () => {
+interface AddModalProps {
+  budgetCategories: BudgetCategory[];
+}
+
+const AddModal = ({ budgetCategories }: AddModalProps) => {
   const [date, setDate] = useState("");
   const [vendor, setVendor] = useState("");
   const [amount, setAmount] = useState("");
@@ -20,6 +28,9 @@ const AddModal = () => {
     setAmount("");
     setCategory("");
   };
+
+  // Build list of categories for add transaction modal from budget categories
+  const categories = buildCategoryList(budgetCategories);
 
   // Function to open add transaction modal
   const handleAddModalOpen = () => {
@@ -70,7 +81,7 @@ const AddModal = () => {
         <div className="modal-box w-full max-w-xl">
           <form method="dialog">
             <button
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+              className="btn btn-ghost absolute right-2 top-2"
               onClick={clearState}
             >
               ✕
@@ -108,16 +119,18 @@ const AddModal = () => {
                 onChange={(e) => handleTransactionAmountChange(e, setAmount)}
               />
             </label>
-            <label className="input input-bordered flex items-center gap-2">
-              <input
-                aria-label="Transaction Category"
-                type="text"
-                className="grow"
-                placeholder="Category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              />
-            </label>
+            <select
+              aria-label="Transaction Category"
+              className="select input-bordered w-full"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option disabled>Category</option>
+              {categories.length &&
+                categories.map((category) => {
+                  return <option key={category}>{category}</option>;
+                })}
+            </select>
           </div>
           <div className="modal-action">
             <button className="btn" onClick={handleSubmit}>

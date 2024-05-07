@@ -16,6 +16,12 @@ export const calculateBudgetCurrents = (
     );
     category.budget = Math.round(parseFloat(category.budget)).toString();
     category.current = Math.round(currentTotal).toString();
+    if (category.budget && parseFloat(category.budget) > 0) {
+      category.currentPercentage = Math.round(
+        (Math.round(currentTotal) / Math.round(parseFloat(category.budget))) *
+          100
+      ).toString();
+    }
 
     return category;
   });
@@ -35,9 +41,12 @@ export const calculateBudgetTotals = (budgetCategories: BudgetCategory[]) => {
     }
   });
 
+  const differenceTotal = currentTotal - budgetTotal;
+
   return {
     budgetTotal,
     currentTotal,
+    differenceTotal,
   };
 };
 
@@ -63,4 +72,15 @@ export const handleBudgetAmountChange = (
   if (value === "" || regex.test(value)) {
     setBudget(value);
   }
+};
+
+export const buildCategoryList = (budgetCategories: BudgetCategory[]) => {
+  const categories: string[] = [];
+  budgetCategories.forEach((category) => {
+    if (!categories.includes(category.category)) {
+      categories.push(category.category);
+    }
+  });
+  categories.sort();
+  return categories;
 };

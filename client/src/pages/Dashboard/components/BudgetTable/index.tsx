@@ -2,24 +2,20 @@ import { useState } from "react";
 import Spinner from "../../../../components/Layout/Spinner";
 import { BudgetCategory } from "../../../../models/budget";
 import { Transaction } from "../../../../models/transaction";
-import {
-  calculateBudgetCurrents,
-  calculateBudgetTotals,
-} from "../../../../utils/dashboard";
+import { calculateBudgetCurrents } from "../../../../utils/dashboard";
 import AddModal from "./AddModal";
 import EditModal from "./EditModal";
+import DashboardCard from "../DashboardCard";
 
 interface BudgetTableProps {
   budgetCategories: BudgetCategory[];
   transactions: Transaction[];
-  filterCategories: string[];
   refetchPending: boolean;
 }
 
 const BudgetTable = ({
   budgetCategories,
   transactions,
-  filterCategories,
   refetchPending,
 }: BudgetTableProps) => {
   // State for edit modal
@@ -36,20 +32,11 @@ const BudgetTable = ({
     }
   };
 
-  // Filter the categories if a filter category is chosen
-  const filteredCategories = filterCategories.length
-    ? budgetCategories.filter((category) =>
-        filterCategories.includes(category.category)
-      )
-    : budgetCategories;
-
   // Calculate current budget category totals based on transactions data
   const calculatedData = calculateBudgetCurrents(
-    filteredCategories,
+    budgetCategories,
     transactions
   );
-
-  const budgetTotals = calculateBudgetTotals(calculatedData);
 
   const handleEditModalOpen = (budget: BudgetCategory) => {
     initializeBudgetEdit(budget);
@@ -65,7 +52,7 @@ const BudgetTable = ({
   };
 
   return (
-    <div className="col-span-12 h-96 rounded-box scrollable-rounded max-h-full bg-base-100 overflow-y-scroll p-8 shadow-xl xl:col-span-6">
+    <DashboardCard>
       {refetchPending ? (
         <Spinner />
       ) : (
@@ -81,6 +68,7 @@ const BudgetTable = ({
                   <th>Category</th>
                   <th>Budget ($)</th>
                   <th>Current ($)</th>
+                  <th>Difference ($)</th>
                   <th>Current (%)</th>
                 </tr>
               </thead>
@@ -90,6 +78,9 @@ const BudgetTable = ({
                     const isOverBudget =
                       category.current &&
                       parseInt(category.current) > parseInt(category.budget);
+                    const categoryDifference =
+                      category.current &&
+                      parseInt(category.current) - parseInt(category.budget);
                     return (
                       <tr
                         key={category.id}
@@ -104,35 +95,35 @@ const BudgetTable = ({
                         </th>
                         <th
                           className={
-                            isOverBudget
-                              ? "bg-error rounded-box"
-                              : "bg-primary rounded-box"
+                            isOverBudget ? "text-error" : "text-success"
                           }
                         >
                           {typeof category.current === "string"
                             ? `$${category.current}`
                             : "$0"}
                         </th>
-                        <th></th>
+                        <th
+                          className={
+                            isOverBudget ? "text-error" : "text-success"
+                          }
+                        >
+                          {categoryDifference !== undefined
+                            ? `$${categoryDifference}`
+                            : null}
+                        </th>
+                        <th
+                          className={
+                            isOverBudget ? "text-error" : "text-success"
+                          }
+                        >
+                          {typeof category.currentPercentage === "string"
+                            ? `${category.currentPercentage}%`
+                            : null}
+                        </th>
                       </tr>
                     );
                   })}
               </tbody>
-              <tfoot>
-                <tr>
-                  <th>Total</th>
-                  <th>
-                    {budgetTotals.budgetTotal
-                      ? `$${budgetTotals.budgetTotal}`
-                      : null}
-                  </th>
-                  <th>
-                    {budgetTotals.currentTotal
-                      ? `$${budgetTotals.currentTotal}`
-                      : null}
-                  </th>
-                </tr>
-              </tfoot>
             </table>
           </div>
           <EditModal
@@ -145,7 +136,7 @@ const BudgetTable = ({
           />
         </>
       )}
-    </div>
+    </DashboardCard>
   );
 };
 

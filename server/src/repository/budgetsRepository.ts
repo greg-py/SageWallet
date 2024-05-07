@@ -4,6 +4,10 @@ const findBudgetsByUserId = async (userId: string) => {
   try {
     const budgets = await Budget.findAll({
       where: { user_id: userId },
+      order: [
+        ["budget", "DESC"],
+        ["category", "DESC"],
+      ],
     });
     return budgets;
   } catch (error) {

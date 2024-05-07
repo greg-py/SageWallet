@@ -1,5 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { handleTransactionAmountChange } from "../../../../utils/dashboard";
+import {
+  buildCategoryList,
+  handleTransactionAmountChange,
+} from "../../../../utils/dashboard";
 import { useMutation } from "@tanstack/react-query";
 import { Transaction } from "../../../../models/transaction";
 import {
@@ -7,6 +10,7 @@ import {
   updateTransaction,
 } from "../../../../api/services/defs/transaction";
 import { queryClient } from "../../../../api/queries/queryClient";
+import { BudgetCategory } from "../../../../models/budget";
 
 interface EditModalProps {
   transaction: Transaction | null;
@@ -19,6 +23,7 @@ interface EditModalProps {
   category: string;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
   handleClose: () => void;
+  budgetCategories: BudgetCategory[];
 }
 
 const EditModal = ({
@@ -32,8 +37,12 @@ const EditModal = ({
   category,
   setCategory,
   handleClose,
+  budgetCategories,
 }: EditModalProps) => {
   const { user } = useAuth0();
+
+  // Build list of categories for add transaction modal from budget categories
+  const categories = buildCategoryList(budgetCategories);
 
   const updateMutation = useMutation({
     mutationFn: (updatedTransaction: Transaction) => {
@@ -95,9 +104,7 @@ const EditModal = ({
     <dialog id="edit_transaction_modal" className="modal">
       <div className="modal-box w-full max-w-xl">
         <form method="dialog">
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-            x
-          </button>
+          <button className="btn btn-ghost absolute right-2 top-2">x</button>
         </form>
         <h3 className="font-bold text-lg">Edit Transaction</h3>
         <div className="h-64 p-4 space-y-4">
@@ -131,16 +138,18 @@ const EditModal = ({
               onChange={(e) => handleTransactionAmountChange(e, setAmount)}
             />
           </label>
-          <label className="input input-bordered flex items-center gap-2">
-            <input
-              aria-label="Transaction Category"
-              type="text"
-              className="grow"
-              placeholder="Category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
-          </label>
+          <select
+            aria-label="Transaction Category"
+            className="select input-bordered w-full"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option disabled>Category</option>
+            {categories.length &&
+              categories.map((category) => {
+                return <option key={category}>{category}</option>;
+              })}
+          </select>
         </div>
         <div className="modal-action">
           <button className="btn btn-error" onClick={handleDelete}>

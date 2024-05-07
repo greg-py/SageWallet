@@ -2,7 +2,9 @@ import budgetsRepository from "../repository/budgetsRepository";
 
 const getUserBudgets = async (userId: string) => {
   const budget = await budgetsRepository.findBudgetsByUserId(userId);
-  budget.sort((a, b) => b.budget - a.budget);
+
+  // TODO: Map raw budget categories to formatted budget category class
+
   return budget;
 };
 

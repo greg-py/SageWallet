@@ -1,5 +1,6 @@
+import AppContainer from "./AppContainer";
 import Navbar from "./Navbar";
-import Drawer from "./Drawer";
+import AppContent from "./AppContent";
 import Footer from "./Footer";
 
 interface LayoutProps {
@@ -8,11 +9,11 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <Drawer>
+    <AppContainer>
       <Navbar />
-      <main className="w-full flex-grow bg-gray-100">{children}</main>
+      <AppContent>{children}</AppContent>
       <Footer />
-    </Drawer>
+    </AppContainer>
   );
 };
 

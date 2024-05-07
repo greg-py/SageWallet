@@ -6,17 +6,19 @@ import { useState } from "react";
 import { formatInTimeZone } from "date-fns-tz";
 import { DATEPICKER_FORMAT_STRING } from "../../../../config/constants";
 import Spinner from "../../../../components/Layout/Spinner";
+import { BudgetCategory } from "../../../../models/budget";
+import DashboardCard from "../DashboardCard";
 
 interface TransactionsListProps {
   transactions: Transaction[];
-  filterCategories: string[];
   refetchPending: boolean;
+  budgetCategories: BudgetCategory[];
 }
 
 const TransactionsList = ({
   transactions,
-  filterCategories,
   refetchPending,
+  budgetCategories,
 }: TransactionsListProps) => {
   // State for edit modal
   const [transaction, setTransaction] = useState<Transaction | null>(null);
@@ -40,13 +42,6 @@ const TransactionsList = ({
     setCategory(transaction.category);
   };
 
-  // Filter the transactions if a filter category is chosen
-  const filteredTransactions = filterCategories.length
-    ? transactions.filter((transaction) =>
-        filterCategories.includes(transaction.category)
-      )
-    : transactions;
-
   const handleEditModalOpen = (transaction: Transaction) => {
     initializeTransactionEdit(transaction);
     (
@@ -61,17 +56,17 @@ const TransactionsList = ({
   };
 
   return (
-    <div className="col-span-12 h-96 rounded-box scrollable-rounded max-h-full bg-base-100 overflow-y-scroll p-8 shadow-xl xl:col-span-6">
+    <DashboardCard>
       {refetchPending ? (
         <Spinner />
       ) : (
         <>
           <div className="flex flex-row justify-between">
             <h2 className="font-bold text-xl">Transactions</h2>
-            <AddModal />
+            <AddModal budgetCategories={budgetCategories} />
           </div>
           <Transactions
-            transactions={filteredTransactions}
+            transactions={transactions}
             handleEdit={handleEditModalOpen}
           />
           <EditModal
@@ -85,10 +80,11 @@ const TransactionsList = ({
             category={category}
             setCategory={setCategory}
             handleClose={handleEditModalClose}
+            budgetCategories={budgetCategories}
           />
         </>
       )}
-    </div>
+    </DashboardCard>
   );
 };
 

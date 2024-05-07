@@ -77,11 +77,9 @@ const EditModal = ({
     <dialog id="edit_budget_modal" className="modal">
       <div className="modal-box w-full max-w-xl">
         <form method="dialog">
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-            x
-          </button>
+          <button className="btn btn-ghost absolute right-2 top-2">x</button>
         </form>
-        <h3 className="font-bold text-lg">Edit Transaction</h3>
+        <h3 className="font-bold text-lg">Edit Budget</h3>
         <div className="h-64 p-4 space-y-4">
           <label className="input input-bordered flex items-center gap-2">
             <input

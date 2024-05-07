@@ -27,15 +27,16 @@ const FilterModal = ({
 
   return (
     <>
-      <button className="btn" onClick={handleFilterModalOpen}>
+      <button
+        className="btn btn-secondary shadow-xl"
+        onClick={handleFilterModalOpen}
+      >
         Filter
       </button>
       <dialog id="filter_modal" className="modal">
         <div className="modal-box">
           <form method="dialog">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
+            <button className="btn btn-ghost absolute right-2 top-2">✕</button>
           </form>
           <h3 className="font-bold text-lg">Filter Transactions</h3>
           <ul className="h-64 menu">

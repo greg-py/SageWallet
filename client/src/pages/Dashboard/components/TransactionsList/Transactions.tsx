@@ -9,7 +9,7 @@ interface TransactionsProps {
 
 const Transactions = ({ transactions, handleEdit }: TransactionsProps) => {
   return (
-    <ul role="list" className="divide-y divide-gray-100">
+    <ul role="list">
       {transactions &&
         transactions.map((transaction) => {
           const formattedDate = formatInTimeZone(
@@ -38,7 +38,7 @@ const Transactions = ({ transactions, handleEdit }: TransactionsProps) => {
                 <p className="text-sm leading-6">
                   {transaction.price && `$${transaction.price}`}
                 </p>
-                <p className="mt-1 text-xs leading-5 badge badge-neutral">
+                <p className="mt-1 text-xs leading-5 bg-accent text-base-100 px-2 pt-1 rounded-lg">
                   {transaction.category}
                 </p>
               </div>

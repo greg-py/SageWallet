@@ -1,4 +1,4 @@
-import { getTransactions } from "../../services/defs/transaction";
+import { getTransactions } from "../../services";
 
 export const transactionsQuery = (
   userId: string,

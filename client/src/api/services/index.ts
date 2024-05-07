@@ -1,1 +1,3 @@
 export * from "./defs/budget";
+export * from "./defs/transaction";
+export * from "./defs/dashboard";

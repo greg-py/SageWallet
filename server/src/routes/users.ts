@@ -1,8 +1,11 @@
 import express from "express";
 import transactionsController from "../controllers/transactionsController";
 import budgetsController from "../controllers/budgetsController";
+import dashboardController from "../controllers/dashboardController";
 
 const router = express.Router();
+
+router.get("/:userId/dashboard", dashboardController.getUserDashboard);
 
 /**
  * @swagger
