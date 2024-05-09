@@ -1,12 +1,12 @@
 import PageContainer from "../../components/Layout/PageContainer";
 import PageTitle from "../../components/Layout/PageTitle";
 
-const Transactions = () => {
+const Income = () => {
   return (
     <PageContainer>
-      <PageTitle>Transactions</PageTitle>
+      <PageTitle>Income</PageTitle>
     </PageContainer>
   );
 };
 
-export default Transactions;
+export default Income;

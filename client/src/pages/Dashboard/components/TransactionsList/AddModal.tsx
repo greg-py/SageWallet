@@ -12,9 +12,11 @@ import { BudgetCategory } from "../../../../models/budget";
 
 interface AddModalProps {
   budgetCategories: BudgetCategory[];
+  minDate: string;
+  maxDate: string;
 }
 
-const AddModal = ({ budgetCategories }: AddModalProps) => {
+const AddModal = ({ budgetCategories, minDate, maxDate }: AddModalProps) => {
   const [date, setDate] = useState("");
   const [vendor, setVendor] = useState("");
   const [amount, setAmount] = useState("");
@@ -65,7 +67,7 @@ const AddModal = ({ budgetCategories }: AddModalProps) => {
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["transactions"] });
+          queryClient.invalidateQueries({ queryKey: ["dashboard"] });
           clearState();
         },
       }
@@ -96,6 +98,8 @@ const AddModal = ({ budgetCategories }: AddModalProps) => {
                 className="grow"
                 placeholder="Date"
                 value={date}
+                min={minDate}
+                max={maxDate}
                 onChange={(e) => setDate(e.target.value)}
               />
             </label>

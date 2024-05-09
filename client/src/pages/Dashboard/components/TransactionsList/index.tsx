@@ -13,12 +13,16 @@ interface TransactionsListProps {
   transactions: Transaction[];
   refetchPending: boolean;
   budgetCategories: BudgetCategory[];
+  filterMonth: number;
+  filterYear: number;
 }
 
 const TransactionsList = ({
   transactions,
   refetchPending,
   budgetCategories,
+  filterMonth,
+  filterYear,
 }: TransactionsListProps) => {
   // State for edit modal
   const [transaction, setTransaction] = useState<Transaction | null>(null);
@@ -26,6 +30,14 @@ const TransactionsList = ({
   const [vendor, setVendor] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
+
+  // Get min and max dates for datepicker based on current filter selection
+  const minDate = new Date(filterYear, filterMonth, 1)
+    .toISOString()
+    .split("T")[0];
+  const maxDate = new Date(filterYear, filterMonth + 1, 0)
+    .toISOString()
+    .split("T")[0];
 
   // Function for setting transaction edit state
   const initializeTransactionEdit = (transaction: Transaction) => {
@@ -63,7 +75,11 @@ const TransactionsList = ({
         <>
           <div className="flex flex-row justify-between">
             <h2 className="font-bold text-xl">Transactions</h2>
-            <AddModal budgetCategories={budgetCategories} />
+            <AddModal
+              budgetCategories={budgetCategories}
+              minDate={minDate}
+              maxDate={maxDate}
+            />
           </div>
           <Transactions
             transactions={transactions}
@@ -81,6 +97,8 @@ const TransactionsList = ({
             setCategory={setCategory}
             handleClose={handleEditModalClose}
             budgetCategories={budgetCategories}
+            minDate={minDate}
+            maxDate={maxDate}
           />
         </>
       )}

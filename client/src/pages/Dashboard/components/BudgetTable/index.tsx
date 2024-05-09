@@ -6,6 +6,7 @@ import { calculateBudgetCurrents } from "../../../../utils/dashboard";
 import AddModal from "./AddModal";
 import EditModal from "./EditModal";
 import DashboardCard from "../DashboardCard";
+import CurrencyText from "../../../../components/UI/CurrencyText";
 
 interface BudgetTableProps {
   budgetCategories: BudgetCategory[];
@@ -78,9 +79,19 @@ const BudgetTable = ({
                     const isOverBudget =
                       category.current &&
                       parseInt(category.current) > parseInt(category.budget);
+                    const isEqualsBudget =
+                      category.current &&
+                      parseInt(category.current) === parseInt(category.budget);
+                    const categoryColor = isOverBudget
+                      ? "text-error"
+                      : isEqualsBudget
+                      ? "text-warning"
+                      : "text-success";
                     const categoryDifference =
                       category.current &&
-                      parseInt(category.current) - parseInt(category.budget);
+                      (
+                        parseInt(category.current) - parseInt(category.budget)
+                      ).toString();
                     return (
                       <tr
                         key={category.id}
@@ -89,33 +100,25 @@ const BudgetTable = ({
                       >
                         <th>{category.category}</th>
                         <th>
-                          {typeof category.budget === "string"
-                            ? `$${category.budget}`
-                            : "$0"}
+                          {typeof category.budget === "string" ? (
+                            <CurrencyText value={category.budget} />
+                          ) : (
+                            "$0"
+                          )}
                         </th>
-                        <th
-                          className={
-                            isOverBudget ? "text-error" : "text-success"
-                          }
-                        >
-                          {typeof category.current === "string"
-                            ? `$${category.current}`
-                            : "$0"}
+                        <th className={categoryColor}>
+                          {typeof category.current === "string" ? (
+                            <CurrencyText value={category.current} />
+                          ) : (
+                            "$0"
+                          )}
                         </th>
-                        <th
-                          className={
-                            isOverBudget ? "text-error" : "text-success"
-                          }
-                        >
-                          {categoryDifference !== undefined
-                            ? `$${categoryDifference}`
-                            : null}
+                        <th className={categoryColor}>
+                          {categoryDifference !== undefined ? (
+                            <CurrencyText value={categoryDifference} />
+                          ) : null}
                         </th>
-                        <th
-                          className={
-                            isOverBudget ? "text-error" : "text-success"
-                          }
-                        >
+                        <th className={categoryColor}>
                           {typeof category.currentPercentage === "string"
                             ? `${category.currentPercentage}%`
                             : null}

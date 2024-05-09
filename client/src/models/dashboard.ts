@@ -7,4 +7,5 @@ export interface DashboardData {
   budgets: BudgetCategory[];
   budgetTotal: number;
   percentageSpent: number;
+  spendRemaining: number;
 }

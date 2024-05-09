@@ -43,7 +43,7 @@ const EditModal = ({
       { id: budget.id, category, budget: amount, userId: user.sub },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["budget"] });
+          queryClient.invalidateQueries({ queryKey: ["dashboard"] });
           handleClose();
         },
       }
@@ -67,7 +67,7 @@ const EditModal = ({
 
     deleteMutation.mutate(budget.id, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["budget"] });
+        queryClient.invalidateQueries({ queryKey: ["dashboard"] });
         handleClose();
       },
     });

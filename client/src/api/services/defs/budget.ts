@@ -1,14 +1,8 @@
 import { API_BASE_URL } from "../../../config/constants";
 import { BudgetCategory } from "../../../models/budget";
 
-export const getBudget = async (
-  userId: string,
-  filterMonth: number,
-  filterYear: number
-): Promise<BudgetCategory[]> => {
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userId}/budgets?month=${filterMonth}&year=${filterYear}`
-  );
+export const getBudget = async (userId: string): Promise<BudgetCategory[]> => {
+  const response = await fetch(`${API_BASE_URL}/users/${userId}/budgets`);
   const data = await response.json();
   return data;
 };

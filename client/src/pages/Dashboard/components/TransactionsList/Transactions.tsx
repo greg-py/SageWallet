@@ -1,6 +1,7 @@
 import { formatInTimeZone } from "date-fns-tz";
 import { Transaction } from "../../../../models/transaction";
 import { DATE_FORMAT_STRING } from "../../../../config/constants";
+import CurrencyText from "../../../../components/UI/CurrencyText";
 
 interface TransactionsProps {
   transactions: Transaction[];
@@ -36,7 +37,9 @@ const Transactions = ({ transactions, handleEdit }: TransactionsProps) => {
               </div>
               <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                 <p className="text-sm leading-6">
-                  {transaction.price && `$${transaction.price}`}
+                  {transaction.price && (
+                    <CurrencyText value={transaction.price} />
+                  )}
                 </p>
                 <p className="mt-1 text-xs leading-5 bg-accent text-base-100 px-2 pt-1 rounded-lg">
                   {transaction.category}

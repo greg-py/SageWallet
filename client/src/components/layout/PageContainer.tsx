@@ -1,8 +1,8 @@
-interface DashboardContainerProps {
+interface PageContainerProps {
   children: JSX.Element | JSX.Element[];
 }
 
-const DashboardContainer = ({ children }: DashboardContainerProps) => {
+const PageContainer = ({ children }: PageContainerProps) => {
   return (
     <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
       {children}
@@ -10,4 +10,4 @@ const DashboardContainer = ({ children }: DashboardContainerProps) => {
   );
 };
 
-export default DashboardContainer;
+export default PageContainer;

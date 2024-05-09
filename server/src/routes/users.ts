@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.get("/:userId/dashboard", dashboardController.getUserDashboard);
 
+router.get("/:userId/filters", dashboardController.getUserFilters);
+
 /**
  * @swagger
  * /api/users/{userId}/transactions:

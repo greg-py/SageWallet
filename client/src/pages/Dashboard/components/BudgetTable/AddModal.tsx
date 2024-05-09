@@ -55,7 +55,7 @@ const AddModal = () => {
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["budget"] });
+          queryClient.invalidateQueries({ queryKey: ["dashboard"] });
           clearState();
         },
       }

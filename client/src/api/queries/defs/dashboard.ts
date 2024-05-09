@@ -1,4 +1,4 @@
-import { getDashboard } from "../../services";
+import { getDashboard, getFilterOptions } from "../../services";
 
 export const dashboardQuery = (
   userId: string,
@@ -7,4 +7,9 @@ export const dashboardQuery = (
 ) => ({
   queryKey: ["dashboard"],
   queryFn: () => getDashboard(userId, filterMonth, filterYear),
+});
+
+export const filterOptionsQuery = (userId: string) => ({
+  queryKey: ["filter-options"],
+  queryFn: () => getFilterOptions(userId),
 });

@@ -24,6 +24,8 @@ interface EditModalProps {
   setCategory: React.Dispatch<React.SetStateAction<string>>;
   handleClose: () => void;
   budgetCategories: BudgetCategory[];
+  minDate: string;
+  maxDate: string;
 }
 
 const EditModal = ({
@@ -38,6 +40,8 @@ const EditModal = ({
   setCategory,
   handleClose,
   budgetCategories,
+  minDate,
+  maxDate,
 }: EditModalProps) => {
   const { user } = useAuth0();
 
@@ -70,7 +74,7 @@ const EditModal = ({
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["transactions"] });
+          queryClient.invalidateQueries({ queryKey: ["dashboard"] });
           handleClose();
         },
       }
@@ -94,7 +98,7 @@ const EditModal = ({
 
     deleteMutation.mutate(transaction.id, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["transactions"] });
+        queryClient.invalidateQueries({ queryKey: ["dashboard"] });
         handleClose();
       },
     });
@@ -115,6 +119,8 @@ const EditModal = ({
               className="grow"
               placeholder="Date"
               value={date}
+              min={minDate}
+              max={maxDate}
               onChange={(e) => setDate(e.target.value)}
             />
           </label>
