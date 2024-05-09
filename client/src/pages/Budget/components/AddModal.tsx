@@ -1,10 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
-import { handleBudgetAmountChange } from "../../../../utils/dashboard";
+import { handleBudgetAmountChange } from "../../../utils/dashboard";
 import { useMutation } from "@tanstack/react-query";
-import { BudgetCategory } from "../../../../models/budget";
-import { addBudget } from "../../../../api/services";
-import { queryClient } from "../../../../api/queries/queryClient";
+import { BudgetCategory } from "../../../models/budget";
+import { addBudget } from "../../../api/services";
+import { queryClient } from "../../../api/queries/queryClient";
 import { HexColorPicker } from "react-colorful";
 
 const AddModal = () => {
@@ -15,6 +15,7 @@ const AddModal = () => {
 
   // User authentication
   const { user } = useAuth0();
+  const userId = user?.sub || "";
 
   // Function to clear component state after submission
   const clearState = () => {
@@ -33,16 +34,16 @@ const AddModal = () => {
 
   const mutation = useMutation({
     mutationFn: (newBudget: BudgetCategory) => {
-      if (!user?.sub) {
+      if (!userId) {
         throw new Error("User ID undefined");
       }
 
-      return addBudget(user.sub, newBudget);
+      return addBudget(userId, newBudget);
     },
   });
 
   const handleSubmit = () => {
-    if (!user?.sub) {
+    if (!userId) {
       return;
     }
 
@@ -51,11 +52,11 @@ const AddModal = () => {
         category,
         budget,
         color,
-        userId: user.sub,
+        userId,
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+          queryClient.invalidateQueries({ queryKey: ["budget", userId] });
           clearState();
         },
       }

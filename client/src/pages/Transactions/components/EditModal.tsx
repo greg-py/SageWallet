@@ -2,15 +2,15 @@ import { useAuth0 } from "@auth0/auth0-react";
 import {
   buildCategoryList,
   handleTransactionAmountChange,
-} from "../../../../utils/dashboard";
+} from "../../../utils/dashboard";
 import { useMutation } from "@tanstack/react-query";
-import { Transaction } from "../../../../models/transaction";
+import { Transaction } from "../../../models/transaction";
 import {
   deleteTransaction,
   updateTransaction,
-} from "../../../../api/services/defs/transaction";
-import { queryClient } from "../../../../api/queries/queryClient";
-import { BudgetCategory } from "../../../../models/budget";
+} from "../../../api/services/defs/transaction";
+import { queryClient } from "../../../api/queries/queryClient";
+import { BudgetCategory } from "../../../models/budget";
 
 interface EditModalProps {
   transaction: Transaction | null;
@@ -26,6 +26,8 @@ interface EditModalProps {
   budgetCategories: BudgetCategory[];
   minDate: string;
   maxDate: string;
+  filterMonth: number;
+  filterYear: number;
 }
 
 const EditModal = ({
@@ -42,24 +44,27 @@ const EditModal = ({
   budgetCategories,
   minDate,
   maxDate,
+  filterMonth,
+  filterYear,
 }: EditModalProps) => {
   const { user } = useAuth0();
+  const userId = user?.sub || "";
 
   // Build list of categories for add transaction modal from budget categories
   const categories = buildCategoryList(budgetCategories);
 
   const updateMutation = useMutation({
     mutationFn: (updatedTransaction: Transaction) => {
-      if (!user?.sub) {
+      if (!userId) {
         throw new Error("User ID undefined");
       }
 
-      return updateTransaction(user.sub, updatedTransaction);
+      return updateTransaction(userId, updatedTransaction);
     },
   });
 
   const handleSubmit = () => {
-    if (!user?.sub || !transaction?.id) {
+    if (!userId || !transaction?.id) {
       return;
     }
 
@@ -70,11 +75,13 @@ const EditModal = ({
         vendor,
         price: amount,
         category,
-        userId: user.sub,
+        userId,
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+          queryClient.invalidateQueries({
+            queryKey: ["transactions", userId, filterMonth, filterYear],
+          });
           handleClose();
         },
       }
@@ -83,16 +90,16 @@ const EditModal = ({
 
   const deleteMutation = useMutation({
     mutationFn: (transactionId: string) => {
-      if (!user?.sub) {
+      if (!userId) {
         throw new Error("User ID undefined");
       }
 
-      return deleteTransaction(user.sub, transactionId);
+      return deleteTransaction(userId, transactionId);
     },
   });
 
   const handleDelete = () => {
-    if (!user?.sub || !transaction?.id) {
+    if (!userId || !transaction?.id) {
       return;
     }
 

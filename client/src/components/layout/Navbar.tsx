@@ -1,14 +1,15 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "react-router-dom";
-import { FilterOptions } from "../../models/filters";
 import { MONTHS } from "../../config/constants";
+import { useQuery } from "@tanstack/react-query";
+import { filterOptionsQuery } from "../../api/queries";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface NavbarProps {
   filterMonth: number;
   setFilterMonth: React.Dispatch<React.SetStateAction<number>>;
   filterYear: number;
   setFilterYear: React.Dispatch<React.SetStateAction<number>>;
-  filterOptions: FilterOptions;
 }
 
 const Navbar = ({
@@ -16,9 +17,17 @@ const Navbar = ({
   setFilterMonth,
   filterYear,
   setFilterYear,
-  filterOptions,
 }: NavbarProps) => {
+  // User authentication
   const { isAuthenticated, user, logout } = useAuth0();
+  const userId = user?.sub || "";
+
+  // Queries
+  const {
+    isPending: isFilterOptionsPending,
+    error: filterOptionsError,
+    data: filterOptions,
+  } = useQuery(filterOptionsQuery(userId));
 
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedMonth = e.target.value;
@@ -30,34 +39,27 @@ const Navbar = ({
     logout({ logoutParams: { returnTo: window.location.origin } });
   };
 
-  return (
-    <div className="navbar bg-base-100 justify-between">
-      <p className="btn btn-ghost text-xl">Budgee</p>
-      <div className="space-x-2">
-        <select
-          className="select w-52 bg-gray-300 text-base-100"
-          value={MONTHS[filterMonth] ?? ""}
-          onChange={(e) => handleMonthChange(e)}
-        >
-          <option disabled>Month</option>
-          {MONTHS.map((month) => {
-            return <option key={month}>{month}</option>;
-          })}
-        </select>
-        <select
-          className="select w-52 bg-gray-300 text-base-100"
-          value={filterYear}
-          onChange={(e) => setFilterYear(parseInt(e.target.value))}
-        >
-          <option disabled>Year</option>
-          {Object.keys(filterOptions) &&
-            Object.keys(filterOptions).map((year) => {
-              return <option key={year}>{year}</option>;
-            })}
-        </select>
+  // Show loading spinner if queries are pending
+  if (isFilterOptionsPending) {
+    return <LoadingSpinner />;
+  }
+
+  // Show error message if query has error
+  if (filterOptionsError) {
+    return (
+      <div className="mx-auto max-w-screen-2xl text-center">
+        <p>There was an error loading data</p>;
       </div>
-      <div>
-        <ul className="menu menu-horizontal px-1">
+    );
+  }
+
+  return (
+    <div className="navbar bg-base-100">
+      <div className="flex-1">
+        <p className="btn btn-ghost text-xl">Budgee</p>
+      </div>
+      <div className="flex-1 text-center">
+        <ul className="menu menu-horizontal flex justify-center w-full">
           <li>
             <Link to="/">Dashboard</Link>
           </li>
@@ -75,30 +77,54 @@ const Navbar = ({
           </li>
         </ul>
       </div>
-      {isAuthenticated && user && (
-        <div className="dropdown dropdown-end">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar"
+      <div className="flex-1 flex justify-end space-x-2">
+        <div className="space-x-2">
+          <select
+            className="select w-52 bg-gray-300 text-base-100"
+            value={MONTHS[filterMonth] ?? ""}
+            onChange={(e) => handleMonthChange(e)}
           >
-            <div className="w-10 rounded-full">
-              <img alt="User avatar" src={user.picture} />
-            </div>
-          </div>
-          <ul
-            tabIndex={0}
-            className="mt-3 z-[1] p-2 shadow-xl menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+            <option disabled>Month</option>
+            {MONTHS.map((month) => {
+              return <option key={month}>{month}</option>;
+            })}
+          </select>
+          <select
+            className="select w-52 bg-gray-300 text-base-100"
+            value={filterYear}
+            onChange={(e) => setFilterYear(parseInt(e.target.value))}
           >
-            <li>
-              <Link to="/profile">Profile</Link>
-            </li>
-            <li>
-              <a onClick={handleLogout}>Logout</a>
-            </li>
-          </ul>
+            <option disabled>Year</option>
+            {Object.keys(filterOptions).map((year) => {
+              return <option key={year}>{year}</option>;
+            })}
+          </select>
         </div>
-      )}
+        {isAuthenticated && user && (
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <img alt="User avatar" src={user.picture} />
+              </div>
+            </div>
+            <ul
+              tabIndex={0}
+              className="mt-3 z-[1] p-2 shadow-xl menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <Link to="/profile">Profile</Link>
+              </li>
+              <li>
+                <a onClick={handleLogout}>Logout</a>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

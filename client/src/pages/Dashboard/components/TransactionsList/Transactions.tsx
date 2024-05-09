@@ -5,10 +5,9 @@ import CurrencyText from "../../../../components/UI/CurrencyText";
 
 interface TransactionsProps {
   transactions: Transaction[];
-  handleEdit: (transaction: Transaction) => void;
 }
 
-const Transactions = ({ transactions, handleEdit }: TransactionsProps) => {
+const Transactions = ({ transactions }: TransactionsProps) => {
   return (
     <ul role="list">
       {transactions &&
@@ -22,8 +21,7 @@ const Transactions = ({ transactions, handleEdit }: TransactionsProps) => {
           return (
             <li
               key={transaction.id}
-              className="flex justify-between gap-x-4 p-4 rounded-box hover:cursor-pointer hover:bg-base-200"
-              onClick={() => handleEdit(transaction)}
+              className="flex justify-between gap-x-4 p-4 rounded-box"
             >
               <div className="flex min-w-0 gap-x-4">
                 <div className="min-w-0 flex-auto">

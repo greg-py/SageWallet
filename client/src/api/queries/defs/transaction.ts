@@ -5,6 +5,7 @@ export const transactionsQuery = (
   filterMonth: number,
   filterYear: number
 ) => ({
-  queryKey: ["transactions"],
+  queryKey: ["transactions", userId, filterMonth, filterYear],
   queryFn: () => getTransactions(userId, filterMonth, filterYear),
+  enabled: !!userId && !!filterMonth && !!filterYear,
 });

@@ -1,28 +1,37 @@
 import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation } from "@tanstack/react-query";
-import { Transaction } from "../../../../models/transaction";
-import { addTransaction } from "../../../../api/services/defs/transaction";
-import { queryClient } from "../../../../api/queries/queryClient";
+import { Transaction } from "../../../models/transaction";
+import { addTransaction } from "../../../api/services/defs/transaction";
+import { queryClient } from "../../../api/queries/queryClient";
 import {
   buildCategoryList,
   handleTransactionAmountChange,
-} from "../../../../utils/dashboard";
-import { BudgetCategory } from "../../../../models/budget";
+} from "../../../utils/dashboard";
+import { BudgetCategory } from "../../../models/budget";
 
 interface AddModalProps {
   budgetCategories: BudgetCategory[];
   minDate: string;
   maxDate: string;
+  filterMonth: number;
+  filterYear: number;
 }
 
-const AddModal = ({ budgetCategories, minDate, maxDate }: AddModalProps) => {
+const AddModal = ({
+  budgetCategories,
+  minDate,
+  maxDate,
+  filterMonth,
+  filterYear,
+}: AddModalProps) => {
   const [date, setDate] = useState("");
   const [vendor, setVendor] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
 
   const { user } = useAuth0();
+  const userId = user?.sub || "";
 
   const clearState = () => {
     setDate("");
@@ -44,16 +53,16 @@ const AddModal = ({ budgetCategories, minDate, maxDate }: AddModalProps) => {
 
   const mutation = useMutation({
     mutationFn: (newTransaction: Transaction) => {
-      if (!user?.sub) {
+      if (!userId) {
         throw new Error("User ID undefined");
       }
 
-      return addTransaction(user.sub, newTransaction);
+      return addTransaction(userId, newTransaction);
     },
   });
 
   const handleSubmit = () => {
-    if (!user?.sub) {
+    if (!userId) {
       return;
     }
 
@@ -63,11 +72,13 @@ const AddModal = ({ budgetCategories, minDate, maxDate }: AddModalProps) => {
         vendor,
         price: amount,
         category,
-        userId: user.sub,
+        userId,
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+          queryClient.invalidateQueries({
+            queryKey: ["transactions", userId, filterMonth, filterYear],
+          });
           clearState();
         },
       }

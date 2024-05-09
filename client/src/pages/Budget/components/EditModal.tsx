@@ -1,12 +1,12 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { BudgetCategory } from "../../../../models/budget";
+import { BudgetCategory } from "../../../models/budget";
 import { useMutation } from "@tanstack/react-query";
-import { deleteBudget, updateBudget } from "../../../../api/services";
-import { queryClient } from "../../../../api/queries/queryClient";
-import { handleBudgetAmountChange } from "../../../../utils/dashboard";
+import { deleteBudget, updateBudget } from "../../../api/services";
+import { queryClient } from "../../../api/queries/queryClient";
+import { handleBudgetAmountChange } from "../../../utils/dashboard";
 
 interface EditModalProps {
-  budget: BudgetCategory | null;
+  id: string;
   category: string;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
   amount: string;
@@ -15,7 +15,7 @@ interface EditModalProps {
 }
 
 const EditModal = ({
-  budget,
+  id,
   category,
   setCategory,
   amount,
@@ -23,27 +23,28 @@ const EditModal = ({
   handleClose,
 }: EditModalProps) => {
   const { user } = useAuth0();
+  const userId = user?.sub || "";
 
   const updateMutation = useMutation({
     mutationFn: (updatedBudget: BudgetCategory) => {
-      if (!user?.sub) {
+      if (!userId) {
         throw new Error("User ID undefined");
       }
 
-      return updateBudget(user.sub, updatedBudget);
+      return updateBudget(userId, updatedBudget);
     },
   });
 
   const handleSubmit = () => {
-    if (!user?.sub || !budget?.id) {
+    if (!userId || !id) {
       return;
     }
 
     updateMutation.mutate(
-      { id: budget.id, category, budget: amount, userId: user.sub },
+      { id: id, category, budget: amount, userId: userId },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+          queryClient.invalidateQueries({ queryKey: ["budget", userId] });
           handleClose();
         },
       }
@@ -52,22 +53,22 @@ const EditModal = ({
 
   const deleteMutation = useMutation({
     mutationFn: (budgetId: string) => {
-      if (!user?.sub) {
+      if (!userId) {
         throw new Error("User ID undefined");
       }
 
-      return deleteBudget(user.sub, budgetId);
+      return deleteBudget(userId, budgetId);
     },
   });
 
   const handleDelete = () => {
-    if (!user?.sub || !budget?.id) {
+    if (!userId || !id) {
       return;
     }
 
-    deleteMutation.mutate(budget.id, {
+    deleteMutation.mutate(id, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+        queryClient.invalidateQueries({ queryKey: ["budget", userId] });
         handleClose();
       },
     });

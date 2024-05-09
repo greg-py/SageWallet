@@ -22,7 +22,7 @@ const Dashboard = ({ filterMonth, filterYear }: DashboardProps) => {
   const userId = user?.sub || "";
 
   // Queries
-  const { isPending, error, data, isRefetching, isRefetchError } = useQuery(
+  const { isPending, error, data } = useQuery(
     dashboardQuery(userId, filterMonth, filterYear)
   );
 
@@ -41,7 +41,7 @@ const Dashboard = ({ filterMonth, filterYear }: DashboardProps) => {
   }
 
   // Show error message if query has error
-  if (error || isRefetchError) {
+  if (error) {
     return (
       <div className="mx-auto max-w-screen-2xl text-center">
         <p>There was an error loading data</p>;
@@ -61,17 +61,10 @@ const Dashboard = ({ filterMonth, filterYear }: DashboardProps) => {
         isWithinBudget={isWithinBudget}
       />
       <DashboardRow>
-        <TransactionsList
-          transactions={data.transactions}
-          refetchPending={isRefetching}
-          budgetCategories={data.budgets}
-          filterMonth={filterMonth}
-          filterYear={filterYear}
-        />
+        <TransactionsList transactions={data.transactions} />
         <BudgetTable
           budgetCategories={data.budgets}
           transactions={data.transactions}
-          refetchPending={isRefetching}
         />
       </DashboardRow>
       <Income />

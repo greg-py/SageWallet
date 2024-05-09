@@ -2,14 +2,12 @@ import AppContainer from "./AppContainer";
 import Navbar from "./Navbar";
 import AppContent from "./AppContent";
 import Footer from "./Footer";
-import { FilterOptions } from "../../models/filters";
 
 interface LayoutProps {
   filterMonth: number;
   setFilterMonth: React.Dispatch<React.SetStateAction<number>>;
   filterYear: number;
   setFilterYear: React.Dispatch<React.SetStateAction<number>>;
-  filterOptions: FilterOptions;
   children: JSX.Element | JSX.Element[];
 }
 
@@ -18,7 +16,6 @@ const Layout = ({
   setFilterMonth,
   filterYear,
   setFilterYear,
-  filterOptions,
   children,
 }: LayoutProps) => {
   return (
@@ -28,7 +25,6 @@ const Layout = ({
         setFilterMonth={setFilterMonth}
         filterYear={filterYear}
         setFilterYear={setFilterYear}
-        filterOptions={filterOptions}
       />
       <AppContent>{children}</AppContent>
       <Footer />
