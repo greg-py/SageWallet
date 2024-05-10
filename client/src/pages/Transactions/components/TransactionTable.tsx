@@ -9,21 +9,21 @@ import {
 import CurrencyText from "../../../components/UI/CurrencyText";
 import EditModal from "./EditModal";
 
-interface TransactionsListProps {
+interface TransactionsTableProps {
   transactions: Transaction[];
   budget: BudgetCategory[];
   filterMonth: number;
   filterYear: number;
 }
 
-const TransactionsList = ({
+const TransactionsTable = ({
   transactions,
   budget,
   filterMonth,
   filterYear,
-}: TransactionsListProps) => {
+}: TransactionsTableProps) => {
   // State for edit modal
-  const [transaction, setTransaction] = useState<Transaction | null>(null);
+  const [id, setId] = useState("");
   const [date, setDate] = useState("");
   const [vendor, setVendor] = useState("");
   const [amount, setAmount] = useState("");
@@ -39,13 +39,17 @@ const TransactionsList = ({
 
   // Function for setting transaction edit state
   const initializeTransactionEdit = (transaction: Transaction) => {
+    if (!transaction.id) {
+      return;
+    }
+
     const formattedDate = formatInTimeZone(
       transaction.date,
       "UTC",
       DATEPICKER_FORMAT_STRING
     );
 
-    setTransaction(transaction);
+    setId(transaction.id);
     setDate(formattedDate);
     setVendor(transaction.vendor);
     setAmount(transaction.price);
@@ -67,49 +71,53 @@ const TransactionsList = ({
 
   return (
     <>
-      <ul role="list">
-        {transactions &&
-          transactions.map((transaction) => {
-            const formattedDate = formatInTimeZone(
-              transaction.date,
-              "UTC",
-              DATE_FORMAT_STRING
-            );
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Vendor</th>
+              <th>Amount</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions &&
+              transactions.map((transaction) => {
+                const formattedDate = formatInTimeZone(
+                  transaction.date,
+                  "UTC",
+                  DATE_FORMAT_STRING
+                );
 
-            return (
-              <li
-                key={transaction.id}
-                className="flex justify-between gap-x-4 p-4 rounded-box hover:cursor-pointer hover:bg-base-200"
-                onClick={() => handleEditModalOpen(transaction)}
-              >
-                <div className="flex min-w-0 gap-x-4">
-                  <div className="min-w-0 flex-auto">
-                    <p className="text-sm font-semibold leading-6">
-                      {transaction.vendor}
-                    </p>
-                    <p className="mt-1 truncate text-xs leading-5">
-                      {formattedDate ?? ""}
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                    <p className="text-sm leading-6">
-                      {transaction.price && (
-                        <CurrencyText value={transaction.price} />
-                      )}
-                    </p>
-                    <p className="mt-1 text-xs leading-5 bg-accent text-base-100 px-2 pt-1 rounded-lg">
-                      {transaction.category}
-                    </p>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-      </ul>
+                return (
+                  <tr
+                    key={transaction.id}
+                    className="hover:cursor-pointer hover:bg-base-200"
+                    onClick={() => handleEditModalOpen(transaction)}
+                  >
+                    <th>{formattedDate ?? ""}</th>
+                    <th>{transaction.vendor}</th>
+                    <th>
+                      <CurrencyText value={transaction.price} />
+                    </th>
+                    <th>{transaction.category}</th>
+                  </tr>
+                );
+              })}
+          </tbody>
+          <tfoot className="border-t border-accent">
+            <tr>
+              <th>Totals</th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
       <EditModal
-        transaction={transaction}
+        id={id}
         date={date}
         setDate={setDate}
         vendor={vendor}
@@ -129,4 +137,4 @@ const TransactionsList = ({
   );
 };
 
-export default TransactionsList;
+export default TransactionsTable;

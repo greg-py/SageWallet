@@ -1,27 +1,19 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { buildCategoryList } from "../../../utils/budget";
-import { useMutation } from "@tanstack/react-query";
-import { Transaction } from "../../../models/transaction";
-import {
-  deleteTransaction,
-  updateTransaction,
-} from "../../../api/services/defs/transaction";
-import { queryClient } from "../../../api/queries/queryClient";
-import { BudgetCategory } from "../../../models/budget";
 import { handleAmountChange } from "../../../utils/transaction";
+import { useMutation } from "@tanstack/react-query";
+import { Income } from "../../../models/income";
+import { queryClient } from "../../../api/queries/queryClient";
+import { deleteIncome, updateIncome } from "../../../api/services";
 
 interface EditModalProps {
   id: string;
   date: string;
   setDate: React.Dispatch<React.SetStateAction<string>>;
-  vendor: string;
-  setVendor: React.Dispatch<React.SetStateAction<string>>;
+  source: string;
+  setSource: React.Dispatch<React.SetStateAction<string>>;
   amount: string;
   setAmount: React.Dispatch<React.SetStateAction<string>>;
-  category: string;
-  setCategory: React.Dispatch<React.SetStateAction<string>>;
   handleClose: () => void;
-  budgetCategories: BudgetCategory[];
   minDate: string;
   maxDate: string;
   filterMonth: number;
@@ -32,32 +24,28 @@ const EditModal = ({
   id,
   date,
   setDate,
-  vendor,
-  setVendor,
+  source,
+  setSource,
   amount,
   setAmount,
-  category,
-  setCategory,
   handleClose,
-  budgetCategories,
   minDate,
   maxDate,
   filterMonth,
   filterYear,
 }: EditModalProps) => {
+  // User authentication
   const { user } = useAuth0();
   const userId = user?.sub || "";
-
-  // Build list of categories for add transaction modal from budget categories
-  const categories = buildCategoryList(budgetCategories);
+  const userName = user?.email || "";
 
   const updateMutation = useMutation({
-    mutationFn: (updatedTransaction: Transaction) => {
+    mutationFn: (updatedIncome: Income) => {
       if (!userId) {
         throw new Error("User ID undefined");
       }
 
-      return updateTransaction(userId, updatedTransaction);
+      return updateIncome(userId, updatedIncome);
     },
   });
 
@@ -70,15 +58,15 @@ const EditModal = ({
       {
         id,
         date,
-        vendor,
-        price: amount,
-        category,
+        user: userName,
+        source,
+        amount,
         userId,
       },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: ["transactions", userId, filterMonth, filterYear],
+            queryKey: ["income", userId, filterMonth, filterYear],
           });
           handleClose();
         },
@@ -87,12 +75,12 @@ const EditModal = ({
   };
 
   const deleteMutation = useMutation({
-    mutationFn: (transactionId: string) => {
+    mutationFn: (incomeId: string) => {
       if (!userId) {
         throw new Error("User ID undefined");
       }
 
-      return deleteTransaction(userId, transactionId);
+      return deleteIncome(userId, incomeId);
     },
   });
 
@@ -104,7 +92,7 @@ const EditModal = ({
     deleteMutation.mutate(id, {
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ["dashboard", userId, filterMonth, filterYear],
+          queryKey: ["income", userId, filterMonth, filterYear],
         });
         handleClose();
       },
@@ -112,16 +100,16 @@ const EditModal = ({
   };
 
   return (
-    <dialog id="edit_transaction_modal" className="modal">
+    <dialog id="edit_income_modal" className="modal">
       <div className="modal-box w-full max-w-xl">
         <form method="dialog">
           <button className="btn btn-ghost absolute right-2 top-2">x</button>
         </form>
-        <h3 className="font-bold text-lg">Edit Transaction</h3>
+        <h3 className="font-bold text-lg">Edit Income</h3>
         <div className="h-64 p-4 space-y-4">
           <label className="input input-bordered flex items-center gap-2">
             <input
-              aria-label="Date of Transaction"
+              aria-label="Date of Income"
               type="date"
               className="grow"
               placeholder="Date"
@@ -133,17 +121,17 @@ const EditModal = ({
           </label>
           <label className="input input-bordered flex items-center gap-2">
             <input
-              aria-label="Transaction Vendor"
+              aria-label="Income Source"
               type="text"
               className="grow"
-              placeholder="Vendor"
-              value={vendor}
-              onChange={(e) => setVendor(e.target.value)}
+              placeholder="Source"
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
             />
           </label>
           <label className="input input-bordered flex items-center gap-2">
             <input
-              aria-label="Transaction Amount"
+              aria-label="Income Amount"
               type="number"
               className="grow"
               placeholder="Amount ($)"
@@ -151,18 +139,6 @@ const EditModal = ({
               onChange={(e) => handleAmountChange(e, setAmount)}
             />
           </label>
-          <select
-            aria-label="Transaction Category"
-            className="select input-bordered w-full"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option disabled>Category</option>
-            {categories.length &&
-              categories.map((category) => {
-                return <option key={category}>{category}</option>;
-              })}
-          </select>
         </div>
         <div className="modal-action">
           <button className="btn btn-error" onClick={handleDelete}>

@@ -1,6 +1,6 @@
 import { BudgetCategory } from "../../../../models/budget";
 import { Transaction } from "../../../../models/transaction";
-import { calculateBudgetCurrents } from "../../../../utils/dashboard";
+import { calculateBudgetCurrents } from "../../../../utils/budget";
 import DashboardCard from "../DashboardCard";
 import CurrencyText from "../../../../components/UI/CurrencyText";
 
@@ -18,7 +18,7 @@ const BudgetTable = ({ budgetCategories, transactions }: BudgetTableProps) => {
 
   return (
     <DashboardCard>
-      <h2 className="font-bold text-xl">Top Budget Categories</h2>
+      <h2 className="font-bold text-xl">Recent Budget Categories</h2>
       <div className="overflow-x-auto">
         <table className="table">
           <thead>

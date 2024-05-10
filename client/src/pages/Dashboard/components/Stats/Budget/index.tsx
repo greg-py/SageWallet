@@ -1,35 +1,35 @@
+import { BudgetCategory } from "../../../../../models/budget";
+import { Transaction } from "../../../../../models/transaction";
+import { calculateBudgetStats } from "../../../../../utils/dashboard";
 import DashboardRow from "../../DashboardRow";
 import StaticStat from "../StaticStat";
 
 interface BudgetProps {
-  budget: number;
-  spend: number;
-  spendPercentage: string | null;
-  remaining: number;
-  isWithinBudget: boolean;
+  budget: BudgetCategory[];
+  transactions: Transaction[];
 }
 
-const Budget = ({
-  budget,
-  spend,
-  spendPercentage,
-  remaining,
-  isWithinBudget,
-}: BudgetProps) => {
+const Budget = ({ budget, transactions }: BudgetProps) => {
+  const budgetStats = calculateBudgetStats(budget, transactions);
+
   return (
     <DashboardRow title="Monthly Budget">
-      <StaticStat title="Budget" value={budget} />
-      <StaticStat title="Spend" value={spend} success={isWithinBudget} />
+      <StaticStat title="Budget" value={budgetStats.totalBudget} />
+      <StaticStat
+        title="Spend"
+        value={budgetStats.totalSpend}
+        success={budgetStats.isWithinBudget}
+      />
       <StaticStat
         title="Spend (%)"
-        value={spendPercentage}
-        success={isWithinBudget}
+        value={budgetStats.spendPercentage && `${budgetStats.spendPercentage}%`}
+        success={budgetStats.isWithinBudget}
         currency={false}
       />
       <StaticStat
         title="Remaining"
-        value={remaining}
-        success={isWithinBudget}
+        value={budgetStats.spendRemaining}
+        success={budgetStats.isWithinBudget}
       />
     </DashboardRow>
   );

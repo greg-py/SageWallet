@@ -1,5 +1,6 @@
 import { FormattedTransaction } from "../models/transaction";
 import budgetsRepository from "../repository/budgetsRepository";
+import incomeRepository from "../repository/incomeRepository";
 import transactionsRepository from "../repository/transactionsRepository";
 import { getUTCDateRange } from "../utils/dates";
 
@@ -62,13 +63,54 @@ const getUserDashboard = async (
     spendRemaining = parseFloat((budgetTotal - currentSpend).toFixed(2));
   }
 
+  // Fetch income from database
+  const rawIncome = await incomeRepository.findIncomeByUserId(
+    userId,
+    startDate,
+    endDate
+  );
+
+  // TODO: Map raw income to formatted income class
+
+  // Calculate income total for current period
+  let incomeTotal = 0;
+  rawIncome.forEach((income) => {
+    const amountString = income.amount?.toString();
+    if (amountString) {
+      incomeTotal += parseFloat(amountString);
+    }
+  });
+  incomeTotal = parseFloat(incomeTotal.toFixed(2));
+
+  // Calculate income vs. budget and spent
+  let incomeToBudgetDiff = 0;
+  let incomeToSpendDiff = 0;
+  if (incomeTotal && budgetTotal && currentSpend) {
+    incomeToBudgetDiff = parseFloat((incomeTotal - budgetTotal).toFixed(2));
+    incomeToSpendDiff = parseFloat((incomeTotal - currentSpend).toFixed(2));
+  }
+
+  // Filter transactions to most recent five
+  const recentTransactions = formattedTransactions.slice(0, 5);
+
+  // Filter budget categories to categories of recent transactions
+  const recentTransactionsCategories = recentTransactions.map(
+    (transaction) => transaction.category
+  );
+  const recentBudgetCategories = rawBudgetCategories.filter((budget) =>
+    recentTransactionsCategories.includes(budget.category)
+  );
+
   return {
-    transactions: formattedTransactions,
+    transactions: recentTransactions,
     currentSpend: currentSpend,
-    budgets: rawBudgetCategories,
+    budgets: recentBudgetCategories,
     budgetTotal: budgetTotal,
     percentageSpent: percentageSpent,
     spendRemaining: spendRemaining,
+    incomeTotal: incomeTotal,
+    incomeToBudgetDiff: incomeToBudgetDiff,
+    incomeToSpendDiff: incomeToSpendDiff,
   };
 };
 

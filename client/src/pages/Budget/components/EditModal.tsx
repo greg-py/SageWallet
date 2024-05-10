@@ -3,7 +3,7 @@ import { BudgetCategory } from "../../../models/budget";
 import { useMutation } from "@tanstack/react-query";
 import { deleteBudget, updateBudget } from "../../../api/services";
 import { queryClient } from "../../../api/queries/queryClient";
-import { handleBudgetAmountChange } from "../../../utils/dashboard";
+import { handleAmountChange } from "../../../utils/transaction";
 
 interface EditModalProps {
   id: string;
@@ -22,6 +22,7 @@ const EditModal = ({
   setAmount,
   handleClose,
 }: EditModalProps) => {
+  // User authentication
   const { user } = useAuth0();
   const userId = user?.sub || "";
 
@@ -81,7 +82,7 @@ const EditModal = ({
           <button className="btn btn-ghost absolute right-2 top-2">x</button>
         </form>
         <h3 className="font-bold text-lg">Edit Budget</h3>
-        <div className="h-64 p-4 space-y-4">
+        <div className="p-4 space-y-4">
           <label className="input input-bordered flex items-center gap-2">
             <input
               aria-label="Budget Category"
@@ -99,7 +100,7 @@ const EditModal = ({
               className="grow"
               placeholder="Budget ($)"
               value={amount}
-              onChange={(e) => handleBudgetAmountChange(e, setAmount)}
+              onChange={(e) => handleAmountChange(e, setAmount)}
             />
           </label>
         </div>

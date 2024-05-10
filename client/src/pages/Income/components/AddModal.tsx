@@ -1,15 +1,12 @@
-import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useMutation } from "@tanstack/react-query";
-import { Transaction } from "../../../models/transaction";
-import { addTransaction } from "../../../api/services/defs/transaction";
-import { queryClient } from "../../../api/queries/queryClient";
-import { buildCategoryList } from "../../../utils/budget";
-import { BudgetCategory } from "../../../models/budget";
+import { useState } from "react";
 import { handleAmountChange } from "../../../utils/transaction";
+import { useMutation } from "@tanstack/react-query";
+import { Income } from "../../../models/income";
+import { queryClient } from "../../../api/queries/queryClient";
+import { addIncome } from "../../../api/services";
 
 interface AddModalProps {
-  budgetCategories: BudgetCategory[];
   minDate: string;
   maxDate: string;
   filterMonth: number;
@@ -17,65 +14,63 @@ interface AddModalProps {
 }
 
 const AddModal = ({
-  budgetCategories,
   minDate,
   maxDate,
   filterMonth,
   filterYear,
 }: AddModalProps) => {
+  // Component state
   const [date, setDate] = useState("");
-  const [vendor, setVendor] = useState("");
+  const [source, setSource] = useState("");
   const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("");
 
+  // User authentication
   const { user } = useAuth0();
   const userId = user?.sub || "";
+  const userName = user?.email || "";
 
+  // Function to clear component state after submission
   const clearState = () => {
     setDate("");
-    setVendor("");
+    setSource("");
     setAmount("");
-    setCategory("");
   };
 
-  // Build list of categories for add transaction modal from budget categories
-  const categories = buildCategoryList(budgetCategories);
-
-  // Function to open add transaction modal
+  // Function to open add income modal
   const handleAddModalOpen = () => {
     clearState();
     (
-      document.getElementById("add_transaction_modal") as HTMLDialogElement
+      document.getElementById("add_income_modal") as HTMLDialogElement
     )?.showModal();
   };
 
   const mutation = useMutation({
-    mutationFn: (newTransaction: Transaction) => {
+    mutationFn: (newIncome: Income) => {
       if (!userId) {
         throw new Error("User ID undefined");
       }
 
-      return addTransaction(userId, newTransaction);
+      return addIncome(userId, newIncome);
     },
   });
 
   const handleSubmit = () => {
-    if (!userId) {
+    if (!userId || !userName) {
       return;
     }
 
     mutation.mutate(
       {
         date,
-        vendor,
-        price: amount,
-        category,
+        user: userName,
+        source,
+        amount,
         userId,
       },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: ["transactions", userId, filterMonth, filterYear],
+            queryKey: ["income", userId, filterMonth, filterYear],
           });
           clearState();
         },
@@ -88,21 +83,16 @@ const AddModal = ({
       <button className="btn btn-neutral btn-sm" onClick={handleAddModalOpen}>
         Add
       </button>
-      <dialog id="add_transaction_modal" className="modal">
+      <dialog id="add_income_modal" className="modal">
         <div className="modal-box w-full max-w-xl">
           <form method="dialog">
-            <button
-              className="btn btn-ghost absolute right-2 top-2"
-              onClick={clearState}
-            >
-              ✕
-            </button>
+            <button className="btn btn-ghost absolute right-2 top-2">x</button>
           </form>
-          <h3 className="font-bold text-lg">Add Transaction</h3>
-          <div className="h-64 p-4 space-y-4">
+          <h3 className="font-bold text-lg">Add Income</h3>
+          <div className="h-full p-4 space-y-4">
             <label className="input input-bordered flex items-center gap-2">
               <input
-                aria-label="Date of Transaction"
+                aria-label="Date of Income"
                 type="date"
                 className="grow"
                 placeholder="Date"
@@ -114,17 +104,17 @@ const AddModal = ({
             </label>
             <label className="input input-bordered flex items-center gap-2">
               <input
-                aria-label="Transaction Vendor"
+                aria-label="Income Source"
                 type="text"
                 className="grow"
-                placeholder="Vendor"
-                value={vendor}
-                onChange={(e) => setVendor(e.target.value)}
+                placeholder="Source"
+                value={source}
+                onChange={(e) => setSource(e.target.value)}
               />
             </label>
             <label className="input input-bordered flex items-center gap-2">
               <input
-                aria-label="Transaction Amount"
+                aria-label="Income Amount"
                 type="number"
                 className="grow"
                 placeholder="Amount ($)"
@@ -132,18 +122,6 @@ const AddModal = ({
                 onChange={(e) => handleAmountChange(e, setAmount)}
               />
             </label>
-            <select
-              aria-label="Transaction Category"
-              className="select input-bordered w-full"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option disabled>Category</option>
-              {categories.length &&
-                categories.map((category) => {
-                  return <option key={category}>{category}</option>;
-                })}
-            </select>
           </div>
           <div className="modal-action">
             <button className="btn" onClick={handleSubmit}>

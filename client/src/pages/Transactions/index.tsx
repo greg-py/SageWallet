@@ -5,8 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { budgetQuery, transactionsQuery } from "../../api/queries";
 import Spinner from "../../components/Layout/Spinner";
 import PageCard from "../../components/Layout/PageCard";
-import TransactionsList from "./components/TransactionsList";
 import AddModal from "./components/AddModal";
+import TransactionsTable from "./components/TransactionTable";
 
 interface TransactionsProps {
   filterMonth: number;
@@ -47,9 +47,7 @@ const Transactions = ({ filterMonth, filterYear }: TransactionsProps) => {
     isTransactionsPending ||
     isTransactionsRefetching ||
     isBudgetPending ||
-    isBudgetRefetching ||
-    !transactions ||
-    !budget
+    isBudgetRefetching
   ) {
     return <Spinner />;
   }
@@ -61,9 +59,11 @@ const Transactions = ({ filterMonth, filterYear }: TransactionsProps) => {
     budgetError ||
     budgetRefetchError
   ) {
-    <div className="mx-auto max-w-screen-2xl text-center">
-      <p>There was an error loading data</p>
-    </div>;
+    return (
+      <div className="mx-auto max-w-screen-2xl text-center">
+        <p>There was an error loading data</p>
+      </div>
+    );
   }
 
   return (
@@ -79,7 +79,7 @@ const Transactions = ({ filterMonth, filterYear }: TransactionsProps) => {
         />
       </div>
       <PageCard>
-        <TransactionsList
+        <TransactionsTable
           transactions={transactions}
           budget={budget}
           filterMonth={filterMonth}

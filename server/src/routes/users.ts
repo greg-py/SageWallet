@@ -2,6 +2,7 @@ import express from "express";
 import transactionsController from "../controllers/transactionsController";
 import budgetsController from "../controllers/budgetsController";
 import dashboardController from "../controllers/dashboardController";
+import incomeController from "../controllers/incomeController";
 
 const router = express.Router();
 
@@ -92,5 +93,13 @@ router.post("/:userId/budgets", budgetsController.addUserBudgets);
 router.put("/:userId/budgets/:budgetId", budgetsController.updateUserBudget);
 
 router.delete("/:userId/budgets/:budgetId", budgetsController.deleteUserBudget);
+
+router.get("/:userId/income", incomeController.getUserIncome);
+
+router.post("/:userId/income", incomeController.addUserIncome);
+
+router.put("/:userId/income/:incomeId", incomeController.updateUserIncome);
+
+router.delete("/:userId/income/:incomeId", incomeController.deleteUserIncome);
 
 export default router;

@@ -8,4 +8,7 @@ export interface DashboardData {
   budgetTotal: number;
   percentageSpent: number;
   spendRemaining: number;
+  incomeTotal: number;
+  incomeToBudgetDiff: number;
+  incomeToSpendDiff: number;
 }

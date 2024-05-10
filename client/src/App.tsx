@@ -64,7 +64,7 @@ function App() {
             path="/income"
             element={
               <ProtectedRoute>
-                <Income />
+                <Income filterMonth={filterMonth} filterYear={filterYear} />
               </ProtectedRoute>
             }
           />

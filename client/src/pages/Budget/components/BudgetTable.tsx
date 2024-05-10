@@ -5,7 +5,7 @@ import { Transaction } from "../../../models/transaction";
 import {
   calculateBudgetCurrents,
   calculateBudgetTotals,
-} from "../../../utils/dashboard";
+} from "../../../utils/budget";
 import EditModal from "./EditModal";
 
 interface BudgetTableProps {
@@ -87,29 +87,20 @@ const BudgetTable = ({ budget, transactions }: BudgetTableProps) => {
                     onClick={() => handleEditModalOpen(category)}
                   >
                     <th>{category.category}</th>
-                    <th>
-                      {typeof category.budget === "string" ? (
-                        <CurrencyText value={category.budget} />
-                      ) : (
-                        "$0"
-                      )}
-                    </th>
+                    <th>{<CurrencyText value={category.budget} />}</th>
                     <th className={categoryColor}>
-                      {typeof category.current === "string" ? (
+                      {category.current && (
                         <CurrencyText value={category.current} />
-                      ) : (
-                        "$0"
                       )}
                     </th>
                     <th className={categoryColor}>
-                      {categoryDifference !== undefined ? (
+                      {categoryDifference && (
                         <CurrencyText value={categoryDifference} />
-                      ) : null}
+                      )}
                     </th>
                     <th className={categoryColor}>
-                      {typeof category.currentPercentage === "string"
-                        ? `${category.currentPercentage}%`
-                        : null}
+                      {category.currentPercentage &&
+                        `${category.currentPercentage}%`}
                     </th>
                   </tr>
                 );
