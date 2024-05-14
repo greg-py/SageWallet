@@ -3,6 +3,7 @@ import transactionsController from "../controllers/transactionsController";
 import budgetsController from "../controllers/budgetsController";
 import dashboardController from "../controllers/dashboardController";
 import incomeController from "../controllers/incomeController";
+import balancesController from "../controllers/balancesController";
 
 const router = express.Router();
 
@@ -101,5 +102,19 @@ router.post("/:userId/income", incomeController.addUserIncome);
 router.put("/:userId/income/:incomeId", incomeController.updateUserIncome);
 
 router.delete("/:userId/income/:incomeId", incomeController.deleteUserIncome);
+
+router.get("/:userId/balances", balancesController.getUserBalances);
+
+router.post("/:userId/balances", balancesController.addUserBalance);
+
+router.put(
+  "/:userId/balances/:balanceId",
+  balancesController.updateUserBalance
+);
+
+router.delete(
+  "/:userId/balances/:balanceId",
+  balancesController.deleteUserBalance
+);
 
 export default router;

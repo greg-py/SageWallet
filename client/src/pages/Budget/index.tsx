@@ -7,6 +7,7 @@ import BudgetTable from "./components/BudgetTable";
 import PageCard from "../../components/Layout/PageCard";
 import Spinner from "../../components/Layout/Spinner";
 import AddModal from "./components/AddModal";
+import Error from "../../components/Layout/Error";
 
 interface BudgetProps {
   filterMonth: number;
@@ -21,41 +22,23 @@ const Budget = ({ filterMonth, filterYear }: BudgetProps) => {
   // Queries
   const {
     isPending: isBudgetPending,
-    error: isBudgetError,
+    error: budgetError,
     data: budget,
-    isRefetching: isBudgetRefetching,
-    isRefetchError: isBudgetRefetchError,
   } = useQuery(budgetQuery(userId));
   const {
     isPending: isTransactionsPending,
     error: transactionsError,
     data: transactions,
-    isRefetching: isTransactionsRefetching,
-    isRefetchError: transactionsRefetchError,
   } = useQuery(transactionsQuery(userId, filterMonth, filterYear));
 
   // Show loading spinner if queries are pending
-  if (
-    isBudgetPending ||
-    isTransactionsPending ||
-    isBudgetRefetching ||
-    isTransactionsRefetching
-  ) {
+  if (isBudgetPending || isTransactionsPending) {
     return <Spinner />;
   }
 
-  // Show error message if query has error
-  if (
-    isBudgetError ||
-    transactionsError ||
-    isBudgetRefetchError ||
-    transactionsRefetchError
-  ) {
-    return (
-      <div className="mx-auto max-w-screen-2xl text-center">
-        <p>There was an error loading data</p>
-      </div>
-    );
+  // Show error message if queries have error
+  if (budgetError || transactionsError) {
+    return <Error />;
   }
 
   return (

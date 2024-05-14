@@ -19,3 +19,4 @@ export const MONTHS = [
 ];
 export const YEARS = [2023, 2024];
 export const DASHBOARD_TRANSACTION_COUNT = 5;
+export const BALANCE_TYPES = ["Cash", "Investment", "Debt"];

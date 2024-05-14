@@ -8,6 +8,7 @@ import {
 } from "../../../config/constants";
 import CurrencyText from "../../../components/UI/CurrencyText";
 import EditModal from "./EditModal";
+import { calculateTotalSpend } from "../../../utils/transaction";
 
 interface TransactionsTableProps {
   transactions: Transaction[];
@@ -28,6 +29,9 @@ const TransactionsTable = ({
   const [vendor, setVendor] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
+
+  // Calculate total current spend for table footer
+  const totalSpend = calculateTotalSpend(transactions);
 
   // Get min and max dates for datepicker based on current filter selection
   const minDate = new Date(filterYear, filterMonth, 1)
@@ -110,7 +114,9 @@ const TransactionsTable = ({
             <tr>
               <th>Totals</th>
               <th></th>
-              <th></th>
+              <th>
+                {totalSpend && <CurrencyText value={totalSpend.toString()} />}
+              </th>
               <th></th>
             </tr>
           </tfoot>

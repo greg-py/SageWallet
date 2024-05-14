@@ -16,3 +16,14 @@ export const handleAmountChange = (
 export const returnRecentTransactions = (transactions: Transaction[]) => {
   return transactions.slice(0, DASHBOARD_TRANSACTION_COUNT);
 };
+
+export const calculateTotalSpend = (transactions: Transaction[]) => {
+  let totalSpend = 0;
+  transactions &&
+    transactions.forEach((transaction) => {
+      totalSpend += parseFloat(transaction.price);
+    });
+  totalSpend = parseFloat(totalSpend.toFixed(2));
+
+  return totalSpend;
+};

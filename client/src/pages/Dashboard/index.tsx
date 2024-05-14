@@ -1,5 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { budgetQuery, transactionsQuery } from "../../api/queries";
+import {
+  balancesQuery,
+  budgetQuery,
+  transactionsQuery,
+} from "../../api/queries";
 import { useQuery } from "@tanstack/react-query";
 import { incomeQuery } from "../../api/queries/defs/income";
 import LoadingSpinner from "../../components/Layout/LoadingSpinner";
@@ -13,6 +17,7 @@ import BudgetTable from "./components/BudgetTable";
 import Incomes from "./components/Stats/Incomes";
 import { returnRecentTransactions } from "../../utils/transaction";
 import { filterBudgetByTransactions } from "../../utils/budget";
+import Error from "../../components/Layout/Error";
 
 interface DashboardProps {
   filterMonth: number;
@@ -40,19 +45,25 @@ const Dashboard = ({ filterMonth, filterYear }: DashboardProps) => {
     error: incomeError,
     data: income,
   } = useQuery(incomeQuery(userId, filterMonth, filterYear));
+  const {
+    isPending: isBalancesPending,
+    error: balancesError,
+    data: balances,
+  } = useQuery(balancesQuery(userId));
 
   // Show loading spinner if queries are pending
-  if (isBudgetPending || isTransactionsPending || isIncomePending) {
+  if (
+    isBudgetPending ||
+    isTransactionsPending ||
+    isIncomePending ||
+    isBalancesPending
+  ) {
     return <LoadingSpinner />;
   }
 
   // Show error message if query has error
-  if (budgetError || transactionsError || incomeError) {
-    return (
-      <div className="mx-auto max-w-screen-2xl text-center">
-        <p>There was an error loading data</p>
-      </div>
-    );
+  if (budgetError || transactionsError || incomeError || balancesError) {
+    return <Error />;
   }
 
   // Get recent transactions for transactions list and budget table
@@ -75,7 +86,7 @@ const Dashboard = ({ filterMonth, filterYear }: DashboardProps) => {
           transactions={transactions}
         />
       </DashboardRow>
-      <Balances />
+      <Balances balances={balances} />
       <Incomes income={income} budget={budget} transactions={transactions} />
     </PageContainer>
   );

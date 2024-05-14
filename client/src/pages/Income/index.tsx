@@ -7,6 +7,7 @@ import IncomeTable from "./components/IncomeTable";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../components/Layout/Spinner";
 import { incomeQuery } from "../../api/queries/defs/income";
+import Error from "../../components/Layout/Error";
 
 interface IncomeProps {
   filterMonth: number;
@@ -40,11 +41,7 @@ const Income = ({ filterMonth, filterYear }: IncomeProps) => {
 
   // Show error message if query has error
   if (incomeError) {
-    return (
-      <div className="mx-auto max-w-screen-2xl text-center">
-        <p>There was an error loading data</p>
-      </div>
-    );
+    return <Error />;
   }
 
   return (

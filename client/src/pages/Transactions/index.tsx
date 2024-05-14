@@ -7,6 +7,7 @@ import Spinner from "../../components/Layout/Spinner";
 import PageCard from "../../components/Layout/PageCard";
 import AddModal from "./components/AddModal";
 import TransactionsTable from "./components/TransactionTable";
+import Error from "../../components/Layout/Error";
 
 interface TransactionsProps {
   filterMonth: number;
@@ -59,11 +60,7 @@ const Transactions = ({ filterMonth, filterYear }: TransactionsProps) => {
     budgetError ||
     budgetRefetchError
   ) {
-    return (
-      <div className="mx-auto max-w-screen-2xl text-center">
-        <p>There was an error loading data</p>
-      </div>
-    );
+    return <Error />;
   }
 
   return (

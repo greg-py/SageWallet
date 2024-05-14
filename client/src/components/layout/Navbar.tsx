@@ -4,6 +4,7 @@ import { MONTHS } from "../../config/constants";
 import { useQuery } from "@tanstack/react-query";
 import { filterOptionsQuery } from "../../api/queries";
 import LoadingSpinner from "./LoadingSpinner";
+import { useState } from "react";
 
 interface NavbarProps {
   filterMonth: number;
@@ -18,7 +19,7 @@ const Navbar = ({
   filterYear,
   setFilterYear,
 }: NavbarProps) => {
-  // User authentication
+  const [menuOpen, setMenuOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuth0();
   const userId = user?.sub || "";
 
@@ -54,12 +55,52 @@ const Navbar = ({
   }
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 relative">
       <div className="flex-1">
         <p className="btn btn-ghost text-xl">Budgee</p>
       </div>
-      <div className="flex-1 text-center">
-        <ul className="menu menu-horizontal flex justify-center w-full">
+      <div className="flex-none lg:flex-1 lg:text-center relative">
+        <button
+          className="btn btn-ghost lg:hidden"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16m-7 6h7"}
+            />
+          </svg>
+        </button>
+        {menuOpen && (
+          <div className="absolute top-full left-0 mt-2 w-auto h-auto z-[1] lg:hidden">
+            <ul className="menu p-2 shadow bg-base-100 rounded-box min-w-full w-full">
+              <li>
+                <Link to="/">Dashboard</Link>
+              </li>
+              <li>
+                <Link to="/balances">Balances</Link>
+              </li>
+              <li>
+                <Link to="/budget">Budget</Link>
+              </li>
+              <li>
+                <Link to="/transactions">Transactions</Link>
+              </li>
+              <li>
+                <Link to="/income">Income</Link>
+              </li>
+            </ul>
+          </div>
+        )}
+        <ul className="hidden lg:flex menu menu-horizontal flex justify-center w-full">
           <li>
             <Link to="/">Dashboard</Link>
           </li>
@@ -77,10 +118,10 @@ const Navbar = ({
           </li>
         </ul>
       </div>
-      <div className="flex-1 flex justify-end space-x-2">
-        <div className="space-x-2">
+      <div className="flex-1 flex justify-end space-x-2 items-center">
+        <div className="flex flex-col sm:flex-row space-x-0 sm:space-x-2 space-y-2 sm:space-y-0">
           <select
-            className="select w-52 bg-gray-300 text-base-100"
+            className="select w-full sm:w-24 lg:w-52 bg-gray-300 text-base-100"
             value={MONTHS[filterMonth] ?? ""}
             onChange={(e) => handleMonthChange(e)}
           >
@@ -90,7 +131,7 @@ const Navbar = ({
             })}
           </select>
           <select
-            className="select w-52 bg-gray-300 text-base-100"
+            className="select w-full sm:w-24 lg:w-52 bg-gray-300 text-base-100"
             value={filterYear}
             onChange={(e) => setFilterYear(parseInt(e.target.value))}
           >
