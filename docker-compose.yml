@@ -6,18 +6,17 @@ services:
     ports:
       - "3000:3000"
     environment:
-      NODE_ENV: production
-      PORT: 3000
-      DB_DIALECT: postgres
-      DB_HOST: 35.223.32.193
-      DB_DATABASE: budgetapp
-      DB_USERNAME: postgres
-      DB_PASSWORD: qvc.crk9kzu9JAJ1gre
+      PORT: ${PORT}
+      DB_DIALECT: ${DB_DIALECT}
+      DB_HOST: ${DB_HOST}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
   client:
     build: ./client
     ports:
       - "80:80"
     environment:
-      VITE_AUTH0_DOMAIN: dev-veryea88w0meisz6.us.auth0.com
-      VITE_AUTH0_CLIENT_ID: QFXj7uW22GtCORmCSsMmQdz4fdSNvqle
-      VITE_API_BASEURL: http://localhost:3000
+      VITE_AUTH0_DOMAIN: ${VITE_AUTH0_DOMAIN}
+      VITE_AUTH0_CLIENT_ID: ${VITE_AUTH0_CLIENT_ID}
+      VITE_API_BASEURL: ${VITE_API_BASEURL}
