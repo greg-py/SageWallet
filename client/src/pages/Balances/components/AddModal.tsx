@@ -69,7 +69,7 @@ const AddModal = () => {
 
   return (
     <>
-      <button className="btn btn-neutral btn-sm" onClick={handleAddModalOpen}>
+      <button className="btn btn-primary btn-sm" onClick={handleAddModalOpen}>
         Add
       </button>
       <dialog id="add_balance_modal" className="modal">
