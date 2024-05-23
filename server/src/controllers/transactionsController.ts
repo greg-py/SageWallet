@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import transactionsService from "../services/transactionsService";
+import { getUserIdFromJwt } from "../utils/auth";
 
 const getUserTransactions = async (req: Request, res: Response) => {
   try {
@@ -8,6 +9,11 @@ const getUserTransactions = async (req: Request, res: Response) => {
 
     if (!userId || !month || !year) {
       return res.status(400).send({ error: "Missing required parameters" });
+    }
+
+    const userIdFromJwt = getUserIdFromJwt(req);
+    if (userId !== userIdFromJwt) {
+      return res.status(403).json({ message: "User ID mismatch" });
     }
 
     if (typeof month !== "string" || typeof year !== "string") {

@@ -16,7 +16,7 @@ interface TransactionsProps {
 
 const Transactions = ({ filterMonth, filterYear }: TransactionsProps) => {
   // User authentication
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
 
   // Get min and max dates for datepicker based on current filter selection
@@ -34,14 +34,16 @@ const Transactions = ({ filterMonth, filterYear }: TransactionsProps) => {
     data: transactions,
     isRefetching: isTransactionsRefetching,
     isRefetchError: transactionsRefetchError,
-  } = useQuery(transactionsQuery(userId, filterMonth, filterYear));
+  } = useQuery(
+    transactionsQuery(userId, filterMonth, filterYear, getAccessTokenSilently)
+  );
   const {
     isPending: isBudgetPending,
     error: budgetError,
     data: budget,
     isRefetching: isBudgetRefetching,
     isRefetchError: budgetRefetchError,
-  } = useQuery(budgetQuery(userId));
+  } = useQuery(budgetQuery(userId, getAccessTokenSilently));
 
   // Show loading spinner if queries are pending
   if (

@@ -27,3 +27,12 @@ export const calculateTotalSpend = (transactions: Transaction[]) => {
 
   return totalSpend;
 };
+
+export const filterTransactions = (
+  transactions: Transaction[],
+  category: string
+) => {
+  return transactions.filter(
+    (transaction) => transaction.category === category
+  );
+};

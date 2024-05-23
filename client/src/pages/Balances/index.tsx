@@ -11,7 +11,7 @@ import Error from "../../components/Layout/Error";
 
 const Balances = () => {
   // User authentication
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
 
   // Queries
@@ -19,7 +19,7 @@ const Balances = () => {
     isPending: isBalancesPending,
     error: balancesError,
     data: balances,
-  } = useQuery(balancesQuery(userId));
+  } = useQuery(balancesQuery(userId, getAccessTokenSilently));
 
   // Show loading spinner if queries are pending
   if (isBalancesPending) {

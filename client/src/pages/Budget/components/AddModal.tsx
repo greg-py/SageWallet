@@ -12,7 +12,7 @@ const AddModal = () => {
   const [budget, setBudget] = useState("");
 
   // User authentication
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
 
   // Function to clear component state after submission
@@ -35,7 +35,7 @@ const AddModal = () => {
         throw new Error("User ID undefined");
       }
 
-      return addBudget(userId, newBudget);
+      return addBudget(userId, newBudget, getAccessTokenSilently);
     },
   });
 

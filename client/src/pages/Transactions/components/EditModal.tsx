@@ -45,7 +45,7 @@ const EditModal = ({
   filterMonth,
   filterYear,
 }: EditModalProps) => {
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
 
   // Build list of categories for add transaction modal from budget categories
@@ -57,7 +57,11 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return updateTransaction(userId, updatedTransaction);
+      return updateTransaction(
+        userId,
+        updatedTransaction,
+        getAccessTokenSilently
+      );
     },
   });
 
@@ -92,7 +96,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return deleteTransaction(userId, transactionId);
+      return deleteTransaction(userId, transactionId, getAccessTokenSilently);
     },
   });
 

@@ -4,6 +4,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "./config/swagger";
 import usersRoutes from "./routes/users";
 import cors from "cors";
+import { checkJwt, checkUserId } from "./middleware/checkJwt";
 
 const endpointPrefix = "/api";
 
@@ -25,7 +26,7 @@ app.use(
 );
 
 // Configure routes
-app.use(`${endpointPrefix}/users`, usersRoutes);
+app.use(`${endpointPrefix}/users`, checkJwt, usersRoutes);
 
 // Return not found for any unmatched routes
 app.use("*", (req: Request, res: Response) => {

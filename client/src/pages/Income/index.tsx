@@ -16,7 +16,7 @@ interface IncomeProps {
 
 const Income = ({ filterMonth, filterYear }: IncomeProps) => {
   // User authentication
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
 
   // Get min and max dates for datepicker based on current filter selection
@@ -32,7 +32,9 @@ const Income = ({ filterMonth, filterYear }: IncomeProps) => {
     isPending: isIncomePending,
     error: incomeError,
     data: income,
-  } = useQuery(incomeQuery(userId, filterMonth, filterYear));
+  } = useQuery(
+    incomeQuery(userId, filterMonth, filterYear, getAccessTokenSilently)
+  );
 
   // Show loading spinner if queries are pending
   if (isIncomePending) {

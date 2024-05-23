@@ -8,6 +8,7 @@ import PageCard from "../../components/Layout/PageCard";
 import Spinner from "../../components/Layout/Spinner";
 import AddModal from "./components/AddModal";
 import Error from "../../components/Layout/Error";
+import { useState } from "react";
 
 interface BudgetProps {
   filterMonth: number;
@@ -15,8 +16,11 @@ interface BudgetProps {
 }
 
 const Budget = ({ filterMonth, filterYear }: BudgetProps) => {
+  // Component state
+  const [editEnabled, setEditEnabled] = useState(false);
+
   // User authentication
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
 
   // Queries
@@ -24,12 +28,14 @@ const Budget = ({ filterMonth, filterYear }: BudgetProps) => {
     isPending: isBudgetPending,
     error: budgetError,
     data: budget,
-  } = useQuery(budgetQuery(userId));
+  } = useQuery(budgetQuery(userId, getAccessTokenSilently));
   const {
     isPending: isTransactionsPending,
     error: transactionsError,
     data: transactions,
-  } = useQuery(transactionsQuery(userId, filterMonth, filterYear));
+  } = useQuery(
+    transactionsQuery(userId, filterMonth, filterYear, getAccessTokenSilently)
+  );
 
   // Show loading spinner if queries are pending
   if (isBudgetPending || isTransactionsPending) {
@@ -45,10 +51,22 @@ const Budget = ({ filterMonth, filterYear }: BudgetProps) => {
     <PageContainer>
       <div className="flex flex-row justify-between">
         <PageTitle>Budget</PageTitle>
-        <AddModal />
+        <div className="flex flex-row space-x-2">
+          <button
+            className={`btn btn-sm ${editEnabled ? "btn-error" : "btn-accent"}`}
+            onClick={() => setEditEnabled((prevState) => !prevState)}
+          >
+            {editEnabled ? "Done" : "Edit"}
+          </button>
+          <AddModal />
+        </div>
       </div>
       <PageCard>
-        <BudgetTable budget={budget} transactions={transactions} />
+        <BudgetTable
+          budget={budget}
+          transactions={transactions}
+          editEnabled={editEnabled}
+        />
       </PageCard>
     </PageContainer>
   );

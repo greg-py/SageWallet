@@ -4,12 +4,11 @@ import budgetsController from "../controllers/budgetsController";
 import dashboardController from "../controllers/dashboardController";
 import incomeController from "../controllers/incomeController";
 import balancesController from "../controllers/balancesController";
+import { checkUserId } from "../middleware/checkJwt";
 
 const router = express.Router();
 
-router.get("/:userId/dashboard", dashboardController.getUserDashboard);
-
-router.get("/:userId/filters", dashboardController.getUserFilters);
+router.get("/:userId/filters", checkUserId, dashboardController.getUserFilters);
 
 /**
  * @swagger
@@ -34,7 +33,11 @@ router.get("/:userId/filters", dashboardController.getUserFilters);
  *       '500':
  *         description: Internal server error
  */
-router.get("/:userId/transactions", transactionsController.getUserTransactions);
+router.get(
+  "/:userId/transactions",
+  checkUserId,
+  transactionsController.getUserTransactions
+);
 
 /**
  * @swagger
@@ -75,45 +78,77 @@ router.get("/:userId/transactions", transactionsController.getUserTransactions);
  *        '500':
  *          description: Internal server error
  */
-router.post("/:userId/transactions", transactionsController.addUserTransaction);
+router.post(
+  "/:userId/transactions",
+  checkUserId,
+  transactionsController.addUserTransaction
+);
 
 router.put(
   "/:userId/transactions/:transactionId",
+  checkUserId,
   transactionsController.updateUserTransaction
 );
 
 router.delete(
   "/:userId/transactions/:transactionId",
+  checkUserId,
   transactionsController.deleteUserTransaction
 );
 
-router.get("/:userId/budgets", budgetsController.getUserBudgets);
+router.get("/:userId/budgets", checkUserId, budgetsController.getUserBudgets);
 
-router.post("/:userId/budgets", budgetsController.addUserBudgets);
+router.post("/:userId/budgets", checkUserId, budgetsController.addUserBudgets);
 
-router.put("/:userId/budgets/:budgetId", budgetsController.updateUserBudget);
+router.put(
+  "/:userId/budgets/:budgetId",
+  checkUserId,
+  budgetsController.updateUserBudget
+);
 
-router.delete("/:userId/budgets/:budgetId", budgetsController.deleteUserBudget);
+router.delete(
+  "/:userId/budgets/:budgetId",
+  checkUserId,
+  budgetsController.deleteUserBudget
+);
 
-router.get("/:userId/income", incomeController.getUserIncome);
+router.get("/:userId/income", checkUserId, incomeController.getUserIncome);
 
-router.post("/:userId/income", incomeController.addUserIncome);
+router.post("/:userId/income", checkUserId, incomeController.addUserIncome);
 
-router.put("/:userId/income/:incomeId", incomeController.updateUserIncome);
+router.put(
+  "/:userId/income/:incomeId",
+  checkUserId,
+  incomeController.updateUserIncome
+);
 
-router.delete("/:userId/income/:incomeId", incomeController.deleteUserIncome);
+router.delete(
+  "/:userId/income/:incomeId",
+  checkUserId,
+  incomeController.deleteUserIncome
+);
 
-router.get("/:userId/balances", balancesController.getUserBalances);
+router.get(
+  "/:userId/balances",
+  checkUserId,
+  balancesController.getUserBalances
+);
 
-router.post("/:userId/balances", balancesController.addUserBalance);
+router.post(
+  "/:userId/balances",
+  checkUserId,
+  balancesController.addUserBalance
+);
 
 router.put(
   "/:userId/balances/:balanceId",
+  checkUserId,
   balancesController.updateUserBalance
 );
 
 router.delete(
   "/:userId/balances/:balanceId",
+  checkUserId,
   balancesController.deleteUserBalance
 );
 

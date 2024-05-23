@@ -18,7 +18,7 @@ const Navbar = ({
   filterYear,
   setFilterYear,
 }: NavbarProps) => {
-  const { isAuthenticated, user, logout } = useAuth0();
+  const { isAuthenticated, user, logout, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
 
   // Queries
@@ -26,7 +26,7 @@ const Navbar = ({
     isPending: isFilterOptionsPending,
     error: filterOptionsError,
     data: filterOptions,
-  } = useQuery(filterOptionsQuery(userId));
+  } = useQuery(filterOptionsQuery(userId, getAccessTokenSilently));
 
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedMonth = e.target.value;

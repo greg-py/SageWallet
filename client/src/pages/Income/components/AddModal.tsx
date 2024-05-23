@@ -25,7 +25,7 @@ const AddModal = ({
   const [amount, setAmount] = useState("");
 
   // User authentication
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
   const userName = user?.email || "";
 
@@ -50,7 +50,7 @@ const AddModal = ({
         throw new Error("User ID undefined");
       }
 
-      return addIncome(userId, newIncome);
+      return addIncome(userId, newIncome, getAccessTokenSilently);
     },
   });
 

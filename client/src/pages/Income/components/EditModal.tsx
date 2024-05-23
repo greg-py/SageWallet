@@ -35,7 +35,7 @@ const EditModal = ({
   filterYear,
 }: EditModalProps) => {
   // User authentication
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
   const userName = user?.email || "";
 
@@ -45,7 +45,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return updateIncome(userId, updatedIncome);
+      return updateIncome(userId, updatedIncome, getAccessTokenSilently);
     },
   });
 
@@ -80,7 +80,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return deleteIncome(userId, incomeId);
+      return deleteIncome(userId, incomeId, getAccessTokenSilently);
     },
   });
 

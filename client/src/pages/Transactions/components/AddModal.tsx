@@ -28,7 +28,7 @@ const AddModal = ({
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
 
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
 
   const clearState = () => {
@@ -55,7 +55,7 @@ const AddModal = ({
         throw new Error("User ID undefined");
       }
 
-      return addTransaction(userId, newTransaction);
+      return addTransaction(userId, newTransaction, getAccessTokenSilently);
     },
   });
 

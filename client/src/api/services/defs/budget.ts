@@ -1,60 +1,79 @@
+import { GetTokenSilentlyOptions } from "@auth0/auth0-react";
 import { API_BASE_URL } from "../../../config/constants";
 import { BudgetCategory } from "../../../models/budget";
+import { GetTokenSilentlyVerboseResponse } from "@auth0/auth0-spa-js";
 
-export const getBudget = async (userId: string): Promise<BudgetCategory[]> => {
-  const response = await fetch(`${API_BASE_URL}/users/${userId}/budgets`);
+export const getBudget = async (
+  userId: string,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
+): Promise<BudgetCategory[]> => {
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/budgets`;
+  const headers = { Authorization: `Bearer ${token}` };
+  const response = await fetch(url, { headers });
   const data = await response.json();
   return data;
 };
 
-export const addBudget = async (userId: string, budget: BudgetCategory) => {
-  if (!userId || !budget) {
-    return {};
-  } else if (userId !== budget.userId) {
-    return {};
-  }
-
-  const response = await fetch(`${API_BASE_URL}/users/${userId}/budgets`, {
+export const addBudget = async (
+  userId: string,
+  budget: BudgetCategory,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
+) => {
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/budgets`;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify(budget),
   });
   const data = await response.json();
   return data;
 };
 
-export const updateBudget = async (userId: string, budget: BudgetCategory) => {
-  if (!userId || !budget) {
-    return {};
-  } else if (userId !== budget.userId) {
-    return {};
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userId}/budgets/${budget.id}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(budget),
-    }
-  );
+export const updateBudget = async (
+  userId: string,
+  budget: BudgetCategory,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
+) => {
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/budgets/${budget.id}`;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(budget),
+  });
   const data = await response.json();
   return data;
 };
 
-export const deleteBudget = async (userId: string, budgetId: string) => {
-  if (!userId || !budgetId) {
-    return {};
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userId}/budgets/${budgetId}`,
-    { method: "DELETE" }
-  );
+export const deleteBudget = async (
+  userId: string,
+  budgetId: string,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
+) => {
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/budgets/${budgetId}`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, { method: "DELETE", headers });
   const data = await response.json();
   return data;
 };

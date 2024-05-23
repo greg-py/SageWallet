@@ -26,7 +26,7 @@ interface DashboardProps {
 
 const Dashboard = ({ filterMonth, filterYear }: DashboardProps) => {
   // User authentication
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
 
   // Queries
@@ -34,22 +34,26 @@ const Dashboard = ({ filterMonth, filterYear }: DashboardProps) => {
     isPending: isBudgetPending,
     error: budgetError,
     data: budget,
-  } = useQuery(budgetQuery(userId));
+  } = useQuery(budgetQuery(userId, getAccessTokenSilently));
   const {
     isPending: isTransactionsPending,
     error: transactionsError,
     data: transactions,
-  } = useQuery(transactionsQuery(userId, filterMonth, filterYear));
+  } = useQuery(
+    transactionsQuery(userId, filterMonth, filterYear, getAccessTokenSilently)
+  );
   const {
     isPending: isIncomePending,
     error: incomeError,
     data: income,
-  } = useQuery(incomeQuery(userId, filterMonth, filterYear));
+  } = useQuery(
+    incomeQuery(userId, filterMonth, filterYear, getAccessTokenSilently)
+  );
   const {
     isPending: isBalancesPending,
     error: balancesError,
     data: balances,
-  } = useQuery(balancesQuery(userId));
+  } = useQuery(balancesQuery(userId, getAccessTokenSilently));
 
   // Show loading spinner if queries are pending
   if (

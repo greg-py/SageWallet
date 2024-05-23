@@ -1,6 +1,18 @@
 # Step 1: Build the React application
 FROM node:16-alpine AS build
 
+# Define build arguments for environment variables
+ARG VITE_AUTH0_DOMAIN
+ARG VITE_AUTH0_CLIENT_ID
+ARG VITE_API_BASEURL
+ARG VITE_AUTH0_API_IDENTIFIER
+
+# Set environment variables during build process
+ENV VITE_AUTH0_DOMAIN=$VITE_AUTH0_DOMAIN
+ENV VITE_AUTH0_CLIENT_ID=$VITE_AUTH0_CLIENT_ID
+ENV VITE_API_BASEURL=$VITE_API_BASEURL
+ENV VITE_AUTH0_API_IDENTIFIER=$VITE_AUTH0_API_IDENTIFIER
+
 # Set working directory
 WORKDIR /app
 

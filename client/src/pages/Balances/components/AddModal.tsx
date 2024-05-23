@@ -14,7 +14,7 @@ const AddModal = () => {
   const [type, setType] = useState(BALANCE_TYPES[0]);
 
   // User authentication
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
   const userName = user?.email || "";
 
@@ -39,7 +39,7 @@ const AddModal = () => {
         throw new Error("User ID undefined");
       }
 
-      return addBalance(userId, newBalance);
+      return addBalance(userId, newBalance, getAccessTokenSilently);
     },
   });
 

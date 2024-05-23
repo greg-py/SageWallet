@@ -1,33 +1,42 @@
+import { GetTokenSilentlyOptions } from "@auth0/auth0-react";
 import { Transaction } from "../../../models/transaction";
 import { API_BASE_URL } from "../../../config/constants";
+import { GetTokenSilentlyVerboseResponse } from "@auth0/auth0-spa-js";
 
 export const getTransactions = async (
   userId: string,
   filterMonth: number,
-  filterYear: number
+  filterYear: number,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
 ): Promise<Transaction[]> => {
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userId}/transactions?month=${filterMonth}&year=${filterYear}`
-  );
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/transactions?month=${filterMonth}&year=${filterYear}`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, { headers });
   const data = await response.json();
   return data;
 };
 
 export const addTransaction = async (
   userId: string,
-  transaction: Transaction
+  transaction: Transaction,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
 ) => {
-  if (!userId || !transaction) {
-    return {};
-  } else if (userId !== transaction.userId) {
-    return {};
-  }
-
-  const response = await fetch(`${API_BASE_URL}/users/${userId}/transactions`, {
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/transactions`;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify(transaction),
   });
   const data = await response.json();
@@ -36,40 +45,39 @@ export const addTransaction = async (
 
 export const updateTransaction = async (
   userId: string,
-  transaction: Transaction
+  transaction: Transaction,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
 ) => {
-  if (!userId || !transaction) {
-    return {};
-  } else if (userId !== transaction.userId) {
-    return {};
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userId}/transactions/${transaction.id}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(transaction),
-    }
-  );
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/transactions/${transaction.id}`;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(transaction),
+  });
   const data = await response.json();
   return data;
 };
 
 export const deleteTransaction = async (
   userId: string,
-  transactionId: string
+  transactionId: string,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
 ) => {
-  if (!userId || !transactionId) {
-    return {};
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userId}/transactions/${transactionId}`,
-    { method: "DELETE" }
-  );
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/transactions/${transactionId}`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, { method: "DELETE", headers });
   const data = await response.json();
   return data;
 };

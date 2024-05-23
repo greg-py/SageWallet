@@ -1,26 +1,42 @@
+import { GetTokenSilentlyOptions } from "@auth0/auth0-react";
 import { API_BASE_URL } from "../../../config/constants";
 import { BalancesCategory } from "../../../models/balances";
+import { GetTokenSilentlyVerboseResponse } from "@auth0/auth0-spa-js";
 
 export const getBalances = async (
-  userId: string
+  userId: string,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
 ): Promise<BalancesCategory[]> => {
-  const response = await fetch(`${API_BASE_URL}/users/${userId}/balances`);
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/balances`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, {
+    headers,
+  });
   const data = await response.json();
   return data;
 };
 
-export const addBalance = async (userId: string, balance: BalancesCategory) => {
-  if (!userId || !balance) {
-    return {};
-  } else if (userId !== balance.userId) {
-    return {};
-  }
-
-  const response = await fetch(`${API_BASE_URL}/users/${userId}/balances`, {
+export const addBalance = async (
+  userId: string,
+  balance: BalancesCategory,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
+) => {
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/balances`;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify(balance),
   });
   const data = await response.json();
@@ -29,37 +45,39 @@ export const addBalance = async (userId: string, balance: BalancesCategory) => {
 
 export const updateBalance = async (
   userId: string,
-  balance: BalancesCategory
+  balance: BalancesCategory,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
 ) => {
-  if (!userId || !balance) {
-    return {};
-  } else if (userId !== balance.userId) {
-    return {};
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userId}/balances/${balance.id}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(balance),
-    }
-  );
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/balances/${balance.id}`;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(balance),
+  });
   const data = await response.json();
   return data;
 };
 
-export const deleteBalance = async (userId: string, balanceId: string) => {
-  if (!userId || !balanceId) {
-    return {};
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userId}/balances/${balanceId}`,
-    { method: "DELETE" }
-  );
+export const deleteBalance = async (
+  userId: string,
+  balanceId: string,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
+) => {
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/balances/${balanceId}`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, { method: "DELETE", headers });
   const data = await response.json();
   return data;
 };

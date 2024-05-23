@@ -27,7 +27,7 @@ const EditModal = ({
   setType,
   handleClose,
 }: EditModalProps) => {
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
   const userName = user?.email || "";
 
@@ -37,7 +37,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return updateBalance(userId, updatedBalance);
+      return updateBalance(userId, updatedBalance, getAccessTokenSilently);
     },
   });
 
@@ -72,7 +72,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return deleteBalance(userId, balanceId);
+      return deleteBalance(userId, balanceId, getAccessTokenSilently);
     },
   });
 

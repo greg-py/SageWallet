@@ -1,66 +1,83 @@
+import { GetTokenSilentlyOptions } from "@auth0/auth0-react";
 import { API_BASE_URL } from "../../../config/constants";
 import { Income } from "../../../models/income";
+import { GetTokenSilentlyVerboseResponse } from "@auth0/auth0-spa-js";
 
 export const getIncome = async (
   userId: string,
   filterMonth: number,
-  filterYear: number
+  filterYear: number,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
 ): Promise<Income[]> => {
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userId}/income?month=${filterMonth}&year=${filterYear}`
-  );
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/income?month=${filterMonth}&year=${filterYear}`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, { headers });
   const data = await response.json();
   return data;
 };
 
-export const addIncome = async (userId: string, income: Income) => {
-  if (!userId || !income) {
-    return {};
-  } else if (userId !== income.userId) {
-    return {};
-  }
-
-  const response = await fetch(`${API_BASE_URL}/users/${userId}/income`, {
+export const addIncome = async (
+  userId: string,
+  income: Income,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
+) => {
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/income`;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
     body: JSON.stringify(income),
   });
   const data = await response.json();
   return data;
 };
 
-export const updateIncome = async (userId: string, income: Income) => {
-  if (!userId || !income) {
-    return {};
-  } else if (userId !== income.userId) {
-    return {};
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userId}/income/${income.id}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(income),
-    }
-  );
+export const updateIncome = async (
+  userId: string,
+  income: Income,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
+) => {
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/income/${income.id}`;
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(income),
+  });
   const data = await response.json();
   return data;
 };
 
-export const deleteIncome = async (userId: string, incomeId: string) => {
-  if (!userId || !incomeId) {
-    return {};
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL}/users/${userId}/income/${incomeId}`,
-    { method: "DELETE" }
-  );
+export const deleteIncome = async (
+  userId: string,
+  incomeId: string,
+  getAccessTokenSilently: (
+    options?: GetTokenSilentlyOptions
+  ) => Promise<string | GetTokenSilentlyVerboseResponse>
+) => {
+  const token = await getAccessTokenSilently();
+  const url = `${API_BASE_URL}/users/${userId}/income/${incomeId}`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const response = await fetch(url, { method: "DELETE", headers });
   const data = await response.json();
   return data;
 };

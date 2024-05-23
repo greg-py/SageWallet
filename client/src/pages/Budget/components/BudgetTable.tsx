@@ -7,17 +7,24 @@ import {
   calculateBudgetTotals,
 } from "../../../utils/budget";
 import EditModal from "./EditModal";
+import CategoryModal from "./CategoryModal";
 
 interface BudgetTableProps {
   budget: BudgetCategory[];
   transactions: Transaction[];
+  editEnabled: boolean;
 }
 
-const BudgetTable = ({ budget, transactions }: BudgetTableProps) => {
+const BudgetTable = ({
+  budget,
+  transactions,
+  editEnabled,
+}: BudgetTableProps) => {
   // Component state
   const [id, setId] = useState("");
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
 
   const initializeBudgetEdit = (budget: BudgetCategory) => {
     if (!budget?.id) {
@@ -46,6 +53,13 @@ const BudgetTable = ({ budget, transactions }: BudgetTableProps) => {
     (
       document.getElementById("edit_budget_modal") as HTMLDialogElement
     )?.close();
+  };
+
+  const handleCategoryModalOpen = (category: string) => {
+    setFilterCategory(category);
+    (
+      document.getElementById("filter_category_modal") as HTMLDialogElement
+    )?.showModal();
   };
 
   return (
@@ -84,7 +98,13 @@ const BudgetTable = ({ budget, transactions }: BudgetTableProps) => {
                   <tr
                     key={category.id}
                     className="hover:cursor-pointer hover:bg-base-200"
-                    onClick={() => handleEditModalOpen(category)}
+                    onClick={() => {
+                      if (editEnabled) {
+                        handleEditModalOpen(category);
+                      } else {
+                        handleCategoryModalOpen(category.category);
+                      }
+                    }}
                   >
                     <th>{category.category}</th>
                     <th>{<CurrencyText value={category.budget} />}</th>
@@ -140,6 +160,7 @@ const BudgetTable = ({ budget, transactions }: BudgetTableProps) => {
         setCategory={setCategory}
         handleClose={handleEditModalClose}
       />
+      <CategoryModal transactions={transactions} category={filterCategory} />
     </>
   );
 };

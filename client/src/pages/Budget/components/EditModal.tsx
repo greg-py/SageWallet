@@ -23,7 +23,7 @@ const EditModal = ({
   handleClose,
 }: EditModalProps) => {
   // User authentication
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const userId = user?.sub || "";
 
   const updateMutation = useMutation({
@@ -32,7 +32,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return updateBudget(userId, updatedBudget);
+      return updateBudget(userId, updatedBudget, getAccessTokenSilently);
     },
   });
 
@@ -58,7 +58,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return deleteBudget(userId, budgetId);
+      return deleteBudget(userId, budgetId, getAccessTokenSilently);
     },
   });
 
