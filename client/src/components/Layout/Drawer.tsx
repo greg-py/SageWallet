@@ -33,11 +33,11 @@ const Drawer = ({ children }: DrawerProps) => {
               className="flex-0 btn btn-ghost px-2"
             >
               <div className="font-title inline-flex text-base-100 text-lg md:text-2xl">
-                ProsperFund
+                SageWallet
               </div>
             </a>
           </div>
-          <ul className="menu p-4 text-white">
+          <ul className="menu p-4 text-base-100">
             {/* Sidebar content here */}
             <li>
               <a>Dashboard</a>

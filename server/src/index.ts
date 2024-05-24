@@ -5,6 +5,8 @@ import swaggerOptions from "./config/swagger";
 import usersRoutes from "./routes/users";
 import cors from "cors";
 import { checkJwt } from "./middleware/checkJwt";
+import { rateLimit } from "express-rate-limit";
+import { corsOptions } from "./config/cors";
 
 const endpointPrefix = "/api";
 
@@ -15,7 +17,16 @@ const app: Express = express();
 app.use(express.json());
 
 // CORS middleware
-app.use(cors());
+app.use(cors(corsOptions));
+
+// Configure rate limiting
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  limit: 100,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: "Too many requests from this IP, please try again after 1 minute",
+});
 
 // Configure Swagger Docs middleware
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -26,7 +37,7 @@ app.use(
 );
 
 // Configure routes
-app.use(`${endpointPrefix}/users`, checkJwt, usersRoutes);
+app.use(`${endpointPrefix}/users`, limiter, checkJwt, usersRoutes);
 
 // Return not found for any unmatched routes
 app.use("*", (req: Request, res: Response) => {

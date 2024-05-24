@@ -74,7 +74,7 @@ const Navbar = ({
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-base-content"
           >
             <li>
               <Link to="/">Dashboard</Link>
@@ -93,7 +93,7 @@ const Navbar = ({
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">ProsperFund</a>
+        <a className="btn btn-ghost text-xl hidden xl:flex">SageWallet</a>
       </div>
       <div className="navbar-center hidden xl:flex">
         <ul className="menu menu-horizontal px-1">
@@ -114,7 +114,7 @@ const Navbar = ({
           </li>
         </ul>
       </div>
-      <div className="navbar-end text-black">
+      <div className="navbar-end text-base-content">
         <div className="flex-1 flex justify-end space-x-2 items-center">
           <div className="flex flex-row space-x-2">
             <select
