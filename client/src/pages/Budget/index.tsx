@@ -9,6 +9,7 @@ import Spinner from "../../components/Layout/Spinner";
 import AddModal from "./components/AddModal";
 import Error from "../../components/Layout/Error";
 import { useState } from "react";
+import EditButton from "./components/EditButton";
 
 interface BudgetProps {
   filterMonth: number;
@@ -52,12 +53,10 @@ const Budget = ({ filterMonth, filterYear }: BudgetProps) => {
       <div className="flex flex-row justify-between">
         <PageTitle>Budget</PageTitle>
         <div className="flex flex-row space-x-2">
-          <button
-            className={`btn btn-sm ${editEnabled ? "btn-error" : "btn-accent"}`}
-            onClick={() => setEditEnabled((prevState) => !prevState)}
-          >
-            {editEnabled ? "Done" : "Edit"}
-          </button>
+          <EditButton
+            editEnabled={editEnabled}
+            setEditEnabled={setEditEnabled}
+          />
           <AddModal />
         </div>
       </div>

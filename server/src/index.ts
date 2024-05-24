@@ -4,7 +4,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "./config/swagger";
 import usersRoutes from "./routes/users";
 import cors from "cors";
-import { checkJwt, checkUserId } from "./middleware/checkJwt";
+import { checkJwt } from "./middleware/checkJwt";
 
 const endpointPrefix = "/api";
 

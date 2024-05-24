@@ -8,6 +8,7 @@ import {
 } from "../../../utils/budget";
 import EditModal from "./EditModal";
 import CategoryModal from "./CategoryModal";
+import EditTableIcon from "./EditTableIcon";
 
 interface BudgetTableProps {
   budget: BudgetCategory[];
@@ -68,6 +69,7 @@ const BudgetTable = ({
         <table className="table">
           <thead>
             <tr>
+              {editEnabled && <th className="w-24"></th>}
               <th>Category</th>
               <th>Budget</th>
               <th>Current</th>
@@ -106,6 +108,7 @@ const BudgetTable = ({
                       }
                     }}
                   >
+                    {editEnabled && <EditTableIcon />}
                     <th>{category.category}</th>
                     <th>{<CurrencyText value={category.budget} />}</th>
                     <th className={categoryColor}>
