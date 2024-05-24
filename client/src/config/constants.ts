@@ -1,6 +1,6 @@
 export const DATE_FORMAT_STRING = "MMMM d";
 export const DATEPICKER_FORMAT_STRING = "yyyy-MM-dd";
-export const API_BASE_URL = "https://budget-app-server-im2r.onrender.com/api";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const FILTER_CATEGORIES_ALL_STRING = "All Categories";
 export const CATEGORY_COLOR_DEFAULT_COLOR = "#0e7490";
 export const MONTHS = [
