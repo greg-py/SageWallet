@@ -39,7 +39,7 @@ const Transactions = ({ transactions }: TransactionsProps) => {
                     <CurrencyText value={transaction.price} />
                   )}
                 </p>
-                <p className="mt-1 text-xs leading-5 bg-accent text-base-100 px-2 pt-1 rounded-lg">
+                <p className="mt-1 text-xs leading-5 bg-primary text-base-100 px-2 pt-1 rounded-lg">
                   {transaction.category}
                 </p>
               </div>
