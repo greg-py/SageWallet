@@ -6,12 +6,13 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json ./
+RUN npm install
 
 # Copy source files
 COPY . .
 
 # Build the application
-RUN npm install; npm run build
+RUN npm run build
 
 # Step 2: Serve the React application using a lightweight web server
 FROM nginx:alpine
