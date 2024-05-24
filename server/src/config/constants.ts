@@ -6,3 +6,8 @@ export const STATUS_CODES = {
   FORBIDDEN: 403,
   SERVER_ERROR: 500,
 };
+export const ALLOWED_ORIGINS = [
+  "http://localhost",
+  "http://localhost:5173",
+  "https://budget-app-client.onrender.com",
+];
