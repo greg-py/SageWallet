@@ -33,7 +33,7 @@ const Drawer = ({ children }: DrawerProps) => {
               className="flex-0 btn btn-ghost px-2"
             >
               <div className="font-title inline-flex text-base-100 text-lg md:text-2xl">
-                Budgee
+                ProsperFund
               </div>
             </a>
           </div>

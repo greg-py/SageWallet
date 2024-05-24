@@ -9,18 +9,20 @@ export default {
   plugins: [daisyui],
   daisyui: {
     themes: [
-      "emerald",
-      "pastel",
-      "nord",
-      "light",
-      "dark",
-      "bumblebee",
-      "corporate",
-      "fantasy",
-      "dracula",
-      "dim",
-      "night",
-      "sunset",
+      {
+        budget: {
+          primary: "#3AAFA9",
+          secondary: "#2B7A78",
+          accent: "#DEF2F1",
+          neutral: "#17252A",
+          "base-100": "#FEFFFF",
+          "base-200": "#F1F5F5",
+          info: "#A6E3E9",
+          success: "#76C7C0",
+          warning: "#FFDD57",
+          error: "#FF6F61",
+        },
+      },
     ],
   },
 };

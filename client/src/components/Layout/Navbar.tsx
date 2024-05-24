@@ -53,7 +53,7 @@ const Navbar = ({
   }
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-primary text-base-100">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost xl:hidden">
@@ -93,7 +93,7 @@ const Navbar = ({
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">Budgee</a>
+        <a className="btn btn-ghost text-xl">ProsperFund</a>
       </div>
       <div className="navbar-center hidden xl:flex">
         <ul className="menu menu-horizontal px-1">
@@ -114,11 +114,11 @@ const Navbar = ({
           </li>
         </ul>
       </div>
-      <div className="navbar-end">
+      <div className="navbar-end text-black">
         <div className="flex-1 flex justify-end space-x-2 items-center">
           <div className="flex flex-row space-x-2">
             <select
-              className="select w-24 xl:w-52 bg-gray-300 text-base-100"
+              className="select w-24 xl:w-52 bg-base-200"
               value={MONTHS[filterMonth] ?? ""}
               onChange={(e) => handleMonthChange(e)}
             >
@@ -128,7 +128,7 @@ const Navbar = ({
               })}
             </select>
             <select
-              className="select w-24 xl:w-52 bg-gray-300 text-base-100"
+              className="select w-24 xl:w-52 bg-base-200"
               value={filterYear}
               onChange={(e) => setFilterYear(parseInt(e.target.value))}
             >
