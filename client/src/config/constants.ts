@@ -1,3 +1,4 @@
+export const APP_NAME = "SageWallet";
 export const DATE_FORMAT_STRING = "MMMM d";
 export const DATEPICKER_FORMAT_STRING = "yyyy-MM-dd";
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;

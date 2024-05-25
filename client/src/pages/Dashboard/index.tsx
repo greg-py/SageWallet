@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import { incomeQuery } from "../../api/queries/defs/income";
 import LoadingSpinner from "../../components/Layout/LoadingSpinner";
 import PageContainer from "../../components/Layout/PageContainer";
-import PageTitle from "../../components/Layout/PageTitle";
 import Balances from "./components/Stats/Balances";
 import Budget from "./components/Stats/Budget";
 import DashboardRow from "./components/DashboardRow";
@@ -81,7 +80,6 @@ const Dashboard = ({ filterMonth, filterYear }: DashboardProps) => {
 
   return (
     <PageContainer>
-      <PageTitle>Dashboard</PageTitle>
       <Budget budget={budget} transactions={transactions} />
       <DashboardRow>
         <TransactionsList transactions={recentTransactions} />

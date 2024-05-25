@@ -1,34 +1,39 @@
-import AppContainer from "./AppContainer";
+import Drawer from "./Drawer";
 import Navbar from "./Navbar";
-import AppContent from "./AppContent";
+import Main from "./Main";
+import DrawerSide from "./DrawerSide";
 import Footer from "./Footer";
+import DrawerContent from "./DrawerContent";
 
 interface LayoutProps {
+  children: JSX.Element | JSX.Element[];
   filterMonth: number;
   setFilterMonth: React.Dispatch<React.SetStateAction<number>>;
   filterYear: number;
   setFilterYear: React.Dispatch<React.SetStateAction<number>>;
-  children: JSX.Element | JSX.Element[];
 }
 
 const Layout = ({
+  children,
   filterMonth,
   setFilterMonth,
   filterYear,
   setFilterYear,
-  children,
 }: LayoutProps) => {
   return (
-    <AppContainer>
-      <Navbar
-        filterMonth={filterMonth}
-        setFilterMonth={setFilterMonth}
-        filterYear={filterYear}
-        setFilterYear={setFilterYear}
-      />
-      <AppContent>{children}</AppContent>
-      <Footer />
-    </AppContainer>
+    <Drawer>
+      <DrawerContent>
+        <Navbar
+          filterMonth={filterMonth}
+          setFilterMonth={setFilterMonth}
+          filterYear={filterYear}
+          setFilterYear={setFilterYear}
+        />
+        <Main>{children}</Main>
+        <Footer />
+      </DrawerContent>
+      <DrawerSide />
+    </Drawer>
   );
 };
 

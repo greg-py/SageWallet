@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
-import Layout from "./components/Layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import Balances from "./pages/Balances";
@@ -8,6 +7,7 @@ import Budget from "./pages/Budget";
 import Income from "./pages/Income";
 import Profile from "./pages/Profile";
 import { useState } from "react";
+import Layout from "./components/Layout/Layout";
 
 function App() {
   // Page state
