@@ -118,7 +118,7 @@ const Navbar = ({
         <div className="flex-1 flex justify-end space-x-2 items-center">
           <div className="flex flex-row space-x-2">
             <select
-              className="select w-24 xl:w-52 bg-base-200"
+              className="select w-32 xl:w-52 bg-base-200"
               value={MONTHS[filterMonth] ?? ""}
               onChange={(e) => handleMonthChange(e)}
             >
@@ -128,7 +128,7 @@ const Navbar = ({
               })}
             </select>
             <select
-              className="select w-24 xl:w-52 bg-base-200"
+              className="select w-32 xl:w-52 bg-base-200"
               value={filterYear}
               onChange={(e) => setFilterYear(parseInt(e.target.value))}
             >

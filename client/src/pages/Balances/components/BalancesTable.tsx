@@ -48,7 +48,6 @@ const BalancesTable = ({ balances }: BalancesTableProps) => {
         <table className="table">
           <thead>
             <tr>
-              <th>User</th>
               <th>Account</th>
               <th>Amount</th>
               <th>Type</th>
@@ -63,7 +62,6 @@ const BalancesTable = ({ balances }: BalancesTableProps) => {
                     className="hover:cursor-pointer hover:bg-base-200"
                     onClick={() => handleEditModalOpen(balance)}
                   >
-                    <th>{balance.user}</th>
                     <th>{balance.account}</th>
                     <th>{<CurrencyText value={balance.amount} />}</th>
                     <th>{balance.type}</th>
@@ -74,7 +72,6 @@ const BalancesTable = ({ balances }: BalancesTableProps) => {
           <tfoot className="border-t border-accent">
             <tr>
               <th>Totals</th>
-              <th></th>
               <th>
                 {
                   <CurrencyText

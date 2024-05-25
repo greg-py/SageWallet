@@ -33,7 +33,7 @@ const Transactions = ({ transactions }: TransactionsProps) => {
                   </p>
                 </div>
               </div>
-              <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+              <div className="flex flex-col items-end">
                 <p className="text-sm leading-6">
                   {transaction.price && (
                     <CurrencyText value={transaction.price} />

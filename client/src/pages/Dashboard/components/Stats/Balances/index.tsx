@@ -11,14 +11,14 @@ const Balances = ({ balances }: BalancesProps) => {
   const calculatedBalances = calculateBalanceStats(balances);
 
   return (
-    <DashboardRow title="Total Balances">
+    <DashboardRow title="Balances">
       <StaticStat title="Cash" value={calculatedBalances.totalCash} />
+      <StaticStat title="Assets" value={calculatedBalances.totalAssets} />
       <StaticStat
         title="Investments"
         value={calculatedBalances.totalInvestments}
       />
       <StaticStat title="Debt" value={calculatedBalances.totalDebt} />
-      <StaticStat title="Net Worth" value={calculatedBalances.netWorth} />
     </DashboardRow>
   );
 };

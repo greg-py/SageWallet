@@ -16,14 +16,9 @@ const Incomes = ({ income, budget, transactions }: IncomeProps) => {
 
   return (
     <DashboardRow title="Income">
-      <StaticStat title="Total ($)" value={incomeStats.totalIncome} />
+      <StaticStat title="Total" value={incomeStats.totalIncome} />
       <StaticStat
-        title="vs. Budget ($)"
-        value={incomeStats.incomeToBudget}
-        success={incomeStats.incomeToBudget > 0}
-      />
-      <StaticStat
-        title="vs. Spent ($)"
+        title="Saved"
         value={incomeStats.incomeToSpend}
         success={incomeStats.incomeToSpend > 0}
       />
