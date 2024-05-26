@@ -10,4 +10,5 @@ export const ALLOWED_ORIGINS = [
   "http://localhost",
   "http://localhost:5173",
   "https://budget-app-client.onrender.com",
+  "https://www.sagewallet.app",
 ];
