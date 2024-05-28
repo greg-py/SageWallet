@@ -3,6 +3,7 @@ import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "./config/swagger";
 import usersRoutes from "./routes/users";
+import teamsRoutes from "./routes/teams";
 import cors from "cors";
 import { checkJwt } from "./middleware/checkJwt";
 import { rateLimit } from "express-rate-limit";
@@ -38,6 +39,7 @@ app.use(
 
 // Configure routes
 app.use(`${endpointPrefix}/users`, limiter, checkJwt, usersRoutes);
+app.use(`${endpointPrefix}/teams`, limiter, checkJwt, teamsRoutes);
 
 // Return not found for any unmatched routes
 app.use("*", (req: Request, res: Response) => {

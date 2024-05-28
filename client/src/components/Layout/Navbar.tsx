@@ -115,6 +115,9 @@ const Navbar = ({
                 <Link to="/profile">Profile</Link>
               </li>
               <li>
+                <Link to="/team">Team</Link>
+              </li>
+              <li>
                 <a onClick={handleLogout}>Logout</a>
               </li>
             </ul>
