@@ -8,6 +8,7 @@ import Income from "./pages/Income";
 import Profile from "./pages/Profile";
 import { useState } from "react";
 import Layout from "./components/Layout/Layout";
+import Team from "./pages/Team";
 
 function App() {
   // Page state
@@ -73,6 +74,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/team"
+            element={
+              <ProtectedRoute>
+                <Team />
               </ProtectedRoute>
             }
           />
