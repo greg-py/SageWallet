@@ -5,8 +5,11 @@ import dashboardController from "../controllers/dashboardController";
 import incomeController from "../controllers/incomeController";
 import balancesController from "../controllers/balancesController";
 import { checkUserId } from "../middleware/checkJwt";
+import teamController from "../controllers/teamController";
 
 const router = express.Router();
+
+router.get("/:userId/team-members", teamController.getUserTeamMember);
 
 router.get("/:userId/filters", checkUserId, dashboardController.getUserFilters);
 

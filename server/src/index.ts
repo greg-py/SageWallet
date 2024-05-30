@@ -5,7 +5,7 @@ import swaggerOptions from "./config/swagger";
 import usersRoutes from "./routes/users";
 import teamsRoutes from "./routes/teams";
 import cors from "cors";
-import { checkJwt } from "./middleware/checkJwt";
+import { checkJwt, checkSecretKey } from "./middleware/checkJwt";
 import { rateLimit } from "express-rate-limit";
 import { corsOptions } from "./config/cors";
 
@@ -39,7 +39,7 @@ app.use(
 
 // Configure routes
 app.use(`${endpointPrefix}/users`, limiter, checkJwt, usersRoutes);
-app.use(`${endpointPrefix}/teams`, limiter, checkJwt, teamsRoutes);
+app.use(`${endpointPrefix}/teams`, limiter, checkSecretKey, teamsRoutes);
 
 // Return not found for any unmatched routes
 app.use("*", (req: Request, res: Response) => {

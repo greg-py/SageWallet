@@ -1,5 +1,9 @@
 import teamRepository from "../repository/teamRepository";
 
+const getUserTeamMember = async (userId: string) => {
+  return await teamRepository.getTeamMemberByUserId(userId);
+};
+
 const createUserTeam = async (userId: string) => {
   const team = await teamRepository.createTeamByUserId(userId);
 
@@ -10,5 +14,6 @@ const createUserTeam = async (userId: string) => {
 };
 
 export default {
+  getUserTeamMember,
   createUserTeam,
 };
