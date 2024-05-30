@@ -1,6 +1,18 @@
 import Team from "../models/team";
 import TeamMember from "../models/teamMember";
 
+const getTeamMemberByUserId = async (userId: string) => {
+  try {
+    return await TeamMember.findOne({
+      where: { user_id: userId },
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error("Database error when fetching ");
+    }
+  }
+};
+
 const createTeamByUserId = async (userId: string) => {
   try {
     return await Team.create(
@@ -35,6 +47,7 @@ const addTeamMemberByUserId = async (teamId: string, userId: string) => {
 };
 
 export default {
+  getTeamMemberByUserId,
   createTeamByUserId,
   addTeamMemberByUserId,
 };

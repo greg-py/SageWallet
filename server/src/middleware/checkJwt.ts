@@ -11,6 +11,44 @@ export const checkJwt = auth({
   issuerBaseURL: process.env.AUTH0_DOMAIN,
 });
 
+// Check the API key included in requests from auth0
+export const checkSecretKey = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const secret = process.env.API_SECRET_KEY || "";
+
+  if (!secret) {
+    return res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: "Server error when validating secret key" });
+  }
+
+  try {
+    const token = req.get("Authorization");
+    if (!token) {
+      return res
+        .status(STATUS_CODES.BAD_REQUEST)
+        .json({ message: "Authorization header not found" });
+    }
+
+    const requestKey = token.replace("Bearer ", "");
+    if (requestKey !== secret) {
+      return res
+        .status(STATUS_CODES.FORBIDDEN)
+        .json({ message: "Secret key mismatch" });
+    }
+
+    next();
+  } catch (error) {
+    console.error("Error in secret key validation: ", error);
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Internal Server Error" });
+  }
+};
+
 // Check the user ID in the JWT against the user ID in the request
 export const checkUserId = (
   req: Request,
