@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation } from "@tanstack/react-query";
 import { Transaction } from "../../../models/transaction";
 import { addTransaction } from "../../../api/services/defs/transaction";
@@ -7,6 +6,7 @@ import { queryClient } from "../../../api/queries/queryClient";
 import { buildCategoryList } from "../../../utils/budget";
 import { BudgetCategory } from "../../../models/budget";
 import { handleAmountChange } from "../../../utils/transaction";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface AddModalProps {
   budgetCategories: BudgetCategory[];
@@ -28,8 +28,8 @@ const AddModal = ({
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
 
-  const { user, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+  const { user } = useAuth();
+  const userId = user?.uid || "";
 
   const clearState = () => {
     setDate("");
@@ -55,7 +55,7 @@ const AddModal = ({
         throw new Error("User ID undefined");
       }
 
-      return addTransaction(userId, newTransaction, getAccessTokenSilently);
+      return addTransaction(user!, newTransaction);
     },
   });
 

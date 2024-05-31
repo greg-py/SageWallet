@@ -1,26 +1,18 @@
 import { Link } from "react-router-dom";
 import { APP_NAME, MONTHS } from "../../config/constants";
-import { useQuery } from "@tanstack/react-query";
-import { filterOptionsQuery } from "../../api/queries";
-import { useAuth0 } from "@auth0/auth0-react";
 import LoadingSpinner from "./LoadingSpinner";
+import { useAuth } from "../../hooks/useAuth";
+import { useFilter } from "../../hooks/useFilter";
 
-interface NavbarProps {
-  filterMonth: number;
-  setFilterMonth: React.Dispatch<React.SetStateAction<number>>;
-  filterYear: number;
-  setFilterYear: React.Dispatch<React.SetStateAction<number>>;
-}
-
-const Navbar = ({
-  filterMonth,
-  setFilterMonth,
-  filterYear,
-  setFilterYear,
-}: NavbarProps) => {
-  // User authentication
-  const { isAuthenticated, user, logout, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+const Navbar = () => {
+  const { loading, user, logoutUser } = useAuth();
+  const {
+    filterOptions,
+    filterMonth,
+    setFilterMonth,
+    filterYear,
+    setFilterYear,
+  } = useFilter();
 
   const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedMonth = e.target.value;
@@ -28,29 +20,8 @@ const Navbar = ({
     setFilterMonth(monthIndex);
   };
 
-  const handleLogout = () => {
-    logout({ logoutParams: { returnTo: window.location.origin } });
-  };
-
-  // Queries
-  const {
-    isPending: isFilterOptionsPending,
-    error: filterOptionsError,
-    data: filterOptions,
-  } = useQuery(filterOptionsQuery(userId, getAccessTokenSilently));
-
-  // Show loading spinner if queries are pending
-  if (isFilterOptionsPending) {
+  if (loading) {
     return <LoadingSpinner />;
-  }
-
-  // Show error message if query has error
-  if (filterOptionsError) {
-    return (
-      <div className="mx-auto max-w-screen-2xl text-center">
-        <p>There was an error loading data</p>;
-      </div>
-    );
   }
 
   return (
@@ -92,20 +63,19 @@ const Navbar = ({
           onChange={(e) => setFilterYear(parseInt(e.target.value))}
         >
           <option disabled>Year</option>
-          {Object.keys(filterOptions).map((year) => {
-            return <option key={year}>{year}</option>;
-          })}
+          {filterOptions &&
+            Object.keys(filterOptions).map((year) => {
+              return <option key={year}>{year}</option>;
+            })}
         </select>
-        {isAuthenticated && user && (
+        {user && (
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
               role="button"
               className="btn btn-ghost btn-circle avatar"
             >
-              <div className="w-10 rounded-full">
-                <img alt="User avatar" src={user.picture} />
-              </div>
+              <div className="w-10 rounded-full bg-accent"></div>
             </div>
             <ul
               tabIndex={0}
@@ -115,7 +85,10 @@ const Navbar = ({
                 <Link to="/profile">Profile</Link>
               </li>
               <li>
-                <a onClick={handleLogout}>Logout</a>
+                <Link to="/team">Team</Link>
+              </li>
+              <li>
+                <a onClick={logoutUser}>Logout</a>
               </li>
             </ul>
           </div>

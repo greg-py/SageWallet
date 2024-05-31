@@ -3,10 +3,11 @@ import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "./config/swagger";
 import usersRoutes from "./routes/users";
+import teamsRoutes from "./routes/teams";
 import cors from "cors";
-import { checkJwt } from "./middleware/checkJwt";
 import { rateLimit } from "express-rate-limit";
 import { corsOptions } from "./config/cors";
+import { authenticateToken } from "./middleware/auth";
 
 const endpointPrefix = "/api";
 
@@ -29,15 +30,18 @@ const limiter = rateLimit({
 });
 
 // Configure Swagger Docs middleware
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use(
-  `${endpointPrefix}/docs`,
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocs)
-);
+if (process.env.NODE_ENV === "development") {
+  const swaggerDocs = swaggerJsDoc(swaggerOptions);
+  app.use(
+    `${endpointPrefix}/docs`,
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocs)
+  );
+}
 
 // Configure routes
-app.use(`${endpointPrefix}/users`, limiter, checkJwt, usersRoutes);
+app.use(`${endpointPrefix}/users`, limiter, authenticateToken, usersRoutes);
+app.use(`${endpointPrefix}/teams`, limiter, authenticateToken, teamsRoutes);
 
 // Return not found for any unmatched routes
 app.use("*", (req: Request, res: Response) => {

@@ -1,10 +1,10 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation } from "@tanstack/react-query";
 import { BalancesCategory } from "../../../models/balances";
 import { deleteBalance, updateBalance } from "../../../api/services";
 import { queryClient } from "../../../api/queries/queryClient";
 import { handleAmountChange } from "../../../utils/transaction";
 import { BALANCE_TYPES } from "../../../config/constants";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface EditModalProps {
   id: string;
@@ -27,8 +27,8 @@ const EditModal = ({
   setType,
   handleClose,
 }: EditModalProps) => {
-  const { user, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+  const { user } = useAuth();
+  const userId = user?.uid || "";
   const userName = user?.email || "";
 
   const updateMutation = useMutation({
@@ -37,7 +37,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return updateBalance(userId, updatedBalance, getAccessTokenSilently);
+      return updateBalance(user!, updatedBalance);
     },
   });
 
@@ -72,7 +72,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return deleteBalance(userId, balanceId, getAccessTokenSilently);
+      return deleteBalance(user!, balanceId);
     },
   });
 

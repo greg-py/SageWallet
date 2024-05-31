@@ -7,28 +7,13 @@ import DrawerContent from "./DrawerContent";
 
 interface LayoutProps {
   children: JSX.Element | JSX.Element[];
-  filterMonth: number;
-  setFilterMonth: React.Dispatch<React.SetStateAction<number>>;
-  filterYear: number;
-  setFilterYear: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Layout = ({
-  children,
-  filterMonth,
-  setFilterMonth,
-  filterYear,
-  setFilterYear,
-}: LayoutProps) => {
+const Layout = ({ children }: LayoutProps) => {
   return (
     <Drawer>
       <DrawerContent>
-        <Navbar
-          filterMonth={filterMonth}
-          setFilterMonth={setFilterMonth}
-          filterYear={filterYear}
-          setFilterYear={setFilterYear}
-        />
+        <Navbar />
         <Main>{children}</Main>
         <Footer />
       </DrawerContent>
