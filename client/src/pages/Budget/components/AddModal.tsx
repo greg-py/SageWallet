@@ -1,10 +1,10 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { BudgetCategory } from "../../../models/budget";
 import { addBudget } from "../../../api/services";
 import { queryClient } from "../../../api/queries/queryClient";
 import { handleAmountChange } from "../../../utils/transaction";
+import { useAuth } from "../../../hooks/useAuth";
 
 const AddModal = () => {
   // Component state
@@ -12,8 +12,8 @@ const AddModal = () => {
   const [budget, setBudget] = useState("");
 
   // User authentication
-  const { user, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+  const { user } = useAuth();
+  const userId = user?.uid || "";
 
   // Function to clear component state after submission
   const clearState = () => {
@@ -35,7 +35,7 @@ const AddModal = () => {
         throw new Error("User ID undefined");
       }
 
-      return addBudget(userId, newBudget, getAccessTokenSilently);
+      return addBudget(user!, newBudget);
     },
   });
 

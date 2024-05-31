@@ -1,8 +1,5 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import PageContainer from "../../components/Layout/PageContainer";
 import PageTitle from "../../components/Layout/PageTitle";
-import { useQuery } from "@tanstack/react-query";
-import { budgetQuery, transactionsQuery } from "../../api/queries";
 import BudgetTable from "./components/BudgetTable";
 import PageCard from "../../components/Layout/PageCard";
 import Spinner from "../../components/Layout/Spinner";
@@ -10,64 +7,54 @@ import AddModal from "./components/AddModal";
 import Error from "../../components/Layout/Error";
 import { useState } from "react";
 import EditButton from "./components/EditButton";
+import { useBudgetData } from "../../hooks/useBudgetData";
+import Layout from "../../components/Layout/Layout";
+import { useFilter } from "../../hooks/useFilter";
 
-interface BudgetProps {
-  filterMonth: number;
-  filterYear: number;
-}
-
-const Budget = ({ filterMonth, filterYear }: BudgetProps) => {
+const Budget = () => {
   // Component state
   const [editEnabled, setEditEnabled] = useState(false);
 
-  // User authentication
-  const { user, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+  const { filterMonth, filterYear } = useFilter();
 
   // Queries
-  const {
-    isPending: isBudgetPending,
-    error: budgetError,
-    data: budget,
-  } = useQuery(budgetQuery(userId, getAccessTokenSilently));
-  const {
-    isPending: isTransactionsPending,
-    error: transactionsError,
-    data: transactions,
-  } = useQuery(
-    transactionsQuery(userId, filterMonth, filterYear, getAccessTokenSilently)
+  const { isPending, error, budgetData, transactionsData } = useBudgetData(
+    filterMonth,
+    filterYear
   );
 
   // Show loading spinner if queries are pending
-  if (isBudgetPending || isTransactionsPending) {
+  if (isPending) {
     return <Spinner />;
   }
 
   // Show error message if queries have error
-  if (budgetError || transactionsError) {
+  if (error || !budgetData || !transactionsData) {
     return <Error />;
   }
 
   return (
-    <PageContainer>
-      <div className="flex flex-row justify-between">
-        <PageTitle>Budget</PageTitle>
-        <div className="flex flex-row space-x-2">
-          <EditButton
-            editEnabled={editEnabled}
-            setEditEnabled={setEditEnabled}
-          />
-          <AddModal />
+    <Layout>
+      <PageContainer>
+        <div className="flex flex-row justify-between">
+          <PageTitle>Budget</PageTitle>
+          <div className="flex flex-row space-x-2">
+            <EditButton
+              editEnabled={editEnabled}
+              setEditEnabled={setEditEnabled}
+            />
+            <AddModal />
+          </div>
         </div>
-      </div>
-      <PageCard>
-        <BudgetTable
-          budget={budget}
-          transactions={transactions}
-          editEnabled={editEnabled}
-        />
-      </PageCard>
-    </PageContainer>
+        <PageCard>
+          <BudgetTable
+            budget={budgetData}
+            transactions={transactionsData}
+            editEnabled={editEnabled}
+          />
+        </PageCard>
+      </PageContainer>
+    </Layout>
   );
 };
 

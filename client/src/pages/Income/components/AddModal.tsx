@@ -1,10 +1,10 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 import { handleAmountChange } from "../../../utils/transaction";
 import { useMutation } from "@tanstack/react-query";
 import { Income } from "../../../models/income";
 import { queryClient } from "../../../api/queries/queryClient";
 import { addIncome } from "../../../api/services";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface AddModalProps {
   minDate: string;
@@ -25,8 +25,8 @@ const AddModal = ({
   const [amount, setAmount] = useState("");
 
   // User authentication
-  const { user, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+  const { user } = useAuth();
+  const userId = user?.uid || "";
   const userName = user?.email || "";
 
   // Function to clear component state after submission
@@ -50,7 +50,7 @@ const AddModal = ({
         throw new Error("User ID undefined");
       }
 
-      return addIncome(userId, newIncome, getAccessTokenSilently);
+      return addIncome(user!, newIncome);
     },
   });
 

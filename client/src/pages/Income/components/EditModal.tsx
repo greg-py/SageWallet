@@ -1,9 +1,9 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { handleAmountChange } from "../../../utils/transaction";
 import { useMutation } from "@tanstack/react-query";
 import { Income } from "../../../models/income";
 import { queryClient } from "../../../api/queries/queryClient";
 import { deleteIncome, updateIncome } from "../../../api/services";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface EditModalProps {
   id: string;
@@ -35,8 +35,8 @@ const EditModal = ({
   filterYear,
 }: EditModalProps) => {
   // User authentication
-  const { user, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+  const { user } = useAuth();
+  const userId = user?.uid || "";
   const userName = user?.email || "";
 
   const updateMutation = useMutation({
@@ -45,7 +45,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return updateIncome(userId, updatedIncome, getAccessTokenSilently);
+      return updateIncome(user!, updatedIncome);
     },
   });
 
@@ -80,7 +80,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return deleteIncome(userId, incomeId, getAccessTokenSilently);
+      return deleteIncome(user!, incomeId);
     },
   });
 

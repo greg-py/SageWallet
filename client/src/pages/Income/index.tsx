@@ -1,23 +1,16 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import PageCard from "../../components/Layout/PageCard";
 import PageContainer from "../../components/Layout/PageContainer";
 import PageTitle from "../../components/Layout/PageTitle";
 import AddModal from "./components/AddModal";
 import IncomeTable from "./components/IncomeTable";
-import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../components/Layout/Spinner";
-import { incomeQuery } from "../../api/queries/defs/income";
 import Error from "../../components/Layout/Error";
+import { useIncomeData } from "../../hooks/useIncomeData";
+import Layout from "../../components/Layout/Layout";
+import { useFilter } from "../../hooks/useFilter";
 
-interface IncomeProps {
-  filterMonth: number;
-  filterYear: number;
-}
-
-const Income = ({ filterMonth, filterYear }: IncomeProps) => {
-  // User authentication
-  const { user, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+const Income = () => {
+  const { filterMonth, filterYear } = useFilter();
 
   // Get min and max dates for datepicker based on current filter selection
   const minDate = new Date(filterYear, filterMonth, 1)
@@ -28,43 +21,39 @@ const Income = ({ filterMonth, filterYear }: IncomeProps) => {
     .split("T")[0];
 
   // Queries
-  const {
-    isPending: isIncomePending,
-    error: incomeError,
-    data: income,
-  } = useQuery(
-    incomeQuery(userId, filterMonth, filterYear, getAccessTokenSilently)
-  );
+  const { isPending, error, data } = useIncomeData(filterMonth, filterYear);
 
   // Show loading spinner if queries are pending
-  if (isIncomePending) {
+  if (isPending) {
     return <Spinner />;
   }
 
   // Show error message if query has error
-  if (incomeError) {
+  if (error || !data) {
     return <Error />;
   }
 
   return (
-    <PageContainer>
-      <div className="flex flex-row justify-between">
-        <PageTitle>Income</PageTitle>
-        <AddModal
-          minDate={minDate}
-          maxDate={maxDate}
-          filterMonth={filterMonth}
-          filterYear={filterYear}
-        />
-      </div>
-      <PageCard>
-        <IncomeTable
-          income={income}
-          filterMonth={filterMonth}
-          filterYear={filterYear}
-        />
-      </PageCard>
-    </PageContainer>
+    <Layout>
+      <PageContainer>
+        <div className="flex flex-row justify-between">
+          <PageTitle>Income</PageTitle>
+          <AddModal
+            minDate={minDate}
+            maxDate={maxDate}
+            filterMonth={filterMonth}
+            filterYear={filterYear}
+          />
+        </div>
+        <PageCard>
+          <IncomeTable
+            income={data}
+            filterMonth={filterMonth}
+            filterYear={filterYear}
+          />
+        </PageCard>
+      </PageContainer>
+    </Layout>
   );
 };
 

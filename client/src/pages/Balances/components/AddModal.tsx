@@ -1,4 +1,3 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { BalancesCategory } from "../../../models/balances";
@@ -6,6 +5,7 @@ import { addBalance } from "../../../api/services";
 import { queryClient } from "../../../api/queries/queryClient";
 import { handleAmountChange } from "../../../utils/transaction";
 import { BALANCE_TYPES } from "../../../config/constants";
+import { useAuth } from "../../../hooks/useAuth";
 
 const AddModal = () => {
   // Component state
@@ -14,8 +14,8 @@ const AddModal = () => {
   const [type, setType] = useState(BALANCE_TYPES[0]);
 
   // User authentication
-  const { user, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+  const { user } = useAuth();
+  const userId = user?.uid || "";
   const userName = user?.email || "";
 
   // Function to clear component state after submission
@@ -39,7 +39,7 @@ const AddModal = () => {
         throw new Error("User ID undefined");
       }
 
-      return addBalance(userId, newBalance, getAccessTokenSilently);
+      return addBalance(user!, newBalance);
     },
   });
 

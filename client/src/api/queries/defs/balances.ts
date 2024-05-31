@@ -1,14 +1,8 @@
-import { GetTokenSilentlyOptions } from "@auth0/auth0-react";
+import { User } from "firebase/auth";
 import { getBalances } from "../../services";
-import { GetTokenSilentlyVerboseResponse } from "@auth0/auth0-spa-js";
 
-export const balancesQuery = (
-  userId: string,
-  getAccessTokenSilently: (
-    options?: GetTokenSilentlyOptions
-  ) => Promise<string | GetTokenSilentlyVerboseResponse>
-) => ({
-  queryKey: ["balances", userId],
-  queryFn: () => getBalances(userId, getAccessTokenSilently),
-  enabled: !!userId,
+export const balancesQuery = (user: User, token: string) => ({
+  queryKey: ["balances", user.uid],
+  queryFn: () => getBalances(user, token),
+  enabled: !!user && !!token,
 });

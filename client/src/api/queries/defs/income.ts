@@ -1,17 +1,13 @@
-import { GetTokenSilentlyOptions } from "@auth0/auth0-react";
 import { getIncome } from "../../services/defs/income";
-import { GetTokenSilentlyVerboseResponse } from "@auth0/auth0-spa-js";
+import { User } from "firebase/auth";
 
 export const incomeQuery = (
-  userId: string,
+  user: User,
   filterMonth: number,
   filterYear: number,
-  getAccessTokenSilently: (
-    options?: GetTokenSilentlyOptions
-  ) => Promise<string | GetTokenSilentlyVerboseResponse>
+  token: string
 ) => ({
-  queryKey: ["income", userId, filterMonth, filterYear],
-  queryFn: () =>
-    getIncome(userId, filterMonth, filterYear, getAccessTokenSilently),
-  enabled: !!userId && !!filterMonth && !!filterYear,
+  queryKey: ["income", user.uid, filterMonth, filterYear],
+  queryFn: () => getIncome(user, filterMonth, filterYear, token),
+  enabled: !!user && !!filterMonth && !!filterYear && !!token,
 });

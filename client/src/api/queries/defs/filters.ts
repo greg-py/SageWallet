@@ -1,14 +1,8 @@
-import { GetTokenSilentlyOptions } from "@auth0/auth0-react";
 import { getFilterOptions } from "../../services";
-import { GetTokenSilentlyVerboseResponse } from "@auth0/auth0-spa-js";
+import { User } from "firebase/auth";
 
-export const filterOptionsQuery = (
-  userId: string,
-  getAccessTokenSilently: (
-    options?: GetTokenSilentlyOptions
-  ) => Promise<string | GetTokenSilentlyVerboseResponse>
-) => ({
-  queryKey: ["filter-options", userId],
-  queryFn: () => getFilterOptions(userId, getAccessTokenSilently),
-  enabled: !!userId,
+export const filterOptionsQuery = (user: User, token: string) => ({
+  queryKey: ["filter-options", user?.uid],
+  queryFn: () => getFilterOptions(user, token),
+  enabled: !!user && !!token,
 });

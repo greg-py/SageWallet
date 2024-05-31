@@ -1,23 +1,16 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import PageContainer from "../../components/Layout/PageContainer";
 import PageTitle from "../../components/Layout/PageTitle";
-import { useQuery } from "@tanstack/react-query";
-import { budgetQuery, transactionsQuery } from "../../api/queries";
 import Spinner from "../../components/Layout/Spinner";
 import PageCard from "../../components/Layout/PageCard";
 import AddModal from "./components/AddModal";
 import TransactionsTable from "./components/TransactionTable";
 import Error from "../../components/Layout/Error";
+import { useTransactionsData } from "../../hooks/useTransactionsData";
+import Layout from "../../components/Layout/Layout";
+import { useFilter } from "../../hooks/useFilter";
 
-interface TransactionsProps {
-  filterMonth: number;
-  filterYear: number;
-}
-
-const Transactions = ({ filterMonth, filterYear }: TransactionsProps) => {
-  // User authentication
-  const { user, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+const Transactions = () => {
+  const { filterMonth, filterYear } = useFilter();
 
   // Get min and max dates for datepicker based on current filter selection
   const minDate = new Date(filterYear, filterMonth, 1)
@@ -28,64 +21,42 @@ const Transactions = ({ filterMonth, filterYear }: TransactionsProps) => {
     .split("T")[0];
 
   // Queries
-  const {
-    isPending: isTransactionsPending,
-    error: transactionsError,
-    data: transactions,
-    isRefetching: isTransactionsRefetching,
-    isRefetchError: transactionsRefetchError,
-  } = useQuery(
-    transactionsQuery(userId, filterMonth, filterYear, getAccessTokenSilently)
-  );
-  const {
-    isPending: isBudgetPending,
-    error: budgetError,
-    data: budget,
-    isRefetching: isBudgetRefetching,
-    isRefetchError: budgetRefetchError,
-  } = useQuery(budgetQuery(userId, getAccessTokenSilently));
+  const { isPending, error, transactionsData, budgetData } =
+    useTransactionsData(filterMonth, filterYear);
 
   // Show loading spinner if queries are pending
-  if (
-    isTransactionsPending ||
-    isTransactionsRefetching ||
-    isBudgetPending ||
-    isBudgetRefetching
-  ) {
+  if (isPending) {
     return <Spinner />;
   }
 
   // Show error message if query has error
-  if (
-    transactionsError ||
-    transactionsRefetchError ||
-    budgetError ||
-    budgetRefetchError
-  ) {
+  if (error || !transactionsData || !budgetData) {
     return <Error />;
   }
 
   return (
-    <PageContainer>
-      <div className="flex flex-row justify-between">
-        <PageTitle>Transactions</PageTitle>
-        <AddModal
-          minDate={minDate}
-          maxDate={maxDate}
-          budgetCategories={budget}
-          filterMonth={filterMonth}
-          filterYear={filterYear}
-        />
-      </div>
-      <PageCard>
-        <TransactionsTable
-          transactions={transactions}
-          budget={budget}
-          filterMonth={filterMonth}
-          filterYear={filterYear}
-        />
-      </PageCard>
-    </PageContainer>
+    <Layout>
+      <PageContainer>
+        <div className="flex flex-row justify-between">
+          <PageTitle>Transactions</PageTitle>
+          <AddModal
+            minDate={minDate}
+            maxDate={maxDate}
+            budgetCategories={budgetData}
+            filterMonth={filterMonth}
+            filterYear={filterYear}
+          />
+        </div>
+        <PageCard>
+          <TransactionsTable
+            transactions={transactionsData}
+            budget={budgetData}
+            filterMonth={filterMonth}
+            filterYear={filterYear}
+          />
+        </PageCard>
+      </PageContainer>
+    </Layout>
   );
 };
 

@@ -1,9 +1,9 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { BudgetCategory } from "../../../models/budget";
 import { useMutation } from "@tanstack/react-query";
 import { deleteBudget, updateBudget } from "../../../api/services";
 import { queryClient } from "../../../api/queries/queryClient";
 import { handleAmountChange } from "../../../utils/transaction";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface EditModalProps {
   id: string;
@@ -23,8 +23,8 @@ const EditModal = ({
   handleClose,
 }: EditModalProps) => {
   // User authentication
-  const { user, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+  const { user } = useAuth();
+  const userId = user?.uid || "";
 
   const updateMutation = useMutation({
     mutationFn: (updatedBudget: BudgetCategory) => {
@@ -32,7 +32,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return updateBudget(userId, updatedBudget, getAccessTokenSilently);
+      return updateBudget(user!, updatedBudget);
     },
   });
 
@@ -58,7 +58,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return deleteBudget(userId, budgetId, getAccessTokenSilently);
+      return deleteBudget(user!, budgetId);
     },
   });
 

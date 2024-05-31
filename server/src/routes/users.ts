@@ -4,14 +4,22 @@ import budgetsController from "../controllers/budgetsController";
 import dashboardController from "../controllers/dashboardController";
 import incomeController from "../controllers/incomeController";
 import balancesController from "../controllers/balancesController";
-import { checkUserId } from "../middleware/checkJwt";
 import teamController from "../controllers/teamController";
+import { authorizeRequestUser } from "../middleware/auth";
 
 const router = express.Router();
 
-router.get("/:userId/team-members", teamController.getUserTeamMember);
+router.get(
+  "/:userId/team-members",
+  authorizeRequestUser,
+  teamController.getUserTeamMember
+);
 
-router.get("/:userId/filters", checkUserId, dashboardController.getUserFilters);
+router.get(
+  "/:userId/filters",
+  authorizeRequestUser,
+  dashboardController.getUserFilters
+);
 
 /**
  * @swagger
@@ -38,7 +46,7 @@ router.get("/:userId/filters", checkUserId, dashboardController.getUserFilters);
  */
 router.get(
   "/:userId/transactions",
-  checkUserId,
+  authorizeRequestUser,
   transactionsController.getUserTransactions
 );
 
@@ -83,75 +91,91 @@ router.get(
  */
 router.post(
   "/:userId/transactions",
-  checkUserId,
+  authorizeRequestUser,
   transactionsController.addUserTransaction
 );
 
 router.put(
   "/:userId/transactions/:transactionId",
-  checkUserId,
+  authorizeRequestUser,
   transactionsController.updateUserTransaction
 );
 
 router.delete(
   "/:userId/transactions/:transactionId",
-  checkUserId,
+  authorizeRequestUser,
   transactionsController.deleteUserTransaction
 );
 
-router.get("/:userId/budgets", checkUserId, budgetsController.getUserBudgets);
+router.get(
+  "/:userId/budgets",
+  authorizeRequestUser,
+  budgetsController.getUserBudgets
+);
 
-router.post("/:userId/budgets", checkUserId, budgetsController.addUserBudgets);
+router.post(
+  "/:userId/budgets",
+  authorizeRequestUser,
+  budgetsController.addUserBudgets
+);
 
 router.put(
   "/:userId/budgets/:budgetId",
-  checkUserId,
+  authorizeRequestUser,
   budgetsController.updateUserBudget
 );
 
 router.delete(
   "/:userId/budgets/:budgetId",
-  checkUserId,
+  authorizeRequestUser,
   budgetsController.deleteUserBudget
 );
 
-router.get("/:userId/income", checkUserId, incomeController.getUserIncome);
+router.get(
+  "/:userId/income",
+  authorizeRequestUser,
+  incomeController.getUserIncome
+);
 
-router.post("/:userId/income", checkUserId, incomeController.addUserIncome);
+router.post(
+  "/:userId/income",
+  authorizeRequestUser,
+  incomeController.addUserIncome
+);
 
 router.put(
   "/:userId/income/:incomeId",
-  checkUserId,
+  authorizeRequestUser,
   incomeController.updateUserIncome
 );
 
 router.delete(
   "/:userId/income/:incomeId",
-  checkUserId,
+  authorizeRequestUser,
   incomeController.deleteUserIncome
 );
 
 router.get(
   "/:userId/balances",
-  checkUserId,
+  authorizeRequestUser,
   balancesController.getUserBalances
 );
 
 router.post(
   "/:userId/balances",
-  checkUserId,
+  authorizeRequestUser,
   balancesController.addUserBalance
 );
 
 router.put(
   "/:userId/balances/:balanceId",
-  checkUserId,
+  authorizeRequestUser,
   balancesController.updateUserBalance
 );
 
 router.delete(
   "/:userId/balances/:balanceId",
-  checkUserId,
+  authorizeRequestUser,
   balancesController.deleteUserBalance
 );
 

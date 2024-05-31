@@ -1,4 +1,3 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { buildCategoryList } from "../../../utils/budget";
 import { useMutation } from "@tanstack/react-query";
 import { Transaction } from "../../../models/transaction";
@@ -9,6 +8,7 @@ import {
 import { queryClient } from "../../../api/queries/queryClient";
 import { BudgetCategory } from "../../../models/budget";
 import { handleAmountChange } from "../../../utils/transaction";
+import { useAuth } from "../../../hooks/useAuth";
 
 interface EditModalProps {
   id: string;
@@ -45,8 +45,8 @@ const EditModal = ({
   filterMonth,
   filterYear,
 }: EditModalProps) => {
-  const { user, getAccessTokenSilently } = useAuth0();
-  const userId = user?.sub || "";
+  const { user } = useAuth();
+  const userId = user?.uid || "";
 
   // Build list of categories for add transaction modal from budget categories
   const categories = buildCategoryList(budgetCategories);
@@ -57,11 +57,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return updateTransaction(
-        userId,
-        updatedTransaction,
-        getAccessTokenSilently
-      );
+      return updateTransaction(user!, updatedTransaction);
     },
   });
 
@@ -96,7 +92,7 @@ const EditModal = ({
         throw new Error("User ID undefined");
       }
 
-      return deleteTransaction(userId, transactionId, getAccessTokenSilently);
+      return deleteTransaction(user!, transactionId);
     },
   });
 

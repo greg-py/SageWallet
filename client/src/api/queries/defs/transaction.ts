@@ -1,17 +1,13 @@
-import { GetTokenSilentlyOptions } from "@auth0/auth0-react";
-import { GetTokenSilentlyVerboseResponse } from "@auth0/auth0-spa-js";
 import { getTransactions } from "../../services";
+import { User } from "firebase/auth";
 
 export const transactionsQuery = (
-  userId: string,
+  user: User,
   filterMonth: number,
   filterYear: number,
-  getAccessTokenSilently: (
-    options?: GetTokenSilentlyOptions
-  ) => Promise<string | GetTokenSilentlyVerboseResponse>
+  token: string
 ) => ({
-  queryKey: ["transactions", userId, filterMonth, filterYear],
-  queryFn: () =>
-    getTransactions(userId, filterMonth, filterYear, getAccessTokenSilently),
-  enabled: !!userId && !!filterMonth && !!filterYear,
+  queryKey: ["transactions", user.uid, filterMonth, filterYear],
+  queryFn: () => getTransactions(user, filterMonth, filterYear, token),
+  enabled: !!user && !!filterMonth && !!filterYear && !!token,
 });
