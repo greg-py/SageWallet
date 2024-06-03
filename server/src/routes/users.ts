@@ -179,4 +179,10 @@ router.delete(
   balancesController.deleteUserBalance
 );
 
+router.post(
+  "/:userId/team",
+  authorizeRequestUser,
+  teamController.createTeamOrReturnInvitation
+);
+
 export default router;

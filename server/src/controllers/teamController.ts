@@ -2,6 +2,23 @@ import { Request, Response } from "express";
 import { STATUS_CODES } from "../config/constants";
 import teamService from "../services/teamService";
 
+const createTeamOrReturnInvitation = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { email } = req.body;
+    const response = await teamService.createTeamOrReturnInvitation(
+      userId,
+      email
+    );
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .send({ error: "Failed to create team or return team invitation" });
+  }
+};
+
 const getUserTeamMember = async (req: Request, res: Response) => {
   try {
     const { userId } = req.body;
@@ -29,6 +46,7 @@ const createUserTeam = async (req: Request, res: Response) => {
 };
 
 export default {
+  createTeamOrReturnInvitation,
   getUserTeamMember,
   createUserTeam,
 };

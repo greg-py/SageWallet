@@ -8,7 +8,9 @@ const getTeamMemberByUserId = async (userId: string) => {
     });
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error("Database error when fetching ");
+      throw new Error(
+        "Database error when fetching team member: " + error.message
+      );
     }
   }
 };

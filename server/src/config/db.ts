@@ -27,6 +27,11 @@ export class DatabaseConnection {
         database,
         username,
         password,
+        // dialectOptions: {
+        //   ssl: {
+        //     require: true,
+        //   },
+        // },
       });
       console.log("Database connection initialized");
     }
